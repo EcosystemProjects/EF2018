@@ -1,0 +1,153 @@
+
+/* Class = "UIButton"; normalTitle = "Browse Ecosystems"; ObjectID = "0QX-e1-nbr"; */
+"0QX-e1-nbr.normalTitle" = "Browse Ecosystems";
+
+/* Class = "UILabel"; text = "Browse ecosystem and categories to follow"; ObjectID = "2ZL-BK-Kdj"; */
+"2ZL-BK-Kdj.text" = "Browse ecosystem and categories to follow";
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "5CJ-2o-TEU"; */
+"5CJ-2o-TEU.normalTitle" = "OK";
+
+/* Class = "UILabel"; text = "WRİTE US!"; ObjectID = "5sc-ar-1J1"; */
+"5sc-ar-1J1.text" = "WRİTE US!";
+
+/* Class = "UILabel"; text = "by Mentornity"; ObjectID = "6pF-yb-yVy"; */
+"6pF-yb-yVy.text" = "by Mentornity";
+
+/* Class = "UIButton"; normalTitle = "Turkish"; ObjectID = "8G7-o1-RCV"; */
+"8G7-o1-RCV.normalTitle" = "Turkish";
+
+/* Class = "UILabel"; text = "Follow categories and get\nfresh posts about your\necosystem!"; ObjectID = "Bvw-Rz-6QP"; */
+"Bvw-Rz-6QP.text" = "Follow categories and get\nfresh posts about your\necosystem!";
+
+/* Class = "UIButton"; normalTitle = "Menu info"; ObjectID = "Cw7-Bg-dRt"; */
+"Cw7-Bg-dRt.normalTitle" = "Menu info";
+
+/* Class = "UIButton"; normalTitle = "SETTİNGS"; ObjectID = "Dpd-Jt-q6o"; */
+"Dpd-Jt-q6o.normalTitle" = "SETTİNGS";
+
+/* Class = "UIButton"; normalTitle = "Serkan Kağan Çelik"; ObjectID = "EDj-t7-U15"; */
+"EDj-t7-U15.normalTitle" = "Serkan Kağan Çelik";
+
+/* Class = "UIButton"; normalTitle = "Get Started"; ObjectID = "FE5-o3-Kqs"; */
+"FE5-o3-Kqs.normalTitle" = "Get Started";
+
+/* Class = "UILabel"; text = "Ecosystem Feed"; ObjectID = "IDR-oB-UMM"; */
+"IDR-oB-UMM.text" = "Ecosystem Feed";
+
+/* Class = "UILabel"; text = "Ecosystem Feed"; ObjectID = "InC-FQ-W5q"; */
+"InC-FQ-W5q.text" = "Ecosystem Feed";
+
+/* Class = "UILabel"; text = "Send me mobile notifications about featued posts"; ObjectID = "JpU-4H-mmP"; */
+"JpU-4H-mmP.text" = "Send me mobile notifications about featued posts";
+
+/* Class = "UIButton"; normalTitle = "TERMS"; ObjectID = "Muq-xb-gRo"; */
+"Muq-xb-gRo.normalTitle" = "TERMS";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "OIG-Ol-yqC"; */
+"OIG-Ol-yqC.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "FOLLOW US"; ObjectID = "Qv3-0D-5dh"; */
+"Qv3-0D-5dh.text" = "FOLLOW US";
+
+/* Class = "UIButton"; normalTitle = "Settings :"; ObjectID = "REg-RC-fjf"; */
+"REg-RC-fjf.normalTitle" = "Settings :";
+
+/* Class = "UIViewController"; title = "Contact"; ObjectID = "RJ2-mr-2Wt"; */
+"RJ2-mr-2Wt.title" = "Contact";
+
+/* Class = "UILabel"; text = " Copyright © 2018"; ObjectID = "STT-wa-vZn"; */
+"STT-wa-vZn.text" = " Copyright © 2018";
+
+/* Class = "UIButton"; normalTitle = "Ahmet Buğra Peşman"; ObjectID = "Sbz-Ci-m4o"; */
+"Sbz-Ci-m4o.normalTitle" = "Ahmet Buğra Peşman";
+
+/* Class = "UILabel"; text = "Stephen Garza"; ObjectID = "Te1-el-cCf"; */
+"Te1-el-cCf.text" = "Stephen Garza";
+
+/* Class = "UILabel"; text = "Effective: April 7, 2018\n\nThis Privacy Policy describes how Mentornity collects, uses and discloses information, and what choices you have with respect to the information.\n\nWe have worked to make the Privacy Policy clearer and more understandable by:\norganizing it into the sections listed in the Table of Contents below,\n\nproviding a series of examples that help illustrate how the policies may be implemented by Mentornity and\ndefining and capitalizing a few terms that are used more than once for simplicity and brevity.\n\nWhen we refer to “Mentornity”, we mean the Mentornity entity that acts as the controller or processor of your information, as explained in more detail in the “Data Protection Regulations” section below.\nTable of Contents\nWho We Are.\nOur Privacy Statement and Applicability Of This Privacy Policy.\nPersonal Data We Collect And Receive.\nHow We Use Your Personal Data.\nHow We Disclose And Transfer Personal Data.\nStoring Personal Data and Security.\nPersonal Data Retention.\nAge Limitations.\nChanges To This Privacy Policy.\nData Protection Regulations.\nData Protection Officer.\nDispute Resolution and Contact.\n\n1. Who We Are."; ObjectID = "Uea-cj-mwa"; */
+"Uea-cj-mwa.text" = "Effective: April 7, 2018\n\nThis Privacy Policy describes how Mentornity collects, uses and discloses information, and what choices you have with respect to the information.\n\nWe have worked to make the Privacy Policy clearer and more understandable by:\norganizing it into the sections listed in the Table of Contents below,\n\nproviding a series of examples that help illustrate how the policies may be implemented by Mentornity and\ndefining and capitalizing a few terms that are used more than once for simplicity and brevity.\n\nWhen we refer to “Mentornity”, we mean the Mentornity entity that acts as the controller or processor of your information, as explained in more detail in the “Data Protection Regulations” section below.\nTable of Contents\nWho We Are.\nOur Privacy Statement and Applicability Of This Privacy Policy.\nPersonal Data We Collect And Receive.\nHow We Use Your Personal Data.\nHow We Disclose And Transfer Personal Data.\nStoring Personal Data and Security.\nPersonal Data Retention.\nAge Limitations.\nChanges To This Privacy Policy.\nData Protection Regulations.\nData Protection Officer.\nDispute Resolution and Contact.\n\n1. Who We Are.";
+
+/* Class = "UIButton"; normalTitle = "Damla Karakülah"; ObjectID = "VM4-pB-RTT"; */
+"VM4-pB-RTT.normalTitle" = "Damla Karakülah";
+
+/* Class = "UIButton"; normalTitle = "ef.mentornity.com"; ObjectID = "W5D-Vv-3j7"; */
+"W5D-Vv-3j7.normalTitle" = "ef.mentornity.com";
+
+/* Class = "UIButton"; normalTitle = "Create post :"; ObjectID = "WED-lj-3zi"; */
+"WED-lj-3zi.normalTitle" = "Create post :";
+
+/* Class = "UIButton"; normalTitle = "French"; ObjectID = "XCm-An-BsS"; */
+"XCm-An-BsS.normalTitle" = "French";
+
+/* Class = "UILabel"; text = " Copyright © 2018"; ObjectID = "XP4-0x-wj9"; */
+"XP4-0x-wj9.text" = " Copyright © 2018";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "ac1-kF-g4M"; */
+"ac1-kF-g4M.text" = "Language";
+
+/* Class = "UILabel"; text = "Welcome to Ecosystem Feed"; ObjectID = "caI-Gz-tNi"; */
+"caI-Gz-tNi.text" = "Welcome to Ecosystem Feed";
+
+/* Class = "UIButton"; normalTitle = "English"; ObjectID = "dKO-5W-0MX"; */
+"dKO-5W-0MX.normalTitle" = "English";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "dbP-vw-n0O"; */
+"dbP-vw-n0O.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Web UI Developers :"; ObjectID = "egn-b3-5rT"; */
+"egn-b3-5rT.text" = "Web UI Developers :";
+
+/* Class = "UIButton"; normalTitle = "Connect Via Linkedin"; ObjectID = "f5f-Se-WZR"; */
+"f5f-Se-WZR.normalTitle" = "Connect Via Linkedin";
+
+/* Class = "UIButton"; normalTitle = "CONTACT"; ObjectID = "fS1-Zq-OjZ"; */
+"fS1-Zq-OjZ.normalTitle" = "CONTACT";
+
+/* Class = "UIButton"; normalTitle = "ef@mentornity.com"; ObjectID = "fb1-WY-tCr"; */
+"fb1-WY-tCr.normalTitle" = "ef@mentornity.com";
+
+/* Class = "UIButton"; normalTitle = "Log out"; ObjectID = "fdd-MJ-4zW"; */
+"fdd-MJ-4zW.normalTitle" = "Log out";
+
+/* Class = "UIButton"; normalTitle = "Ecosystems :"; ObjectID = "g3x-wA-su2"; */
+"g3x-wA-su2.normalTitle" = "Ecosystems :";
+
+/* Class = "UIButton"; normalTitle = "Your feed :"; ObjectID = "g5H-It-qAb"; */
+"g5H-It-qAb.normalTitle" = "Your feed :";
+
+/* Class = "UILabel"; text = "by Mentornity"; ObjectID = "gLy-4u-9yC"; */
+"gLy-4u-9yC.text" = "by Mentornity";
+
+/* Class = "UILabel"; text = "OR"; ObjectID = "ieB-Kr-LI3"; */
+"ieB-Kr-LI3.text" = "OR";
+
+/* Class = "UIViewController"; title = "Settings"; ObjectID = "kim-rY-TDu"; */
+"kim-rY-TDu.title" = "Settings";
+
+/* Class = "UIButton"; normalTitle = "ABOUT"; ObjectID = "mJu-uZ-SLb"; */
+"mJu-uZ-SLb.normalTitle" = "ABOUT";
+
+/* Class = "UILabel"; text = "IOS Developers :"; ObjectID = "moB-vH-IF4"; */
+"moB-vH-IF4.text" = "IOS Developers :";
+
+/* Class = "UILabel"; text = "Send me e-mails about featued posts"; ObjectID = "qyW-P7-p96"; */
+"qyW-P7-p96.text" = "Send me e-mails about featued posts";
+
+/* Class = "UILabel"; text = "This is an Internall Project that developed by great intern teams of Mentornity, Inc. Meet them and visit their Linkedin profiles."; ObjectID = "sfD-UN-Fex"; */
+"sfD-UN-Fex.text" = "This is an Internall Project that developed by great intern teams of Mentornity, Inc. Meet them and visit their Linkedin profiles.";
+
+/* Class = "UIButton"; normalTitle = "Language"; ObjectID = "tdn-o8-U8u"; */
+"tdn-o8-U8u.normalTitle" = "Language";
+
+/* Class = "UILabel"; text = "Stephen Garza"; ObjectID = "teg-AI-bbT"; */
+"teg-AI-bbT.text" = "Stephen Garza";
+
+/* Class = "UILabel"; text = "VISIT OUR WEB SITE"; ObjectID = "wFX-OH-mHQ"; */
+"wFX-OH-mHQ.text" = "VISIT OUR WEB SITE";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "wMI-6n-Rzz"; */
+"wMI-6n-Rzz.text" = "Language";
+
+/* Class = "UIButton"; normalTitle = "German"; ObjectID = "zYd-Pq-BAX"; */
+"zYd-Pq-BAX.normalTitle" = "German";
