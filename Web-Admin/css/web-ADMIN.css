@@ -1,0 +1,36 @@
+body{
+  font-family: 'Nunito', sans-serif;
+}
+
+
+.container{
+    border-bottom:2px solid #d6d6d6;
+      margin-top: 20px;
+}
+.login{
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.LoginForm{
+  margin-left: auto;
+}
+#input{
+  background: #f5f2f2;
+border-radius: 5px;
+margin-right: 10px;
+border: none;
+height: 25px;
+font: 700 13.3333px Nunito;
+
+}
+
+#submit{
+  height: 25px;
+background: ##765ed7;
+border: none;
+border-radius: 5px;
+width: 70px;
+color: white;
+margin-right: 10px;
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Categories</title>
+    <link rel="stylesheet" href="../css/ADMIN-panel.css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:300i,400,700" rel="stylesheet">
+  </head>
+  <body>
+    <div class="PanelMenu">
+
+          <a class="buttonMenuUsers" href="file:///C:/Users/User/Desktop/mentornity/html-admin/users.html">Users</a>
+
+          <a id="CategoriesMenuButton"  style="color:#765ed7" class="buttonMenuUsers" href="file:///C:/Users/User/Desktop/mentornity/html-admin/categories.html"><b>Categories</b></a>
+
+            <a class="buttonMenuUsers" href="file:///C:/Users/User/Desktop/mentornity/html-admin/posts.html">Posts</a>
+
+
+            <div class="UsersLogoutPanel">
+                <b style="margin-right: 10px;">Username</b>
+                <a class="buttonLogoutPanel" href="file:///C:/Users/User/Desktop/mentornity/html-admin/web-ADMIN.html">Logout</a>
+            </div>
+  </div>
+    <script type="text/javascript" src="../js/jquery-2.2.0.min.js"></script>
+
+    <!-- Script for hide text on click     -->
+    <script>
+
+    jQuery(document).ready(function($) {
+      $("#inputBox").click(function(){
+          $('#inputBox').val('');
+      });
+        });
+    </script>
+
+  <div>
+    <table>
+      <tr style="background: #765ed7;    color: white;
+    height: 60px;">
+          <th style="width: 500px;" >Regions</th>
+          <th style="width:600px;" >Ecosystems</th>
+
+
+          <th style="text-align:right;">
+
+              <input class="BorderRadiusİnput" type="text" name="NewRegion" value="    New Region"  >
+          </th>
+          <th>
+              <a class="orangeButton" href="#">SAVE</a>
+          </th>
+      </tr>
+      <tr>
+        <td>United States</td>
+        <td>
+          <a href="file:///C:/Users/User/Desktop/mentornity/html-admin/ecosystems.html">4</a>
+      </td>
+      <td style="text-align: right;" >
+          <input  id="hiddenTextBox" class="hiddenTextBox" type="text"   name="" value="">
+      </td>
+      <td>
+
+          <script>
+          /* not ready */
+          jQuery(document).ready(function($) {
+            $("#editButton").click(function(e){
+                    e.preventDefault();
+                if ( $("#hiddenTextBox").css('visibility') === 'visible') {
+                      $("#deleteButton").attr("value","DELETE");
+                        $("#hiddenTextBox").css("visibility",'hidden');
+                           $("#deleteButton").removeClass("GreyButton");
+                          $("#deleteButton").addClass("EditDelete");
+                    }else {
+                    $("#hiddenTextBox").css("visibility","visible");
+                       $("#deleteButton").addClass("GreyButton");
+                        $("#deleteButton").attr("value","SAVE");
+                          $("#editButton").css("visibility","hidden");
+
+                  }
+                  });
+          });
+          </script>
+
+          <input id="editButton" type="button" name="edit" class="EditDelete" value="EDIT">
+          <input id="deleteButton"  class="EditDelete" type="button" name="DeleteandSavebutton" value="DELETE">
+
+
+
+      </td>
+      </tr>
+    </table>
+    <script>
+
+    /* not ready */
+    jQuery(document).ready(function($) {
+
+      $("#deleteButton").click(function(e){
+
+
+
+        if ( $('#deleteButton').val('DELETE')) {
+          $("#hiddenTextBox").addClass("visibleTextBox");
+           $("#hiddenTextBox").attr("readonly","readonly");
+             $("#deleteButton").addClass("GreyButton");
+                 $("#deleteButton").attr("value","SAVE");
+                     $("#hiddenTextBox").attr("value","Are you sure ?");
+                        $("#editButton").css("visibility","hidden");
+        }
+          else {
+               SAVE
+
+          }
+
+
+
+
+
+      });
+    });
+    </script>
+
+  </div>
+
+  </body>
+</html>
