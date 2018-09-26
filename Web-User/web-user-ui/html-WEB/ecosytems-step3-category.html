@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/main.css">
+      <link href="https://fonts.googleapis.com/css?family=Nunito:300i,400,700" rel="stylesheet">
+    <title>Catogaries</title>
+  </head>
+  <body onload="myFunction()">
+    <!-- loader -->
+     <img id="loader"src="img/ef-loading-gif.gif" alt="">
+    <script>
+    var myVar;
+    /*i want to see the how loader working so time variable is made-up we can change it later */
+    function myFunction() {
+        myVar = setTimeout(showPage, 1000);
+    }
+
+    function showPage() {
+      document.getElementById("loader").style.display = "none";
+        document.getElementById("onloadCategoriesHeader").style.display = "block";
+            document.getElementById("main").style.display = "block";
+    }
+    </script>
+    <!-- End -->
+  <header class="Header" id="onloadCategoriesHeader" style="display:none;">
+    <div class="container">
+      <div class="Header-left">
+        <a class="Header-logo">
+            <img src="img/site-logo-1.png" alt="">
+        </a>
+        <div class="Header-left-Text">
+          <b>Ecosystem feed</b><b style="font: 400 15px Nunito; color:#6e6e6e"> by Mentornity</b>
+        </div>
+        </div>
+        <button type="button" name="button" class="HamMenu">
+            <span> <img src="img/hamburgerMenu.svg" alt=""> </span>
+        </button>
+        <div class="Header-Buttons">
+              <a href="#"  style="text-decoration: none;">  <img src="img/home-icon.png" alt=""> </a>
+                <a href="#"  style="text-decoration: none;">  <img src="img/createpost-icon.png" alt=""> </a>
+                  <a href="#"  style="text-decoration: none;">  <img src="img/ecosystems.png" alt=""> </a>
+                    <a href="#"  style="text-decoration: none;">  <img src="img/settings-icon.png" alt=""> </a>
+        </div>
+      </div>
+  </header>
+
+  <div id="main" class="main"  style="background:#f8f8f8; margin-top:5px; height:100px; display: none;" >
+
+        <b style="color:#cfcfcf;">Region / Ecosystem  </b>
+        <h1>  CATEGORY</h1>
+        <div class="main" style="text-align:-webkit-center;">
+          <div id="cat" class="CategoryMenu">
+              <h3>Talent Management</h3>
+              <div class="CategoryDetail">
+                <div class="CategoryDetailTagA">
+                  <a href="#" style="margin-right:10px;"  >12 Posts</a>
+                  <a href="#">48 Followers</a>
+                </div>
+
+                <input type="button" name="" value="Follow" class="ecoFollowButton">
+              </div>
+          </div>
+        </div>
+        <div class="main" style="text-align:-webkit-center;">
+          <div id="cat" class="CategoryMenu">
+              <h3>Organization Devolopment</h3>
+              <div class="CategoryDetail">
+                <div class="CategoryDetailTagA">
+                  <a href="#" style="margin-right:10px;"  >12 Posts</a>
+                  <a href="#">48 Followers</a>
+                </div>
+
+                <input type="button" name="" value="Follow" class="ecoFollowButton">
+              </div>
+          </div>
+        </div>
+  </div>
+  </body>
+</html>

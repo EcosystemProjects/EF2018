@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="../css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Welcome Page</title>
+  </head>
+  <body onload="myFunction()">
+    <!-- loader -->
+     <img id="loader"src="img/ef-loading-gif.gif" alt="">
+    <script type="text/javascript">
+    var myVar;
+    /*i want to see the how loader working so time variable is made-up we can change it later */
+    function myFunction() {
+        myVar = setTimeout(showPage, 1000);
+    }
+    function showPage() {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("top").style.display = "block";
+        document.getElementById("bottom").style.display = "block";
+      }
+    </script>
+        <div id="top" style="display:none;">
+        <div class="main" style="width:200px; margin-top:10px;">
+
+              <p style=" color:#636363">Follow categories and get fresh posts about your ecosystem!</p>
+        </div>
+          <div class="DisplayIcons" >
+                <img  style="height:150px;"  src="img/site-logo-1.png" alt="">
+          </div>
+          <div class="main" style="width:130px; margin-top:30px; ">
+                <b>Ecosystem Feed</b><i style="color:#636363"> by Mentornity</i>
+          </div>
+        </div>
+          <div id="bottom" style="display:none" >
+              <div class="main" style="margin-top:50px; margin-bottom:25px;">
+                  <a class="LinkedinButton" type="button" name="button">Connect via Linkedin</a>
+
+              </div>
+
+                <p style="text-align:center;">OR</p>
+
+                <div class="main" style="margin-top:25px;">
+                      <a  class="transparentButton"href="#">Browse Ecosystem</a>
+                </div>
+                  <div class="main"  style="width:200px;">
+                  <p style="margin-top:50px;">TERMS OF USE AND PRIVACY AGREEMENTS</p>
+                  <b>Copyright 2018</b>
+                  </div>
+
+          </div>
+  </body>
+</html>

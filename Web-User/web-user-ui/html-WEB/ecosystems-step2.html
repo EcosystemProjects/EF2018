@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="../css/main.css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:300i,400,700" rel="stylesheet">
+    <title></title>
+  </head>
+  <body onload="myFunction()">
+      <!-- loader -->
+       <img id="loader"src="img/ef-loading-gif.gif" alt="">
+      <script>
+      var myVar;
+      /*i want to see the how loader working so time variable is made-up we can change it later */
+      function myFunction() {
+          myVar = setTimeout(showPage, 1000);
+      }
+
+      function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("onloadMainPage").style.display = "block";
+          document.getElementById("a").style.display = "block";
+      }
+      </script>
+      <!-- End -->
+
+    <header class="Header" id="a" style="display:none;">
+      <div class="container">
+        <div class="Header-left">
+          <a class="Header-logo">
+              <img src="img/site-logo-1.png" alt="">
+          </a>
+          <div class="Header-left-Text">
+            <b>Ecosystem feed</b><b style="font: 400 15px Nunito; color:#6e6e6e"> by Mentornity</b>
+          </div>
+          </div>
+          <button type="button" name="button" class="HamMenu">
+              <span> <img src="img/hamburgerMenu.svg" alt=""> </span>
+          </button>
+          <div class="Header-Buttons">
+                <a href="#"  style="text-decoration: none;">  <img src="img/home-icon.png" alt=""> </a>
+                  <a href="#"  style="text-decoration: none;">  <img src="img/createpost-icon.png" alt=""> </a>
+                    <a href="#"  style="text-decoration: none;">  <img src="img/ecosystems.png" alt=""> </a>
+                      <a href="#"  style="text-decoration: none;">  <img src="img/settings-icon.png" alt=""> </a>
+          </div>
+        </div>
+    </header>
+
+          <div class="main" style="display:none;" id="onloadMainPage">
+            <h1 style="font-size:30px;">ECOSYSTEMS</h1>
+            <h2 style="font-size:15px;color:#b1b1b1;" >Select an ecosystem to see categories</h2>
+                <div class="EcoButton">
+                    <button  style="background:#28bf8b; color:white;" type="button" name="button" value="Türkiye">Human Resources</button>
+                      <button  style="background:#bf2884; color:white;" type="button" name="button" value="Türkiye">Entrepreneurship</button>
+                        <button style="background:#ff9c00; color:white;" type="button" name="button" value="Türkiye">Education</button>
+                          <button style="background:#187adf; color:white;" type="button" name="button" value="Türkiye">Tourism</button>
+                </div>
+              </div>
+
+  </body>
+</html>

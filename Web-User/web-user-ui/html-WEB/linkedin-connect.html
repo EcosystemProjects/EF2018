@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/main.css">
+      <link href="https://fonts.googleapis.com/css?family=Nunito:300i,400,700" rel="stylesheet">
+  </head>
+  <body  onload="loaderFunc()">
+         <img id="loader"src="img/ef-loading-gif.gif" alt="">
+    <script type="text/javascript">
+        var myVar;
+        /*i want to see the how loader working so time variable is made-up we can change it later */
+        function loaderFunc() {
+            myVar = setTimeout(showPage, 1000);
+        }
+        function showPage() {
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("onloadMainPage").style.display = "block";
+          document.getElementById("onloadHeader1").style.display = "block";
+          document.getElementById("UserPage").style.display = "block"
+          document.getElementById("MenuInfo").style.display = "block"
+          }
+    </script>
+    <header id="onloadHeader1" style="display:none;" class="Header">
+          <div class="container">
+            <div class="Header-left">
+              <a class="Header-logo">
+                  <img src="img/site-logo-1.png" alt="">
+              </a>
+                  <div class="Header-left-Text">
+                      <b>Ecosystem feed</b><b style="font: 400 15px Nunito; color:#6e6e6e"> by Mentornity</b>
+                  </div>
+              </div>
+              <button type="button" name="button" class="HamMenu">
+                  <span> <img src="img/hamburgerMenu.svg" alt=""> </span>
+              </button>
+              <div class="Header-Buttons">
+                    <a href="#"  style="text-decoration: none;">  <img src="img/home-icon.png" alt=""> </a>
+                      <a href="#"  style="text-decoration: none;">  <img src="img/createpost-icon.png" alt=""> </a>
+                        <a href="#"  style="text-decoration: none;">  <img src="img/ecosystems.png" alt=""> </a>
+                          <a href="#"  style="text-decoration: none;">  <img src="img/settings-icon.png" alt=""> </a>
+              </div>
+            </div>
+    </header>
+  <div class="main" id="onloadMainPage"  style="display:none">
+    <div class="Title">
+<h1><b>Welcome to Ecosystem Feed</b></h1>
+  <h2><i style="font: 400 20px Nunito; color:#6e6e6e" >Browse ecosystems and categories to follow</i></h2>
+</div>
+
+<a class="LinkedinButton"href="#">
+    GET STARTED
+</a>
+</div>
+
+<div class="UserPage" id="UserPage"  style="display:none">
+
+  <img src="img/site-logo-1.png" >
+  <div class="UserPage-Menu">
+    <a href="#"><b>UserName</b></a>
+  <a href="#"> Connect via Linkedin</a>
+  <a href="#">Logout</a>
+  </div>
+</div>
+
+<div class="MenuInfo" id="MenuInfo" style="display:none">
+  <div class="MenuIconsHelper">
+        <b>Menu info</b>
+        <div class="DisplayIcons">
+            Your Feed:  <img src="img/home-icon.png" alt="">
+            Ecosystems :
+            <img src="img/ecosystems.png" alt="">
+            Settings :
+            <img src="img/settings-icon.png" alt="">
+            Create post:
+            <img src="img/createpost-icon.png" alt="">
+        </div>
+
+
+  </div>
+
+
+</div>
+
+  </body>
+
+</html>
