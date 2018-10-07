@@ -1,0 +1,15 @@
+ECOSYSTEM FEED KALAN PROBLEMLER VE EKLENECEKLER
+Uygulama genel anlamda bitti. Eklecek olanlar yada çözülmesi gereken problemleri yazıyorum.
+1-Uygulamada kullanıcıyı takip etmek için intercom io adında bir servis kullanıyoruz. Buna Serkan beyin tavsiyesine göre eğer login olunduysa bir id eklenmeli.
+2-Kullanıcıya bildirim göndermek için onesignal adında başka bir servis kullanılıyor. bildirime tıklanıldığıda bir içeriğe yönlendirmek gerekiyor.iki servisinde kurulumları yapıldı.
+3-Bütün ekranlar için(ALlfeed,feed,my posts,category details) içerik yoksa hata yada bilgi mesajı görüntülemelisin.BUnnungörsel olarak nasıl olması gerektiğini serkan beyle konuşabilirsin.
+4-Kategori detaylarının olduğu sayfada kullanıcı resm bilgisi eksik onu json sorgusuna eklediğinde eklersin.
+5-postlarda ve ayrıntılı post görüntüleme de de benzer durum mevcut. Bu bilgiler json sorgusuyla eksiksiz sağlandığında eklersin.
+6-Ayarlar ekranında iki tane switch var bunların şuan bir fonksiyonları yok.Backend tarafında halledildiğinde eklemek sana kalıyor.
+Sanırım biri json sorgusuyla diğeride onesignal tarafında bildirimi kapatma ile halledilebilir.
+7-Ayarlar>Hakkkında kısmında geliştirici bilgilerini güncelleyebilirsin.Ayrıca serkan bey oraya bir link de koydurabilir.YAni uygulama içinden değilde bir siteden geliştirici bilgileri görüntülenebilir.
+8-Create Post->Kullanıcı kendi postunu silebilir.Buton hazır olarak mevcut.Bu konuda api desteği sağlandığında  silebilirsin.
+9-Son olarak Create post kısmında girilen bilgiler veritabanına yüklenmeli.Şuan bu konuda api sağlanmadığı için bu konu size kaldı.
+
+Uygulama Arayüzü için :https://projects.invisionapp.com/share/NELE65DSU48#/screens/304200221
+Trello:Trellodaki konulara bakmak çok faydalı olacaktır.Bunun için Serkan beyden seni eklemesini iste.
