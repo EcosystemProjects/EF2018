@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:padding="5dp">
+    <ImageView
+        android:id="@+id/follower_profile_iv"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:paddingRight="10dp"/>
+    <TextView
+        android:id="@+id/follower_username_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Name"
+        android:textSize="25sp"
+        android:includeFontPadding="true"
+        android:paddingVertical="@dimen/activity_vertical_margin"
+        />
+</LinearLayout>

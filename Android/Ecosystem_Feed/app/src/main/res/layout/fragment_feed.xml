@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Feed"
+    android:id="@+id/feed_ly">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="FOR ME"
+            android:textSize="25sp"
+            android:textColor="@color/black_text"
+            android:fontFamily="@font/nunito_semibold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/feed_see_all_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="SEE ALL"
+            android:textSize="25sp"
+            android:textColor="@color/black_text"
+            android:fontFamily="@font/nunito_extralight"
+            android:gravity="center"/>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/for_me_contents_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
+        android:layout_marginHorizontal="16dp"
+        android:scrollbars="vertical"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="56dp"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+</FrameLayout>

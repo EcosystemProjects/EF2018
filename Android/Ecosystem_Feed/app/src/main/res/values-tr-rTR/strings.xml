@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ecosytem Feed</string>
+    <string name="Title">Linkedln ile bağlan.</string>
+    <string name="Title1">Ekosistemi keşfet.</string>
+    <string name="OR">VEYA</string>
+    <string name="String4">Kategorileri takip edin ve ekosisteminizdeki en yeni paylaşımlara ulaşın.</string>
+    <string name="welcome_to_n_ecosystem_feed">Hoş Geldiniz\nEcosystem Feed</string>
+    <string name="get_started">Hadi Başlayalım!</string>
+    <string name="connected_via_linkedin_nlogout">Linkedln ile bağlanıldı.</string>
+    <string name="your_feed">Akışınız :</string>
+    <string name="ecosystems">Ekosistem :</string>
+    <string name="settings">Ayarlar :</string>
+    <string name="create_post">Gönderi Oluştur :</string>
+    <string name="browse_ecosystem_and_categories_n_to_follow">Takip etmek için ekosistem ve kategorilerde gezinin.</string>
+    <string name="language_title">Türkçe</string>
+    <string name="about">HAKKINDA</string>
+    <string name="create_a_new_post">YENİ BİR YAYIN OLUŞTURUN.</string>
+    <string name="show_my_posts">YAYINLARIMI GÖSTER</string>
+    <string name="link">BAĞLANTI</string>
+    <string name="put_link_here">"Bağlantı adresini buraya koyun. "</string>
+    <string name="edit">DÜZENLE</string>
+    <string name="or_write_yourself">VEYA KENDİNİZ YAZIN</string>
+    <string name="title">BAŞLIK</string>
+    <string name="write_here">Buraya yazın...</string>
+    <string name="description">TANIMLAMA</string>
+    <string name="featured_image">RESİM EKLEME</string>
+    <string name="add">EKLE</string>
+    <string name="send">GÖNDER</string>
+    <string name="ecosytems">EKOSİSTEMLER</string>
+    <string name="select_a_region_to_see_ecosystems">Ekosistemleri görmek için bir bölge seçin</string>
+    <string name="settings_capital">AYARLAR</string>
+    <string name="contact">İLETİŞİM</string>
+    <string name="language">DİL</string>
+    <string name="send_me_mobile_nptifications_nabout_featured_post">Öne çıkan yayın hakkında bana bildirimler gönder.</string>
+    <string name="send_me_e_mails_about_nfeatured_posts">Öne çıkan yayınlar hakkına bana e-posta gönder</string>
+    <string name="ecosystem_feed">Ekosistem Bölümleri</string>
+    <string name="by_mentornity">Mentornity Tarafından</string>
+    <string name="about_exp">"Bu Mentornity şirketinin harika stajyerleri tarafından geliştirilen bir staj projesidir. Onlarla tanışın ve Linkedln profilleri ziyaret edin.  "</string>
+    <string name="frontend_ui_developers">Web Yazılım Geliştircileri:</string>
+    <string name="ios_developers">IOS Yazılım Geliştircileri:</string>
+    <string name="followers">Takipçiler</string>
+    <string name="posts">eçerlilik Tarihi: 7,2018 Bu Gizlilik Politikası Mentornity\'nin bilgiyi nasıl topladığını, kullandığını ve ifşa ettiğini ve bilgiye göre nelere sahip olduğunuzu ve bu bilgilerle ilgili sahip olduğunuz seçeneklerin neler olduğunu açıklar. Gizlilik Politikasını daha açık ve daha anlaşılır kılmak için çalıştık: Aşağıdaki İçindekiler bölümünde listelenen bölümler halinde düzenleyerek, Politikaların Mentornity tarafından nasıl uygulanabileceğini ve basitlik ve kıskançlık için bir kereden fazla kullanılan birkaç terimin tanımlanmasını ve sermayeleştirilmesini gösteren bir dizi örnek sunmak. \'Mentornity\' adını verdiğimiz zaman, aşağıdaki \'Veri Koruma Yönetmelikleri\' bölümünde daha ayrıntılı olarak açıklandığı gibi, bilgilerinizin kontrolü veya işlemcisi olarak görev yapan Mentornity varlığı anlamına gelebiliriz. İçindekiler</string>
+    <string name="terms">Geçerlilik Tarihi: 7,2018 Bu Gizlilik Politikası Mentornity\'nin bilgiyi nasıl topladığını, kullandığını ve ifşa ettiğini ve bilgiye göre nelere sahip olduğunuzu ve bu bilgilerle ilgili sahip olduğunuz seçeneklerin neler olduğunu açıklar. Gizlilik Politikasını daha açık ve daha anlaşılır kılmak için çalıştık: Aşağıdaki İçindekiler bölümünde listelenen bölümler halinde düzenleyerek, Politikaların Mentornity tarafından nasıl uygulanabileceğini ve basitlik ve kıskançlık için bir kereden fazla kullanılan birkaç terimin tanımlanmasını ve sermayeleştirilmesini gösteren bir dizi örnek sunmak. \'Mentornity\' adını verdiğimiz zaman, aşağıdaki \'Veri Koruma Yönetmelikleri\' bölümünde daha ayrıntılı olarak açıklandığı gibi, bilgilerinizin kontrolü veya işlemcisi olarak görev yapan Mentornity varlığı anlamına gelebiliriz. İçindekiler</string>
+    <string name="select_new_categories">Kategorileri görmek için bir ekosistem seçin.</string>
+    <string name="logout">Çıkış</string>
+    <string name="terms_capital">ŞARTLAR</string>
+    <string name="create_post_url_error">Girdiğiniz url uygun değil.</string>
+    <string name="create_post_empty_url_error">Url alanı boş olamaz.</string>
+    <string name="String3">Copyright © 2018</string>
+    <string name="TERMS_OF_USE_AND">TERMS OF USE AND</string>
+    <string name="title_activity_terms">TermsActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Privacy">gizlilik politikası</string>
+    <string-array name="Languages">
+        <item name="English">English</item>
+        <item name="Türkçe">Turkce</item>
+    </string-array>
+    <string name="follow">Takip Et</string>
+    <string name="un_follow">Takibi Bırak</string>
+    <string name="ok">Tamam</string>
+
+</resources>

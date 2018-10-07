@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#00ffffff"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_list_bg"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filter_dialog_region_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nunito_semibold"
+                android:gravity="center"
+                android:text="Region"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/filter_dialog_region_Ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_down"
+                android:tint="@color/white" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/filter_dialog_region_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"></ListView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filter_dialog_ecosystem_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nunito_semibold"
+                android:gravity="center"
+                android:text="Ecosystem"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/filter_dialog_ecosystem_Ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_down"
+                android:tint="@color/white" />
+        </RelativeLayout>
+        <ListView
+            android:id="@+id/filter_dialog_ecosystem_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"></ListView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filter_dialog_category_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nunito_semibold"
+                android:gravity="center"
+                android:text="Category"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/filter_dialog_category_Ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_down"
+                android:tint="@color/white" />
+        </RelativeLayout>
+        <ListView
+            android:id="@+id/filter_dialog_category_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            ></ListView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/filter_filter_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color1"
+        android:fontFamily="@font/nunito_bold"
+        android:text="@string/ok"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Ecosytem Feed</string>
+    <string name="Title">Connect via Linkedln</string>
+    <string name="Title1">Browse Ecosystem</string>
+    <string name="OR">OR</string>
+    <string name="TERMS_OF_USE_AND">TERMS OF USE AND</string>
+    <string name="String3">Copyright © 2018</string>
+    <string name="String4">Follow categories and get \\n fresh posts about your \\n ecosytem!</string>
+    <string name="title_activity_terms">TermsActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="terms">Effective: April 7,2018\n\nThis Privacy Policy describes how Mentornity collects, uses and discloses information,and what choices you have with respect to the information, and what choices you have with respect to the information \n\n We have worked to make the Privacy Policy clearer and more understandable by: organizing it into the sections listed in the Table of Contents below, \n\n  providing a series of examples that help illustrate how the policies may be implemented by Mentornity and defining and capitalizing a few terms that are used more than once for simplicity and brevity.\n\n When we refer to 'Mentornity', we can mean the Mentornity entity that acts as the controller or processor of your information,as explained in more detail in the 'Data Protection Regulations' section below.\n Table of Contents </string>
+    <string name="welcome_to_n_ecosystem_feed">Welcome to \nEcosystem Feed</string>
+    <string name="browse_ecosystem_and_categories_n_to_follow">Browse ecosystem and categories  to follow</string>
+    <string name="get_started">Get Started</string>
+    <string name="connected_via_linkedin_nlogout">Connected via Linkedin\n Logout</string>
+    <string name="your_feed">Your Feed :</string>
+    <string name="ecosystems">Ecosystems :</string>
+    <string name="settings">Settings :</string>
+    <string name="create_post">Create post :</string>
+    <string name="create_a_new_post">CREATE A NEW POST</string>
+    <string name="show_my_posts">SHOW MY POSTS</string>
+    <string name="link">LINK</string>
+    <string name="put_link_here">put link here</string>
+    <string name="edit">EDIT</string>
+    <string name="or_write_yourself">OR WRITE YOURSELF</string>
+    <string name="title">TITLE</string>
+    <string name="write_here">Write here</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="featured_image">FEATURED IMAGE</string>
+    <string name="add">ADD</string>
+    <string name="send">SEND</string>
+    <string name="ecosytems">ECOSYTEMS</string>
+    <string name="select_a_region_to_see_ecosystems">Select a region to see ecosystems</string>
+    <string name="settings_capital">SETTINGS</string>
+    <string name="about">ABOUT</string>
+    <string name="contact">CONTACT</string>
+    <string name="language">Language</string>
+    <string name="send_me_mobile_nptifications_nabout_featured_post">Send me mobile nptifications about featured post</string>
+    <string name="send_me_e_mails_about_nfeatured_posts">Send me e-mails about  featured posts</string>
+    <string name="ecosystem_feed">Ecosystem Feed</string>
+    <string name="by_mentornity">by Mentornity</string>
+    <string name="about_exp">This is an internall Project that developed by great intern teams of Mentornity, Inc.Meet them and visit their Linkedln Profiles</string>
+    <string name="frontend_ui_developers">Web UI Developers :</string>
+    <string name="ios_developers">IOS Developers :</string>
+    <string name="terms_capital">TERMS</string>
+    <string name="follow">Follow</string>
+    <string name="followers">Followers</string>
+    <string name="posts">Posts</string>
+    <string name="language_title">English</string>
+    <string-array name="Languages">
+        <item name="English">English</item>
+        <item name="Türkçe">Turkce</item>
+    </string-array>
+    <string name="select_new_categories">Select an ecosystem to see categories</string>
+    <string name="logout">LOG OUT</string>
+    <string name="Privacy">this is a privacy policy</string>
+    <string name="create_post_url_error">URL is not appropriate.</string>
+    <string name="create_post_empty_url_error">URL is empty.</string>
+    <string name="un_follow">Unfollow</string>
+    <string name="ok">OK</string>
+</resources>

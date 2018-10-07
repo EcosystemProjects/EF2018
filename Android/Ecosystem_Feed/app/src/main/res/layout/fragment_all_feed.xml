@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AllFeed">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/allfeed_forme_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="FOR ME"
+            android:textSize="25sp"
+            android:textColor="@color/black_text"
+            android:fontFamily="@font/nunito_extralight"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="SEE ALL"
+            android:textSize="25sp"
+            android:textColor="@color/black_text"
+            android:fontFamily="@font/nunito_semibold"
+            android:gravity="center"/>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_contents_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
+        android:layout_marginHorizontal="16dp"
+        android:scrollbars="vertical"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="56dp"
+        >
+
+     </android.support.v7.widget.RecyclerView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/popup_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="64dp"
+        android:src="@drawable/ic_filter_list_black_24dp"
+        app:backgroundTint="@color/blue_list_bg"
+        app:rippleColor="@android:color/holo_red_dark"/>
+</RelativeLayout>
