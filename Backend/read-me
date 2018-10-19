@@ -1,1 +1,9 @@
-#Please add your backend files here
+Post Ekleme İşlemleri Yapılmadı .
+Yetki verileri geliyor fakat sayfalarda yetki kısıtlamaları yok bunlar düzenlenicek .
+Settings sayfası Yapılmadı .
+Admin panelinde iyileştirmeler gerekiyor tasarımsal arama kısmı vs.
+Aynı Region , Kategori için aynı isimde oluşturuluyor kontrol koyulması gerekiyor .
+Mail gönderme ve bildirim gönderme sistemleri yapılmadı .
+
+Api konusunda yukardaki işlemlerden birkaçı apiye eklenicek . Ios ve Android tarafındaki eksikleri öğrenip ekleyebilirsiniz .
+Takıldığınız anlayamadığınız kısımda iletişime geçebilirsiniz .
