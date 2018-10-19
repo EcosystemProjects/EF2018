@@ -1,0 +1,95 @@
+body{
+    font-family: 'Nunito', sans-serif;
+}
+
+.PanelMenu{
+  display: flex;
+}
+
+
+.buttonMenuUsers
+{
+  margin-left: 20px;
+  margin-right: 10px;
+  text-decoration:none;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: grey;
+}
+.UsersLogoutPanel{
+  margin-top: 10px;
+  margin-left: auto;
+
+}
+
+.buttonLogoutPanel{
+    text-decoration: none;
+    margin-right: 20px;
+    color: grey;
+
+}
+table{
+  border-collapse: collapse;
+  width: 100%;
+}
+td, th {
+
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    border: 1px solid #dddddd;
+}
+
+select{
+  border:none;
+}
+
+.orangeButton{
+  text-decoration: none;
+    color: white;
+    background: orange;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-radius: 5px;/***/
+    padding-top: 2px;
+padding-bottom: 2px;
+margin-left: 10px;
+}
+.EditDelete{
+  background: transparent;
+    border: none;
+    font: 400 15px Nurito;
+    color: grey;
+}
+
+.GreyButton{
+  text-decoration: none;
+    color: black;
+    background: lightgrey;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-radius: 5px;
+    border: none;
+    height: 25px;
+}
+
+  .hiddenTextBox{
+    visibility: hidden;
+  }
+/*
+  #hiddenTextBox{
+    visibility: hidden;
+  }*/
+
+  .visibleTextBox{
+    visibility: visible;
+  }
+.BorderRadiusİnput{
+  border-radius: 5px;
+  border: none;
+  font: 400 13.3333px Nunito;
+  Color: grey;
+  height: 20px;
+
+}

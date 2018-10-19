@@ -1,0 +1,195 @@
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+/*Masaüstü*/
+:root {
+    font-size: 16px;
+}
+
+/*Mobil (md<)*/
+@media screen and (max-width: 992px) {
+    :root {
+        font-size: 14px;
+    }
+}
+
+main {
+    padding-top: 60px;
+}
+
+nav {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.mh-60p {
+    min-height: 60px;
+}
+
+.row-bg-1 {
+    background-image: url('../img/row_bg_1.png');
+    background-repeat: no-repeat;
+    background-position: 75% bottom;
+}
+
+.row-bg-2 {
+    background-image: url('../img/row_bg_2.png');
+    background-repeat: no-repeat;
+    background-position: 25% top;
+    background-size: contain;
+}
+
+.text-purple {
+    color: #6028be;
+}
+
+/*Özel Buton Stilleri*/
+[class*="btn-custom"],
+[class*="btn-custom"]:hover {
+    color: #fff;
+    font-size: 1.3rem;
+
+}
+
+[class*="btn-"] {
+    box-shadow: 0 0 8px -2px #434343;
+}
+
+[class*="btn-"]:hover {
+
+    box-shadow: 0 0 10px -1px #434343;
+}
+
+.btn-custom-transparent {
+    background-color: transparent;
+    border-color: transparent;
+    border: unset;
+    box-shadow: unset;
+}
+
+.btn-custom-purple {
+    background-color: #6028be;
+    border-color: #6028be;
+}
+
+.btn-custom-pink {
+    background-color: #ef0c67;
+    border-color: #ef0c67;
+}
+
+.btn-custom-blue {
+    background-color: #187adf;
+    border-color: #187adf;
+}
+
+.btn-custom-orange {
+    background-color: #f39500;
+    border-color: #f39500;
+}
+
+.btn-custom-green {
+    background-color: #28be8a;
+    border-color: #28be8a;
+}
+
+.btn-custom-darkred {
+    background-color: #b00021;
+    border-color: #b00021;
+}
+
+.row.dark {
+    position: relative;
+}
+
+.navbar-brand {
+    position: relative;
+    margin-left: 50px;
+}
+
+.navbar-brand:after {
+    content: ' ';
+    height: 35px;
+    width: 44px;
+    background-image: url('../img/logo_header.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+
+}
+
+h2 {
+    font-size: 2.4rem;
+    font-weight: 600;
+}
+
+h5 {
+    color: #7b7b7b;
+}
+
+p {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    color: #646464;
+}
+
+.row.dark:before {
+    background-color: #f9f9f9;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100vw;
+    top: 0;
+    bottom: 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+footer ul {
+    list-style: none;
+}
+
+footer p {
+    max-width: 540px;
+    margin: 20px auto;
+}
+
+footer ul li {
+    display: inline-block;
+    margin: 0 8px;
+    position: relative;
+}
+
+footer ul li:after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #000;
+    position: absolute;
+    right: -12px;
+    top: calc(50% - 2px);
+}
+
+footer ul li:last-child:after {
+    content: unset;
+}
+
+/*Responsive İçerik*/
+@media (min-width: 992px) {
+    .vertical-center {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+@media (max-width: 992px) {
+    nav {
+        background-color: #fff;
+    }
+}
