@@ -1,0 +1,53 @@
+Options All -Indexes
+php_flag register_globals on
+ServerSignature Off
+
+RewriteEngine on 
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([0-9a-zA-Z-_]+)\.html$ index.php?page=$1 [L,QSA]
+RewriteRule ^admin/([0-9a-zA-Z-_]+)\.html$ index.php?page=admin&subpage=$1 [L,QSA]
+RewriteRule ^admin/ecosystems/([0-9a-zA-Z-_]+)\.html$ index.php?page=admin&subpage=ecosystems&region=$1 [L,QSA]
+RewriteRule ^admin/categories/([0-9a-zA-Z-_]+)/([0-9a-zA-Z-_]+)\.html$ index.php?page=admin&subpage=categories&region=$1&ecosystems=$2 [L,QSA]
+RewriteRule ^dashboard/([0-9a-zA-Z-_]+).html$ index.php?page=dashboard&subpage=$1 [L,QSA]
+RewriteRule ^dashboard/([0-9a-zA-Z-_]+)/([0-9a-zA-Z-_]+)\.html$ index.php?page=dashboard&subpage=$1&inpage=$2 [L,QSA]
+
+RewriteCond %{THE_REQUEST} \ /(.+)\.php
+RewriteCond %{THE_REQUEST} \ /(.+)\.aspx
+RewriteRule ^ /%1.html [L,R=301]
+
+RewriteCond %{QUERY_STRING} base64_encode.*\\(.*\\) [OR]
+RewriteCond %{QUERY_STRING} (\\<|<).*script.*(\\>|>) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\\[|\\%[0-9A-Z]{0,2})
+RewriteCond %{QUERY_STRING} _REQUEST(=|\\[|\\%[0-9A-Z]{0,2})
+RewriteRule ^(.*)$ index.php [F,L]
+
+<Files *.php>
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+</Files>
+
+<Files index.php>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+<Files Web.php>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+<Files captcha.php>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+ErrorDocument 404 /404.html
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# “ea-php71” paketini varsayılan “PHP” programlama dili olarak ayarlayın.
+<IfModule mime_module>
+  AddType application/x-httpd-ea-php71 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
