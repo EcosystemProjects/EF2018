@@ -1,22 +1,19 @@
 <?php
 
 /* Linkedin settings */
-$config['url']             		=   'http://ecosystemfeed.com/';
-$config['base_url']             =   'http://ecosystemfeed.com/homepage.html';
-$config['callback_url']         =   'http://ecosystemfeed.com/linkedin.html';
-$config['linkedin_access']      =   '86qsn3575cp34p';
-$config['linkedin_secret']      =   '8Cev77FbYac504ee';
+$config['url']             		  =   'http://ecosystemfeed.com/'; // Default System Address
+$config['base_url']             =   'http://ecosystemfeed.com/homepage.html'; // First Page
+$config['callback_url']         =   'http://ecosystemfeed.com/linkedin.html'; // Linkedin Api Information Return Page
+$config['linkedin_access']      =   '';//Linkedin api access key
+$config['linkedin_secret']      =   '';//Linkedin api secret key
 $config['linkedin_scope']       =   'r_basicprofile r_emailaddress w_share';
 
 /* Database settings */
-$config['host']					=	'localhost';
-$config['port']					=	'';
-$config['dbname']				=	'ecosyste_db';
-$config['dbuser']				=	'ecosyste_admin';
-$config['dbpass']				=	'Ja{TPuRwrq@K';
-$config['dbtype']				=	'Mysql'; // Mssql, Mysql, Mysqli, Mongodb, Mariadb
-/*
-$config['base_url']             =   'http://192.168.1.190/homepage.html';
-$config['callback_url']         =   'http://192.168.1.190/linkedin.html';
-*/
+$config['host']					=	'localhost'; // Default : localhost , or Ip Address
+$config['port']					=	'';// Mssql 1433 etc.
+$config['dbname']				=	'';// Db Name
+$config['dbuser']				=	'';// Db Username
+$config['dbpass']				=	'';// Db Password
+$config['dbtype']				=	'Mysql'; // Db Query Type Mssql, Mysql, Mysqli, Mongodb, Mariadb
+
 ?>
