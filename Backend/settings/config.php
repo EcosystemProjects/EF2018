@@ -1,7 +1,7 @@
 <?php
 
 	/* Linkedin settings */
-	$config['url']             		  =   'http://ecosystemfeed.com/'; // Default System Address
+	$config['url']             	=   'http://ecosystemfeed.com/'; // Default System Address
 	$config['base_url']             =   'http://ecosystemfeed.com/homepage.html'; // First Page
 	$config['callback_url']         =   'http://ecosystemfeed.com/linkedin.html'; // Linkedin Api Information Return Page
 	$config['linkedin_access']      =   '';//Linkedin api access key
