@@ -60,7 +60,7 @@
 									<a href="dashboard/follower/'.$SeoFunction->seo($name).'.html">'.$follower.' followers</a>
 								</div>
 
-								'.(($isOnline) ? '<a href="dashboard/follow/'.$SeoFunction->seo($name).'.html" name="button" value="'.$name.'" class="ecoFollowButton">FOLLOW</a>' : '<a href="homepage.html" name="button" class="ecoFollowButton" disabled="disabled">Disabled</a>').'
+								'.(($isOnline) ? '<a href="dashboard/follow/'.$SeoFunction->seo($name).'.html" name="button" value="'.$name.'" class="ecoFollowButton">FOLLOW</a>' : '').'
 							</div>
 							';
 							
