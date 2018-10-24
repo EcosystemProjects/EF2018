@@ -1,8 +1,10 @@
 body{
     font-family: 'Nunito', sans-serif;
 }
+button:focus {outline:0; }
 .Header {
   box-shadow: 0 8px 6px -6px #00000033;
+  display:none;
 }
 .container{
   margin-top: 20px;
@@ -25,8 +27,7 @@ body{
   display: inline-block;
 }
 .Title{
-  width: 450px;
-  margin-left: 35%;
+  width: 100%;
 margin-bottom: 50px;
 }
 .main{
@@ -92,33 +93,10 @@ margin-top: 50px;
   margin-right: 25px;
 }
 
-.RegionButton{
-  display: grid;
-}
-.RegionButton a {
-    margin: 0 auto;
-    border-radius: 15px;
-    background: #f0f0f0;
-    margin: 0 auto;
-    margin-bottom: 25px;
-    width: 300px;
-    border: none;
-    height: 50px;
-    font-size: 20px;
-	color:black;
-	text-decoration: none;
-	padding-top:12px;
-}
-.RegionButton a:hover{
-  background: #187adf;
-  text-decoration: none;
-  color: white;
-}
-
 .EcoButton{
   display: grid;
 }
-.EcoButton a {
+.EcoButton button {
     margin: 0 auto;
     border-radius: 15px;
     background: #f0f0f0;
@@ -126,18 +104,14 @@ margin-top: 50px;
     margin-bottom: 25px;
     width: 300px;
     border: none;
-    height: 50px;
+    height: 80px;
     font-size: 20px;
-	color:white;
-	text-decoration: none;
-	padding-top:12px;
+
 }
-.EcoButton a:hover{
+.EcoButton button:hover{
   background: #187adf;
-  text-decoration: none;
   color: white;
 }
-
 #loader {
   position: absolute;
   left: 50%;
@@ -220,8 +194,9 @@ margin-top: 50px;
   width: 700px;
   border-radius: 10px;
   box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-bottom: 10px;
-  
+  height: 700px;
+  margin-bottom: 20px;
+
 }
 .imgM{
   width: 700px;
@@ -229,27 +204,19 @@ margin-top: 50px;
 
 .imgM img{
   width: 700px;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  -webkit-border-top-left-radius: 10px;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-topright: 10px;
 
-}
-
-@media screen and (max-width:800px) {
-	.PicMain{
-	  width: 95% ;
-	}
-	.imgM{
-	  width: 100%;
-	}
-	.imgM img{
-	  width: 100% ;
-	}
 }
 
 
 .PicBottom{
   margin-left: 10px;
   text-align: left;
-  padding-bottom: 10px;
 }
 
 .sendTitle{
@@ -422,4 +389,222 @@ color: black;
 padding: 10px;
 padding-left: 35px;
 padding-right: 35px;
+}
+.tabs{
+  display:inline-flex;
+  justify-content: center;
+}
+.tabs h5 {
+  margin-right: 10px;
+  cursor: pointer;
+}
+.tabs button{
+  border:none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: bold;
+}
+.tabs button:hover{
+  color: #187adf;
+  border-bottom: 1px solid #187adf;
+}
+.user{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+.userPanel{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.switch {
+position: relative;
+display: inline-block;
+width: 60px;
+height: 26px;
+}
+
+.switch input {display:none;}
+
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 26px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+input:checked + .slider {
+background-color: #2196F3;
+}
+
+input:focus + .slider {
+box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+-webkit-transform: translateX(26px);
+-ms-transform: translateX(26px);
+transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+border-radius: 34px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+}
+.conctact-icon{
+width: 50px;
+margin:10px;
+}
+.devTeam{
+width: 300px;
+text-align:left;
+
+}
+.devTeam h4,p{
+margin: 0;
+}
+.selectParent{
+overflow:hidden;
+}
+.selectParent select{
+  font-weight: bold;
+  width:100px;
+ -webkit-appearance: none;
+ -moz-appearance: none;
+ appearance: none;
+ padding: 2px 2px 2px 20px;
+ border: none;
+ background: transparent url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat right center;
+}
+.HamMenu {
+  display: none;
+}
+
+.main table{
+  width: 50%
+}
+@media screen and (max-width:800px) {
+  html, body {
+    max-width: 100%;
+    /*overflow-x: hidden; */
+}
+  p{
+    width: 100%
+  }
+  table{width:100% !important
+  }
+  h3{
+    width: 100% !important;
+  }
+
+.sendTitle{
+  width: 100%
+}
+.Linkbox{
+  width: 100%
+}
+.tableİmg{
+  width: 60px !important;
+}
+.CategoryMenu{
+  width: 100% !important
+}
+.LinkedinButton{
+  width: auto !important;
+}
+  .Header, .Header-Buttons, .main,.imgM , .top {
+    width:100%  /* The width is 100%, when the viewport is 800px or smaller */
+  }
+.Header-Buttons{
+  display:none;
+}
+
+.Header{
+  width: 100%;
+  display:flex;
+}
+
+.Header-left-Text{
+  display:flex;
+  flex-direction: column;
+}
+.HeaderBread{
+  margin-left: 10%;
+  display:block;
+}
+.followerPannel{
+  text-align: left;
+  width: 90% !important;
+  height: 85px !important;
+}
+.Bottom_Par, .post_bottom{
+  width: 95%;
+  text-align: center;
+  align-items: center;
+}
+.post_bottom a {
+  width: 100%;
+}
+.PicMain{
+  width: 95% ;
+}
+.imgM img{
+  width: 100% ;
+}
+.HamMenu{
+  display: block;
+  border: none;
+  background: transparent;
+  margin-left: auto;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.HamMenu span{
+  display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    content: "";
+    background: no-repeat center center;
+    background-size: 100% 100%;
+}
+.Header-left{
+  display: flex;
+  margin-left:25px;
+  align-items: center;
+}
+.container{
+  align-items: center;
+}
+.tabName p{
+  width: 100% !important;
+}
+.PostText{
+  width: 100% !important;
+}
+.main img {
+  width: 100%
+}s
 }
