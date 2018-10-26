@@ -33,9 +33,10 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
     private List<ContentListItem> listContents;
     private List<FollowerItem> listFollowers;
     private Button followCategoryBtn;
-    private TextView postsTV,followersTV,titleTV;
+    private TextView postsTV,followersTV,titleTV,noContentTv,noFollowerTv;
     private ImageButton closeIBtn;
     private String TAG="CategoryDetails";
+    private Boolean isContentEmpty,isFollowersEmpty;
 
     public CategoryDetails() {
         // Required empty public constructor
@@ -87,6 +88,8 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         postsTV=v.findViewById(R.id.frg_category_posts_tv);
         followersTV=v.findViewById(R.id.frg_category_followers_tv);
         titleTV=v.findViewById(R.id.category_details_title_tv);
+        noContentTv = v.findViewById(R.id.category_details_no_content_tv);
+        noFollowerTv = v.findViewById(R.id.category_details_no_follower_tv);
 
         followCategoryBtn.setOnClickListener(this);
         postsTV.setOnClickListener(this);
@@ -98,33 +101,36 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bitmap img= BitmapFactory.decodeResource(getResources(),R.drawable.ef_app_send_show_posts1);
+        Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.ef_app_send_show_posts1);
         //There are two json parsing for followers and posts.
-        listContents=new ArrayList<>();
-        String data=getArguments().getString("POSTS");
-        JSONArray JA= null;
+        listContents = new ArrayList<>();
+        String data = getArguments().getString("POSTS");
+        JSONArray JA = null;
         try {
             JA = new JSONArray(data);
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        if(JA!=null)
-            for(int i=0;i<JA.length();i++)
-            {
+        if (JA != null)
+        {   isContentEmpty = false;
+            for (int i = 0; i < JA.length(); i++) {
                 try {
-                    JSONObject jO=(JSONObject)JA.get(i);
-                    String regionAndEcosystem=jO.getString("region").toUpperCase()+"/"+jO.getString("ecosystem").toUpperCase(),
-                    category=jO.getString("category"),
-                    content=jO.getString("title");
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
+                            category = jO.getString("category"),
+                            content = jO.getString("title");
 
-                    final String imgUrl="http://ecosystemfeed.com"+jO.getString("image");
-                    Log.d(TAG, "onCreate: "+imgUrl);
+                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                    Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem,category,content,false,imgUrl,jO));
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl, jO));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            isContentEmpty = true;
+        }
 
 
         listFollowers=new ArrayList<>();
@@ -135,17 +141,20 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        if(JA!=null)
-            for(int i=0;i<JA.length();i++)
-            {
+        if(JA!=null) {
+            isFollowersEmpty = false;
+            for (int i = 0; i < JA.length(); i++) {
                 try {
-                    JSONObject jO=(JSONObject)JA.get(i);
-                    String name=jO.get("name").toString().toUpperCase()+" "+jO.getString("surname").toUpperCase();
-                    listFollowers.add(new FollowerItem(img,name));
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String name = jO.get("name").toString().toUpperCase() + " " + jO.getString("surname").toUpperCase();
+                    listFollowers.add(new FollowerItem(img, name));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            isFollowersEmpty = true;
+        }
 
     }
 
@@ -159,14 +168,29 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                     Toast.makeText(getContext(),"Follow is not defined.",Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.frg_category_posts_tv:
-                    postsRecyclerView.setVisibility(View.VISIBLE);
                     followerRecyclerView.setVisibility(View.GONE);
+                    noFollowerTv.setVisibility(View.GONE);
+                    if (isContentEmpty){
+                        postsRecyclerView.setVisibility(View.GONE);
+                        noContentTv.setVisibility(View.VISIBLE);
+                    }else{
+                        postsRecyclerView.setVisibility(View.VISIBLE);
+                        noContentTv.setVisibility(View.GONE);
+                    }
+
                     postsTV.setTextColor(getResources().getColor(R.color.black_text));
                     followersTV.setTextColor(getResources().getColor(R.color.grayText));
                     break;
                 case R.id.frg_category_followers_tv:
                     postsRecyclerView.setVisibility(View.GONE);
-                    followerRecyclerView.setVisibility(View.VISIBLE);
+                    noContentTv.setVisibility(View.GONE);
+                    if(isFollowersEmpty) {
+                        followerRecyclerView.setVisibility(View.GONE);
+                        noFollowerTv.setVisibility(View.VISIBLE);
+                    }else{
+                        followerRecyclerView.setVisibility(View.VISIBLE);
+                        noFollowerTv.setVisibility(View.GONE);
+                    }
                     postsTV.setTextColor(getResources().getColor(R.color.grayText));
                     followersTV.setTextColor(getResources().getColor(R.color.black_text));
                     break;

@@ -59,5 +59,7 @@
     <string name="follow">Takip Et</string>
     <string name="un_follow">Takibi Bırak</string>
     <string name="ok">Tamam</string>
+    <string name="no_content">Henüz içerik yok.</string>
+    <string name="no_fallower">Takipçi yok.</string>
 
 </resources>

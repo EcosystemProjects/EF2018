@@ -32,9 +32,10 @@ public class AllFeed extends Fragment {
     View v;
     private RecyclerView contentRecyclerView;//Recycler view for visualize recieved data.
     private List<ContentListItem> listContents;//it is to hold recieved data.
-    private TextView forMeBtn;
+    private TextView forMeBtn ,noContentTv;
     private Feed feed;
     private FloatingActionButton popupFab;
+    private boolean isDataEmty;
     public String TAG="AllFeed";
 
     public AllFeed() {
@@ -47,6 +48,7 @@ public class AllFeed extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_all_feed, container, false);
+        noContentTv = v.findViewById(R.id.all_feed_no_content_tv);
         forMeBtn=v.findViewById(R.id.allfeed_forme_btn);//it is used to start Feed screen which is followed posts are in there.
         popupFab=v.findViewById(R.id.popup_fab);
         forMeBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,39 +75,49 @@ public class AllFeed extends Fragment {
         ContentAdapter content_Adapter=new ContentAdapter(listContents,getContext());
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         contentRecyclerView.setAdapter(content_Adapter);
+
+        if(isDataEmty){
+            contentRecyclerView.setVisibility(View.GONE);
+            noContentTv.setVisibility(View.VISIBLE);
+        }else{
+            contentRecyclerView.setVisibility(View.VISIBLE);
+            noContentTv.setVisibility(View.GONE);
+        }
         return v;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);//Contents Adding
-        listContents=new ArrayList<>();
-        String data=getArguments().getString("ALLFEED");
-        Log.d(TAG, "onCreate: "+data);
-        JSONArray JA= null;
+        listContents = new ArrayList<>();
+        String data = getArguments().getString("ALLFEED");
+        Log.d(TAG, "onCreate: " + data);
+        JSONArray JA = null;
         try {
             JA = new JSONArray(data);
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        if(JA!=null)
-            for(int i=0;i<JA.length();i++)
-            {
+        if (JA != null)
+        {
+            isDataEmty = false;
+            for (int i = 0; i < JA.length(); i++) {
                 try {
-                    JSONObject jO=(JSONObject)JA.get(i);
-                    String regionAndEcosystem=jO.getString("title"),
-                            category="category",
-                            content=jO.getString("description");
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String regionAndEcosystem = jO.getString("title"),
+                            category = "category",
+                            content = jO.getString("description");
 
-                    final String imgUrl="http://ecosystemfeed.com"+jO.getString("image");
-                    Log.d(TAG, "onCreate: "+imgUrl);
+                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                    Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem,category,content,false,imgUrl,jO));
-                }
-                catch (JSONException e)
-                {
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl, jO));
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            isDataEmty = true;
+        }
     }
 }

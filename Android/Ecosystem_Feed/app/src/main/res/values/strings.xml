@@ -60,4 +60,6 @@
     <string name="create_post_empty_url_error">URL is empty.</string>
     <string name="un_follow">Unfollow</string>
     <string name="ok">OK</string>
+    <string name="no_content">There is no content yet.</string>
+    <string name="no_fallower">No followers.</string>
 </resources>

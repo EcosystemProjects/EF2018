@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -51,9 +52,10 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     private List<ContentListItem> listContents;
     private EditText titleEtext,descriptionEtext,linkEtext;
     private ImageView contentIv;
+    private FrameLayout myPostsFl;
 
     private ImageButton regionIB,ecosystemIB,categoryIB;
-    private TextView regionTV,ecosystemTV,categoryTV;
+    private TextView regionTV,ecosystemTV,categoryTV,noContentTv;
     private ListView regionLV,ecosystemLV,categoryLV;
     CustomProgressDialog dialog;
 
@@ -62,6 +64,8 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     public List<String> listEcosytems;
     public HashMap<String,String> mapEcosystems=new HashMap<>();
     public List<String> listCategories=new ArrayList<>();
+
+    private boolean isDataEmty;
 
     public String data="";
     private String TAG="Createpost";
@@ -77,6 +81,8 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         v=inflater.inflate(R.layout.fragment_create_post,container,false);
         dialog=new CustomProgressDialog(getActivity(),1);
         contentRecyclerView=v.findViewById(R.id.my_contents_rv);
+        noContentTv = v.findViewById(R.id.my_posts_no_content_tv);
+        myPostsFl = v.findViewById(R.id.my_posts_fl);
         ContentAdapter content_Adapter=new ContentAdapter(listContents,getContext());
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         contentRecyclerView.setAdapter(content_Adapter);
@@ -312,6 +318,9 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         //isDeleteVisible is true for only my post section
         //it is not ready because of backend there are no query url.
         //When ready please add.
+        listContents = new ArrayList<>();
+        isDataEmty = true; // this will modify when data provided.
+
     }
 
     public void activateButton(Button b)
@@ -361,14 +370,23 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                 }
                 break;
             case R.id.create_post_btn:
+                myPostsFl.setVisibility(View.GONE);
                 createPostScrllView.setVisibility(View.VISIBLE);
                 contentRecyclerView.setVisibility(View.GONE);
                 activateButton(createPostBtn);
                 deactivateButton(myPostButton);
                 break;
             case R.id.my_post_btn:
-                contentRecyclerView.setVisibility(View.VISIBLE);
+                myPostsFl.setVisibility(View.VISIBLE);
                 createPostScrllView.setVisibility(View.GONE);
+                if(isDataEmty){
+                    contentRecyclerView.setVisibility(View.GONE);
+                    noContentTv.setVisibility(View.VISIBLE);
+
+                }else{
+                    contentRecyclerView.setVisibility(View.VISIBLE);
+                    noContentTv.setVisibility(View.GONE);
+                }
                 activateButton(myPostButton);
                 deactivateButton(createPostBtn);
                 break;
