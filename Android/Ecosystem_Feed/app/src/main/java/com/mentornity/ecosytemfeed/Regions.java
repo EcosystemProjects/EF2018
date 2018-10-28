@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +25,10 @@ import java.util.List;
 public class Regions extends Fragment {
     View v;
     private RecyclerView regionRecycleView;
+    private TextView noContentTv;
     public List<RegionListItem> listRegions;
     CustomProgressDialog dialog;
+    private boolean isDataEmpty;
 
     public Regions() {
         // Required empty public constructor
@@ -36,6 +40,12 @@ public class Regions extends Fragment {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_ecosytems, container, false);
         //recycler view initializng
+        noContentTv = v.findViewById(R.id.regions_no_content_tv);
+        if(isDataEmpty){
+            noContentTv.setVisibility(View.VISIBLE);
+        }else{
+            noContentTv.setVisibility(View.GONE);
+        }
         regionRecycleView=v.findViewById(R.id.regions_rv);
         RegionAdapter region_adapter=new RegionAdapter(listRegions,getContext());
         regionRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -58,18 +68,22 @@ public class Regions extends Fragment {
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        for(int i=0;i<JA.length();i++)
-        {
-            try {
-                JSONObject jO=(JSONObject)JA.get(i);
-                String name=jO.get("name").toString();
-                int id= Integer.parseInt(jO.get("id").toString()),
-                        orderIndex=Integer.parseInt(jO.get("orderindex").toString()),
-                        groupid= Integer.parseInt(jO.get("groupid").toString());
-                listRegions.add(new RegionListItem(name,id,orderIndex,groupid));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if(JA != null) {
+            isDataEmpty = false;
+            for (int i = 0; i < JA.length(); i++) {
+                try {
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String name = jO.get("name").toString();
+                    int id = Integer.parseInt(jO.get("id").toString()),
+                            orderIndex = Integer.parseInt(jO.get("orderindex").toString()),
+                            groupid = Integer.parseInt(jO.get("groupid").toString());
+                    listRegions.add(new RegionListItem(name, id, orderIndex, groupid));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+        }else{
+            isDataEmpty = true;
         }
     }
 }
