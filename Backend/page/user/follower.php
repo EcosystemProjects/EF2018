@@ -55,8 +55,10 @@
 					
 					if(isset($_POST['follow']))
 					{
-						if(empty($_SESSION['user']))
+						if(!isset($_SESSION['user'])){
 							header("location:/dashboard.html");
+							return;
+						}
 						
 						$id = $datafol['id'];
 						$setting = json_decode($datafol['setting'],true);
