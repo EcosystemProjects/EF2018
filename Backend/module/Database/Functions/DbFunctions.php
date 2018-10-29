@@ -60,7 +60,7 @@ class DBFunctions
 		else
 		{
 
-			$check = $this->selectAll("SELECT authid,email,phone,username,id,information FROM users WHERE authid = '".$uid."' AND email = '".$email."'");
+			$check = $this->selectAll("SELECT authid,email,phone,username,id,information FROM users WHERE authid = '".$uid."' OR email = '".$email."'");
 			if(count($check) > 0){
 				
 				return $this->PDO_fetch_Array($check, 0);
