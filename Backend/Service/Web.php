@@ -75,16 +75,16 @@ try{
 	if($process == "getCategories")
 	{
 		$groupid = @$_REQUEST["groupid"];
-		getData("select c.seourl as seourl,f.setting as follower,COUNT(p.categoryid) as posts,c.id as id,c.name as name,c.orderindex as orderindex,c.groupid as groupid from category as c, follower as f, posts as p where c.type='categories' and c.groupid = $groupid and f.categoryid = c.id and p.categoryid = c.id",array('id','name','orderindex','groupid','seourl','follower','posts'));
+		getData("SELECT c.seourl as seourl,COALESCE(fw.setting,'{\"follower\":[]}') as follower,COUNT(p.id) as posts, c.id as id,c.name as name,c.orderindex as orderindex,c.groupid as groupid FROM (category as c LEFT JOIN follower as fw ON c.id = fw.categoryid) LEFT JOIN posts as p on c.id = p.categoryid WHERE c.groupid = $groupid GROUP BY c.seourl ",array('id','name','orderindex','groupid','seourl','follower','posts'));
 	}
 	elseif($process == "getAllData")
-		getData("select id,name,orderindex,type,groupid,seourl from category",array('id','name','orderindex','groupid','type','seourl'));
+		getData("SELECT id,name,orderindex,type,groupid,seourl FROM category",array('id','name','orderindex','groupid','type','seourl'));
 	elseif($process == "getRegion")
-		getData("select id,name,orderindex,groupid,seourl from category where type='region'",array('id','name','orderindex','groupid','seourl'));
+		getData("SELECT id,name,orderindex,groupid,seourl FROM category WHERE type='region'",array('id','name','orderindex','groupid','seourl'));
 	elseif($process == "getEcosystem")
 	{
 		$groupid = @$_REQUEST["groupid"];
-		getData("select id,name,orderindex,groupid,seourl from category where type='ecosystems' and groupid = $groupid",array('id','name','orderindex','groupid','seourl'));
+		getData("SELECT id,name,orderindex,groupid,seourl FROM category WHERE type='ecosystems' and groupid = $groupid",array('id','name','orderindex','groupid','seourl'));
 	}
 	elseif($process == "getFollowers")
 	{
@@ -163,7 +163,7 @@ try{
 			$authortiyId = $datainf['authority'];
 			$loginid = $data['authid'];
 			
-			$authQuery = $DBFunctions->selectAll("select name,information FROM authority where auth = $authortiyId");
+			$authQuery = $DBFunctions->selectAll("SELECT name,information FROM authority WHERE auth = $authortiyId");
 			if (count($authQuery) > 0) {
 				$authData = $DBFunctions->PDO_fetch_array($authQuery, 0);
 				$authDataInf = json_decode($authData['information'], true);
