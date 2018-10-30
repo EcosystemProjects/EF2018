@@ -56,7 +56,7 @@
 							<h3>'.$name.'</h3>
 							<div class="CategoryDetail">
 								<div class="CategoryDetailTagA">
-									<a href="dashboard/categoryposts/'.$SeoFunction->seo($name).'.html" style="margin-right:10px;">'.$posts.' Posts</a>
+									<a href="dashboard/categoryposts/'.$id.'/'.$SeoFunction->seo($name).'.html" style="margin-right:10px;">'.$posts.' Posts</a>
 									<a href="dashboard/follower/'.$SeoFunction->seo($name).'.html">'.$follower.' followers</a>
 								</div>
 
