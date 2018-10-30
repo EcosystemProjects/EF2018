@@ -11,6 +11,7 @@ RewriteRule ^admin/ecosystems/([0-9a-zA-Z-_]+)\.html$ index.php?page=admin&subpa
 RewriteRule ^admin/categories/([0-9a-zA-Z-_]+)/([0-9a-zA-Z-_]+)\.html$ index.php?page=admin&subpage=categories&region=$1&ecosystems=$2 [L,QSA]
 RewriteRule ^dashboard/([0-9a-zA-Z-_]+).html$ index.php?page=dashboard&subpage=$1 [L,QSA]
 RewriteRule ^dashboard/([0-9a-zA-Z-_]+)/([0-9a-zA-Z-_]+)\.html$ index.php?page=dashboard&subpage=$1&inpage=$2 [L,QSA]
+RewriteRule ^dashboard/([0-9a-zA-Z-_]+)/([0-9a-zA-Z-_]+)/([0-9a-zA-Z-_]+)\.html$ index.php?page=dashboard&subpage=$1&inpage=$2&twopage=$3 [L,QSA]
 
 RewriteCond %{THE_REQUEST} \ /(.+)\.php
 RewriteCond %{THE_REQUEST} \ /(.+)\.aspx
