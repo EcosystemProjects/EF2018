@@ -70,6 +70,7 @@ public class Regions extends Fragment {
         }
         if(JA != null) {
             isDataEmpty = false;
+            Log.d("Regions", "onCreate: JA="+JA.toString());
             for (int i = 0; i < JA.length(); i++) {
                 try {
                     JSONObject jO = (JSONObject) JA.get(i);

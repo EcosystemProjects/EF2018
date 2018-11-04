@@ -63,7 +63,8 @@ public class Feed extends Fragment {
                                 dialog.show();//Hata burada olabilir
                             }
                         });
-                        FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getAllPosts");Log.d(TAG, "run: FetchData varable created");
+                        FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getAllPosts");
+                        Log.d(TAG, "run: FetchData varable created");
                         fetchData.execute();
                         for(int k=0;k<1;)
                         {

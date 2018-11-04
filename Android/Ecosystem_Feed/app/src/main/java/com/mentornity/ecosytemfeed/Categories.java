@@ -30,9 +30,10 @@ public class Categories extends Fragment {
     View v;
     private RecyclerView categoryRecyclerView;
     private List<CategoryItem> listCategory;
-    private TextView titleTv;
+    private TextView titleTv,noContentTv;
     private ImageButton closeIBtn;
     public  String TAG="Categories";
+    private boolean isDataEmpty;
 
     public Categories() {
         // Required empty public constructor
@@ -44,6 +45,7 @@ public class Categories extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_categories, container, false);
+        noContentTv = v.findViewById(R.id.categories_no_content_tv);
         categoryRecyclerView=v.findViewById(R.id.categories_rv);//Recycler view initializing.
         CategoryAdapter categoryAdapter=new CategoryAdapter(listCategory,getContext());
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -52,6 +54,12 @@ public class Categories extends Fragment {
         Bundle bundle=getArguments();//Getting data from intent.
         titleTv=v.findViewById(R.id.categories_title_tv);
         titleTv.setText(bundle.getString("title"));
+
+        if(isDataEmpty){
+            noContentTv.setVisibility(View.VISIBLE);
+        }else{
+            noContentTv.setVisibility(View.GONE);
+        }
 
         closeIBtn=v.findViewById(R.id.categories_close_btn);
         closeIBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,32 +74,37 @@ public class Categories extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listCategory=new ArrayList<>();
-        String data=getArguments().getString("Categories");
-        System.out.println("DATA:"+data);
-        JSONArray JA= null;
+        listCategory = new ArrayList<>();
+        String data = getArguments().getString("Categories");
+        System.out.println("DATA:" + data);
+        JSONArray JA = null;
         try {
             JA = new JSONArray(data);
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        if(JA!=null)//Json parsing
-            for(int i=0;i<JA.length();i++)
-            {
+        if (JA != null)//Json parsing
+        {
+            isDataEmpty = false;
+            Log.d("Categories", "onCreate: JA="+JA.toString());
+            for (int i = 0; i < JA.length(); i++) {
                 try {
-                    JSONObject jO=(JSONObject)JA.get(i);
-                    String name=jO.get("name").toString();
-                    int id= Integer.parseInt(jO.get("id").toString()),
-                            orderIndex=Integer.parseInt(jO.get("orderindex").toString()),
-                            groupid= Integer.parseInt(jO.get("groupid").toString()),
-                            postsNumber=Integer.parseInt(jO.get("posts").toString()),
-                            followerNumber=new JSONObject(jO.get("follower").toString()).getJSONArray("follower").length();
-                    Log.d(TAG, "onCreate: "+followerNumber);
-                    listCategory.add(new CategoryItem(name,postsNumber+" Posts",followerNumber+" Fallowers",false));
-                    System.out.println("name:"+name);
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String name = jO.get("name").toString();
+                    int //id= Integer.parseInt(jO.get("id").toString()),
+                            //orderIndex=Integer.parseInt(jO.get("orderindex").toString()),
+                            //groupid= Integer.parseInt(jO.get("groupid").toString()),
+                            postsNumber = Integer.parseInt(jO.get("posts").toString()),
+                            followerNumber = new JSONObject(jO.get("follower").toString()).getJSONArray("follower").length();
+                    Log.d(TAG, "onCreate: " + followerNumber);
+                    listCategory.add(new CategoryItem(name, postsNumber + " Posts", followerNumber + " Fallowers", false));
+                    System.out.println("name:" + name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            isDataEmpty = true;
+        }
     }
 }

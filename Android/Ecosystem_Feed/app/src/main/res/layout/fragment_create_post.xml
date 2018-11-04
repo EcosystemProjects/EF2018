@@ -222,7 +222,7 @@
                     android:scrollbars="vertical"
                     android:paddingVertical="16dp"
                     android:nestedScrollingEnabled="true"
-                    ></ListView>
+                    />
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -254,7 +254,7 @@
                     android:visibility="gone"
                     android:scrollbars="vertical"
                     android:paddingVertical="16dp"
-                    android:nestedScrollingEnabled="true"></ListView>
+                    android:nestedScrollingEnabled="true"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -282,19 +282,23 @@
                 <ListView
                     android:id="@+id/create_post_category_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="168dp"
                     android:visibility="gone"
-                    ></ListView>
+                    android:scrollbars="vertical"
+                    android:paddingVertical="16dp"
+                    android:nestedScrollingEnabled="true"
+                    />
 
             </LinearLayout>
+
             <Button
+                android:id="@+id/create_post_send_btn"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="@string/send"
-                android:textColor="@color/white"
-                android:background="@drawable/send_bg"
                 android:layout_marginBottom="8dp"
-                />
+                android:background="@drawable/send_bg"
+                android:text="@string/send"
+                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
     <!--SHOW MY POSTS-->
@@ -322,6 +326,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_content"
+            android:visibility="gone"
             android:textSize="26sp" />
 
     </FrameLayout>

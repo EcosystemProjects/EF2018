@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class Ecosystemlist extends Fragment {
         if (JA != null)
         {
             isDataEmpty = false;
+            Log.d("Ecosystemlist", "onCreate: JA="+JA.toString());
             for (int i = 0; i < JA.length(); i++) {
                 try {
                     JSONObject jO = (JSONObject) JA.get(i);
