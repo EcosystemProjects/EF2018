@@ -25,11 +25,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.linkedin.platform.LISessionManager;
+import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -37,7 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Settings extends Fragment implements View.OnClickListener {
+public class Settings extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
 
     View v;
@@ -45,6 +53,7 @@ public class Settings extends Fragment implements View.OnClickListener {
     ImageButton twitterFallowBtn,facebookFallowBtn,linkedlnFallowBtn;
     ToggleButton changeLanguageBtn;
     TextView webSiteTv,mailTv,termTv,logoutTv,userNameTV;
+    Switch sendEmailSw, sendNotificationSw;
     RelativeLayout settingsLy,contactLy;
     LinearLayout aboutLy, frontendDevelopersLy,androidDevelopersLy,iosDevelopersLy,backendDevelopersLy;
     ListView language_lists;
@@ -72,36 +81,44 @@ public class Settings extends Fragment implements View.OnClickListener {
         facebookFallowBtn.setOnClickListener(this);
         twitterFallowBtn.setOnClickListener(this);
         linkedlnFallowBtn.setOnClickListener(this);
-        changeLanguageBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked())
-                {
-                    language_lists.setVisibility(View.VISIBLE);
-                    language_lists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                            if(position==0)
-                                changeLanguage("en","US");
-                            else if(position==1)
-                                changeLanguage("tr","TR");
-                        }
-                    });
+        sendEmailSw.setOnCheckedChangeListener(this);
+        sendNotificationSw.setOnCheckedChangeListener(this);
 
-                }
-                else
-                {
-                    language_lists.setVisibility(View.GONE);
-                }
-            }
-        });
+        changeLanguageBtn.setOnCheckedChangeListener(this);
 
         webSiteTv.setOnClickListener(this);
         mailTv.setOnClickListener(this);
         termTv.setOnClickListener(this);
         logoutTv.setOnClickListener(this);
-        userNameTV.setText(getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("name",null));
 
+        //SET SWITCHES POSITIONS
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FetchData fetchData = new FetchData(""); // !!! PUT URL HERE... TO GET EMAIL AND NOTIFICATION PERMISSIONS !!!
+                fetchData.execute();
+                for(int k=0;k<1;)
+                {
+                    if(fetchData.fetched)k++;
+                }
+
+                try {
+                    JSONArray JA = new JSONArray(fetchData.getData());
+                    for (int i = 0; i < JA.length(); i++) {
+                        JSONObject JO = (JSONObject) JA.get(i);
+                        sendEmailSw.setChecked(JO.getBoolean("sendEmailPermission"));  // !!! SET EMAIL PERMISSION SWITCH ACCORDING TO JSON PATTERN !!!
+                        sendNotificationSw.setChecked(JO.getBoolean("sendNotificationPermission"));// !!! SET NOTIFICATION PERMISSION SWITCH ACCORDING TO JSON PATTERN !!!
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        sendEmailSw.setChecked(true);
+        sendNotificationSw.setChecked(true);
+
+        userNameTV.setText(getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("name",null));
         Picasso.get().load(getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("pic",null)).into(profileImage, new Callback() {
             @Override
             public void onSuccess() {
@@ -116,6 +133,7 @@ public class Settings extends Fragment implements View.OnClickListener {
                 profileImage.setImageResource(R.drawable.app_icon);
             }
         });
+
         //Changing screens
         settingTabButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +221,9 @@ public class Settings extends Fragment implements View.OnClickListener {
         userNameTV=v.findViewById(R.id.settings_name_tv);
         profileImage=v.findViewById(R.id.settings_profile_iv);
 
+        sendEmailSw = v.findViewById(R.id.settings_send_email_switch);
+        sendNotificationSw = v.findViewById(R.id.settings_send_notification_switch);
+
         frontendDevelopersLy =v.findViewById(R.id.settings_frontendDevelopers_ly);
         androidDevelopersLy=v.findViewById(R.id.settings_AndroidDevelopers_ly);
         iosDevelopersLy=v.findViewById(R.id.settings_iosDevelopers_ly);
@@ -243,6 +264,50 @@ public class Settings extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.settings_send_email_switch:
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!
+                // UPDATE EMAIL PERMISSION!!!
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                Toast.makeText(getContext(), "E-Mail Send Set To: " + isChecked, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings_send_notification_switch:
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // UPDATE NOTIFICATION PERMISSION!!!
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                Toast.makeText(getContext(), "Notification Send Set To: " + isChecked, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.language_change_ly_btn:
+                if(buttonView.isChecked())
+                {
+                    language_lists.setVisibility(View.VISIBLE);
+                    language_lists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                            if(position==0)
+                                changeLanguage("en","US");
+                            else if(position==1)
+                                changeLanguage("tr","TR");
+                        }
+                    });
+                }
+                else
+                {
+                    language_lists.setVisibility(View.GONE);
+                }
+                break;
+        }
+
+
+    }
+
     public void changeLanguage(String language,String region)
     {
         Locale locale;

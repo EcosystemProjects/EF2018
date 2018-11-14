@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,9 +35,12 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,9 +55,10 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     private List<ContentListItem> listContents;
     private EditText titleEtext,descriptionEtext,linkEtext;
     private ImageView contentIv;
+    private FrameLayout myPostsFl;
 
     private ImageButton regionIB,ecosystemIB,categoryIB;
-    private TextView regionTV,ecosystemTV,categoryTV;
+    private TextView regionTV,ecosystemTV,categoryTV,noContentTv;
     private ListView regionLV,ecosystemLV,categoryLV;
     CustomProgressDialog dialog;
 
@@ -63,7 +68,11 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     public HashMap<String,String> mapEcosystems=new HashMap<>();
     public List<String> listCategories=new ArrayList<>();
 
+    private boolean isDataEmpty;
+
+    private Bitmap imageBitmap;
     public String data="";
+    public String myPostsData = "";
     private String TAG="Createpost";
     public Create_post_fragment() {
         // Required empty public constructor
@@ -77,6 +86,8 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         v=inflater.inflate(R.layout.fragment_create_post,container,false);
         dialog=new CustomProgressDialog(getActivity(),1);
         contentRecyclerView=v.findViewById(R.id.my_contents_rv);
+        noContentTv = v.findViewById(R.id.my_posts_no_content_tv);
+        myPostsFl = v.findViewById(R.id.my_posts_fl);
         ContentAdapter content_Adapter=new ContentAdapter(listContents,getContext());
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         contentRecyclerView.setAdapter(content_Adapter);
@@ -198,7 +209,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                             JSONObject jO = (JSONObject) JA.get(j);
                             String name = jO.get("name").toString();
                             int selectedCategoryGroupID= Integer.parseInt(jO.get("groupid").toString());
-                            if(jO.get("type").toString().compareTo("Categories")==0 &&
+                            if(jO.get("type").toString().compareTo("categories")==0 &&
                                     Integer.parseInt(mapEcosystems.get(ecosystemTV.getText().toString()))==selectedCategoryGroupID)
                             {listCategories.add(name);}
                         } catch (JSONException e) {
@@ -274,6 +285,32 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
             }).start();
         }
     }
+    ///////////////////////////////
+    //!!!PUT UPLOAD QUERY HERE!!!//
+    ///////////////////////////////
+
+    private void uploadPost(){
+        String regionAndEcosystem = regionTV.getText().toString()+ecosystemTV.getText().toString();
+        String category = categoryTV.getText().toString();
+        String description = descriptionEtext.getText().toString();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+        byte[] imageByteArray = outputStream.toByteArray();
+
+        String imgUrl = "http://ecosystemfeed.com"; //!!!UPLOAD IMAGE AND PUT IMAGE URL HERE!!!//
+
+
+        JSONObject JO = new JSONObject();
+        try {
+            JO.put("title",regionAndEcosystem);
+            JO.put("category",category);
+            JO.put("description",description);
+            JO.put("image",imgUrl);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -285,8 +322,8 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
 
             try {
                 InputStream inInputStream=getActivity().getContentResolver().openInputStream(selectedImage);
-                Bitmap bitmap1=BitmapFactory.decodeStream(inInputStream);
-                contentIv.setImageBitmap(bitmap1);
+                imageBitmap = BitmapFactory.decodeStream(inInputStream);
+                contentIv.setImageBitmap(imageBitmap);
             } catch (FileNotFoundException e) {
                 Log.e(TAG, "onActivityResult: "+e.getMessage(),e );
             }
@@ -312,6 +349,40 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         //isDeleteVisible is true for only my post section
         //it is not ready because of backend there are no query url.
         //When ready please add.
+        //////////////////////////////////
+        //!!! PUT MY POSTS QUERY HERE!!!//
+        //////////////////////////////////
+        FetchData myPostsfetchData=new FetchData("!!!PUT QUERY HERE!!!");
+        myPostsfetchData.execute();
+        while(!myPostsfetchData.fetched && !myPostsfetchData.getErrorOccured()){/*waiting to fetch*/}
+        myPostsData=myPostsfetchData.getData();
+        listContents = new ArrayList<>();
+        JSONArray JA = null;
+        try {
+            JA = new JSONArray(myPostsData);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+        if (JA != null)
+        {   isDataEmpty = false;
+            for (int i = 0; i < JA.length(); i++) {
+                try {
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
+                            category = jO.getString("category"),
+                            content = jO.getString("title");
+
+                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                    Log.d(TAG, "onCreate: " + imgUrl);
+                    //isDeleteVisible is true for only my post section
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, true, imgUrl, jO));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            isDataEmpty = true;
+        }
     }
 
     public void activateButton(Button b)
@@ -361,14 +432,23 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                 }
                 break;
             case R.id.create_post_btn:
+                myPostsFl.setVisibility(View.GONE);
                 createPostScrllView.setVisibility(View.VISIBLE);
                 contentRecyclerView.setVisibility(View.GONE);
                 activateButton(createPostBtn);
                 deactivateButton(myPostButton);
                 break;
             case R.id.my_post_btn:
-                contentRecyclerView.setVisibility(View.VISIBLE);
+                myPostsFl.setVisibility(View.VISIBLE);
                 createPostScrllView.setVisibility(View.GONE);
+                if(isDataEmpty){
+                    contentRecyclerView.setVisibility(View.GONE);
+                    noContentTv.setVisibility(View.VISIBLE);
+
+                }else{
+                    contentRecyclerView.setVisibility(View.VISIBLE);
+                    noContentTv.setVisibility(View.GONE);
+                }
                 activateButton(myPostButton);
                 deactivateButton(createPostBtn);
                 break;
@@ -388,6 +468,9 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
+            case R.id.create_post_send_btn:
+                uploadPost();
+                break;
 
         }
     }

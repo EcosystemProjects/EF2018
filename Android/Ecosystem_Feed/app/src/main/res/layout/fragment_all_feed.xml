@@ -32,18 +32,35 @@
             android:fontFamily="@font/nunito_semibold"
             android:gravity="center"/>
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/all_contents_rv"
+
+    <FrameLayout
+        android:id="@+id/all_contents_fl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="64dp"
         android:layout_marginHorizontal="16dp"
-        android:scrollbars="vertical"
-        android:background="@android:color/transparent"
-        android:layout_marginBottom="56dp"
-        >
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="56dp">
 
-     </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/all_contents_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scrollbars="vertical">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/all_feed_no_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_content"
+            android:visibility="gone"
+            android:textSize="26sp" />
+    </FrameLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/popup_fab"
         android:layout_width="wrap_content"

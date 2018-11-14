@@ -14,14 +14,15 @@ public class FetchData extends AsyncTask<Void,Void,Void>{
     public String data ="";
     private String url;
     private String TAG="FetchData";
+    public Boolean fetched = false;
+    public Boolean errorOccured = false;
+
+    public FetchData(String url) {
+        this.url = url;
+    }
 
     public Boolean getFetched() {
         return fetched;
-    }
-
-    public  Boolean fetched=false;
-    public FetchData(String url) {
-        this.url = url;
     }
     private String getUrl() {
         return url;
@@ -30,6 +31,10 @@ public class FetchData extends AsyncTask<Void,Void,Void>{
     {
         return data;
     }
+    public Boolean getErrorOccured() {
+        return errorOccured;
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
         Log.d(TAG, "doInBackground: data fetching");
@@ -42,6 +47,8 @@ public class FetchData extends AsyncTask<Void,Void,Void>{
                 System.out.println("Page is ok!");
             }
             else{
+                errorOccured = true;
+                Log.d(TAG, "doInBackground: error occured");
                 System.out.println("Page not found 404 /unauthorized 401 ");
             }
             Log.d(TAG, "doInBackground: connection opened");
@@ -56,9 +63,18 @@ public class FetchData extends AsyncTask<Void,Void,Void>{
             Log.d(TAG, "doInBackground: buffered.fetched=true");
             fetched=true;
         } catch (MalformedURLException e) {
+            errorOccured = true;
+            Log.d(TAG, "doInBackground: error occured");
+            Log.d(TAG, "doInBackground: MalformedURLException");
             e.printStackTrace();
+            return null;
+
         } catch (IOException e) {
+            errorOccured = true;
+            Log.d(TAG, "doInBackground: error occured");
+            Log.d(TAG, "doInBackground: IOException");
             e.printStackTrace();
+            return null;
         }
         return null;
     }

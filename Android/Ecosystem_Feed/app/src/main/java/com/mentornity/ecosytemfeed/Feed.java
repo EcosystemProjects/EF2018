@@ -31,9 +31,10 @@ public class Feed extends Fragment {
     View v;
     private RecyclerView contentRecyclerView;
     private List<ContentListItem> listContents;
-    private TextView allBtn;
+    private TextView allBtn,noContentTv;
     private AllFeed allFeed;
     CustomProgressDialog dialog;
+    private boolean isDataEmty;
     private String TAG="Feed";
     public Feed() {
         // Required empty public constructor
@@ -45,6 +46,7 @@ public class Feed extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_feed, container, false);
+        noContentTv = v.findViewById(R.id.for_me_no_content_tv);
         dialog=new CustomProgressDialog(getContext(),1);
         allBtn=v.findViewById(R.id.feed_see_all_btn);
         //After data fetching,AllFeed page opens.
@@ -61,7 +63,8 @@ public class Feed extends Fragment {
                                 dialog.show();//Hata burada olabilir
                             }
                         });
-                        FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getAllPosts");Log.d(TAG, "run: FetchData varable created");
+                        FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getAllPosts");
+                        Log.d(TAG, "run: FetchData varable created");
                         fetchData.execute();
                         for(int k=0;k<1;)
                         {
@@ -86,39 +89,50 @@ public class Feed extends Fragment {
         ContentAdapter content_Adapter=new ContentAdapter(listContents,getContext());
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         contentRecyclerView.setAdapter(content_Adapter);
+        if(isDataEmty){
+            contentRecyclerView.setVisibility(View.GONE);
+            noContentTv.setVisibility(View.VISIBLE);
+        }else{
+            contentRecyclerView.setVisibility(View.VISIBLE);
+            noContentTv.setVisibility(View.GONE);
+        }
         return v;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listContents=new ArrayList<>();
-        String data=getArguments().getString("FEED");
-        Log.d(TAG, "onCreate: "+data);
+        listContents = new ArrayList<>();
+        String data = getArguments().getString("FEED");
+        Log.d(TAG, "onCreate: " + data);
         //data parsing
-        JSONArray JA= null;
+        JSONArray JA = null;
         try {
             JA = new JSONArray(data);
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
-        if(JA!=null)
-            for(int i=0;i<JA.length();i++)
-            {
+        if (JA != null)
+        {
+            isDataEmty = false;
+            for (int i = 0; i < JA.length(); i++) {
                 try {
-                    JSONObject jO=(JSONObject)JA.get(i);
-                    Log.d(TAG, "onCreate: jo:"+ jO);
-                    String regionAndEcosystem=jO.getString("title"),
-                            category="category",
-                            content=jO.getString("description");
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    Log.d(TAG, "onCreate: jo:" + jO);
+                    String regionAndEcosystem = jO.getString("title"),
+                            category = "category",
+                            content = jO.getString("description");
 
-                    final String imgUrl="http://ecosystemfeed.com"+jO.getString("image");
-                    Log.d(TAG, "onCreate: "+imgUrl);
+                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                    Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem,category,content,false,imgUrl,jO));
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl, jO));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            isDataEmty = true;
+        }
     }
 }

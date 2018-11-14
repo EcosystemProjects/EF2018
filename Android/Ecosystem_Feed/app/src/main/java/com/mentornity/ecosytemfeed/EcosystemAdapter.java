@@ -62,7 +62,6 @@ public class EcosystemAdapter extends RecyclerView.Adapter<EcosystemAdapter.View
                 {
                      if(fetchData.fetched)k++;
                 }
-                Bundle bundle=new Bundle();
                 bundle.putString("Categories",fetchData.getData());
                 System.out.println("DATA:"+fetchData.getData());
                 categories_fragment.setArguments(bundle);

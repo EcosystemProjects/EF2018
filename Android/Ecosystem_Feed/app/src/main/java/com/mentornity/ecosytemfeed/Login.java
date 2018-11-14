@@ -6,8 +6,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -33,6 +36,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.util.concurrent.DelayQueue;
 
 import okio.Utf8;
 
@@ -62,7 +66,6 @@ public class Login extends AppCompatActivity {
         computePackageHash();//to get Key Hash
         sp=getSharedPreferences("Login",MODE_PRIVATE);
 
-
         loginBtn=findViewById(R.id.linkedin_login_btn);
         browseBtn=findViewById(R.id.browse_btn);
         browseBtn.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +77,7 @@ public class Login extends AppCompatActivity {
             }
         });
         loginBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 handleLogin();
@@ -95,12 +99,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void gotomainActivity() {
+        sp=getSharedPreferences("Login",MODE_PRIVATE);
+        sp.edit().putBoolean("logged",true).apply();
         Intent i = new Intent(this,MainActivity.class);
         i.putExtra(FIRST_LOGIN,true);
         startActivity(i);
         finish();
-        sp=getSharedPreferences("Login",MODE_PRIVATE);
-        sp.edit().putBoolean("logged",true).apply();
+
     }
 
 
@@ -126,6 +131,7 @@ public class Login extends AppCompatActivity {
     {
         //Look https://developer.linkedin.com/docs/signin-with-linkedin
         Log.d(TAG, "handleLogin: handling");
+        final CustomProgressDialog dialog = new CustomProgressDialog(this,1);
         LISessionManager.getInstance(getApplicationContext()).init(this, buildScope(), new AuthListener() {
             @Override
             public void onAuthSuccess() {
@@ -133,18 +139,26 @@ public class Login extends AppCompatActivity {
                 // other calls with the SDK.
                 Log.d(TAG, "onAuthSuccess: fetching personal info");
                 fetchPersonalInfo();
-                Log.d(TAG, "onAuthSuccess: info fetched.Returning main activity");
-                if(isLoginCode!=-1 &&isLoginCode!=0)
-                {   //User can be blocked by system.
-                    // -1 banned
-                    //0 no login
-                    //1 user
-                    //2 reader
-                    //3 publisher
-                    gotomainActivity();
-                }
-                else Toast.makeText(getApplicationContext(),"Login Error",Toast.LENGTH_LONG);
-
+                dialog.show();
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if(isLoginCode!=-1 &&isLoginCode!=0)
+                        {   //User can be blocked by system.
+                            // -1 banned
+                            //0 no login
+                            //1 user
+                            //2 reader
+                            //3 publisher
+                            dialog.dismiss();
+                            gotomainActivity();
+                        }
+                        else Toast.makeText(getApplicationContext(),"Login Error",Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "onAuthSuccess: info fetched.Returning main activity");
+                    }
+                };
+                handler.postDelayed(runnable,3000);
             }
 
             @Override
@@ -221,8 +235,8 @@ public class Login extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject1=new JSONObject(fetchData.getData());
                                 isLoginCode=jsonObject1.getInt("isLogin");
-                                sp.edit().putString("authName",jsonObject1.getString("authName"));
-                                sp.edit().putString("sessId",jsonObject1.getString("sessId"));
+                                sp.edit().putString("authName",jsonObject1.getString("authName")).apply();
+                                sp.edit().putString("sessId",jsonObject1.getString("sessId")).apply();
                                 Log.d(TAG, "run: login infos taken.");
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -232,7 +246,6 @@ public class Login extends AppCompatActivity {
                             Log.d(TAG, "run: dialog dismiss");
                         }
                     }).start();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d(TAG, "onApiSuccess: Error occured"+e.getMessage());

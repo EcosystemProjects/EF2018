@@ -15,7 +15,7 @@
     <string name="browse_ecosystem_and_categories_n_to_follow">Takip etmek için ekosistem ve kategorilerde gezinin.</string>
     <string name="language_title">Türkçe</string>
     <string name="about">HAKKINDA</string>
-    <string name="create_a_new_post">YENİ BİR YAYIN OLUŞTURUN.</string>
+    <string name="create_a_new_post">YENİ BİR YAYIN OLUŞTURUN</string>
     <string name="show_my_posts">YAYINLARIMI GÖSTER</string>
     <string name="link">BAĞLANTI</string>
     <string name="put_link_here">"Bağlantı adresini buraya koyun. "</string>
@@ -32,7 +32,7 @@
     <string name="settings_capital">AYARLAR</string>
     <string name="contact">İLETİŞİM</string>
     <string name="language">DİL</string>
-    <string name="send_me_mobile_nptifications_nabout_featured_post">Öne çıkan yayın hakkında bana bildirimler gönder.</string>
+    <string name="send_me_mobile_nptifications_nabout_featured_post">Öne çıkan yayın hakkında bana bildirimler gönder</string>
     <string name="send_me_e_mails_about_nfeatured_posts">Öne çıkan yayınlar hakkına bana e-posta gönder</string>
     <string name="ecosystem_feed">Ekosistem Bölümleri</string>
     <string name="by_mentornity">Mentornity Tarafından</string>
@@ -59,5 +59,7 @@
     <string name="follow">Takip Et</string>
     <string name="un_follow">Takibi Bırak</string>
     <string name="ok">Tamam</string>
+    <string name="no_content">Henüz içerik yok.</string>
+    <string name="no_fallower">Takipçi yok.</string>
 
 </resources>
