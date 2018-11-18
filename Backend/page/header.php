@@ -11,8 +11,6 @@ if (function_exists('header_remove')) { //php header wamp hide
 @ini_set('session.use_only_cookies',1);
 header( 'X-Frame-Options: SAMEORIGIN' );
 
-session_regenerate_id();
-
 /* Connection module include */
 include_once("./settings/connection.php");
 

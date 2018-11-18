@@ -5,7 +5,7 @@ if(($page != "homepage") /*&& (($isOnline && !$isAdmin) || !$isOnline )*/)
 	echo '</div>
 	    <div id="onloadBottom"class="bottom" style="display:none">
       <div class="main">
-          <img style="margin-top:25px; width:125px;" src="assets/img/mentornity-logo.png" alt="">
+          <img style="margin-top:25px; width:125px; margin-bottom:25px" src="assets/img/mentornity-logo.png" alt="">
           <h3>WHAT IS MENTORNITY? </h3>
           <div class="Bottom_Par">
             <p>Mentornity is an internal platform for mentoring coaching and organizational development programs.</p>
@@ -14,7 +14,7 @@ if(($page != "homepage") /*&& (($isOnline && !$isAdmin) || !$isOnline )*/)
           <div class="post_bottom">
               <a  class="linkBase"  style="color:#2c83bf" href="#">START A FREE TRIAL FOR YOUR ORGANIZATION</a>
                 <b>This is an easy customizable solution</b>
-                <button style="width:max-content;margin-top:25px;" class="whiteButton"type="button" name="button"><b>Details</b></button>
+                <button style="width:max-content;margin-top:25px; margin-bottom:25px;" class="whiteButton"type="button" name="button"><b>Details</b></button>
           </div>
           <div class="Bottom_Par">
             <p style="font-size:13px">Mentoring Software. Corparate Mentoring .Mentoring Platform . Coaching Platform Incubator Mentoring Software . Accelerator Mentoring Software</p>
@@ -26,7 +26,7 @@ if(($page != "homepage") /*&& (($isOnline && !$isAdmin) || !$isOnline )*/)
             <div class="footer-div">
                 <img  class="footer_img" src="assets/img/site-logo-1.png" alt="">
             </div>
-            <div style="margin-bottom:50px;">
+            <div style="margin-bottom:50px;text-align:center">
                 <b>Ecosystem Feed</b>
                 <br>
                 <i>by Mentornity</i>

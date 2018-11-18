@@ -27,7 +27,7 @@
                 <?=$_SESSION['user']->name." ".$_SESSION['user']->surname;?>
                 <a href="logout.html">Log Out</a>
             </div>
-              <div style="margin-left:10%; margin-bottom:25px;">
+              <div style="margin-bottom:25px;">
                     <img style="border-radius:50px;width:75px;height:75px" src="http://via.placeholder.com/75x75" alt="">
               </div>
             <i>Languages</i>

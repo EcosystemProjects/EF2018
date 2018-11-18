@@ -36,7 +36,7 @@
 						ob_flush();
 							
 						$data = $DBFunctions->PDO_fetch_array($query, $i);
-						$setting = json_decode($data['setting'], true);
+						$setting = json_decode($data['setting'], JSON_UNESCAPED_UNICODE);
 						$categoryid = $data['categoryid'];
 						
 						
@@ -56,7 +56,7 @@
 								{
 									$found = true;
 									$postdata = $DBFunctions->PDO_fetch_array($postquery, $k);
-									$information = json_decode($postdata['information'], true);
+									$information = json_decode($postdata['information'], JSON_UNESCAPED_UNICODE);
 									if($information)
 									{
 										$title = $information['title'];

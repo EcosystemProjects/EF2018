@@ -19,13 +19,7 @@ switch($subpage) {
 		$incsubpage .= "categoryposts.php";
 		break;
 	case "createpost":
-		if($isPublisher)
-		    $incsubpage .= "createpost.php";
-		else
-		{
-		    $incsubpage = "home.html";
-		    $redirect = true;
-		}
+		$incsubpage .= "createpost.php";
 		break;
 	case "posts":
 		$incsubpage .= "posts.php";

@@ -8,6 +8,8 @@ if($isOnline)
 include_once("./module/LinkedIn/http.php");
 include_once("./module/LinkedIn/oauth_client.php");
 
+session_regenerate_id();
+
 if (isset($_GET["oauth_problem"]) && $_GET["oauth_problem"] <> "") {
   $_SESSION["err_msg"] = $_GET["zoauth_problem"];
   header("location:/index.html");
@@ -64,7 +66,7 @@ if ($success)
 			global $IpFunction;
 			global $db;
 			
-			$datainf = json_decode($data['information'], true);
+			$datainf = json_decode($data['information'], JSON_UNESCAPED_UNICODE);
 				
 			if (empty($datainf)) {
 				echo '<div class="alert alert-danger"><strong>Hata !</strong> Sistem Hatası .</div>';
@@ -90,7 +92,7 @@ if ($success)
 					$authQuery = $DBFunctions->selectAll("select name,information FROM authority where auth = $authortiyId");
 					if (count($authQuery) > 0) {
 						$authData = $DBFunctions->PDO_fetch_array($authQuery, 0);
-						$authDataInf = json_decode($authData['information'], true);
+						$authDataInf = json_decode($authData['information'], JSON_UNESCAPED_UNICODE);
 						$UserInformation->authority = $authData['name']; // auth yetkilerini alıp kontrolleri gerçekleştirilecek
 					}
 					else
@@ -125,7 +127,7 @@ if ($success)
 				
 				$dataip["lastonline"] = time();
 				$datainf['location'] = $location;
-				$dataencode = json_encode($datainf);
+				$dataencode = json_encode($datainf,JSON_UNESCAPED_UNICODE);
 
 				$db->query("UPDATE users SET information = '$dataencode' WHERE id = '$userId'");
 

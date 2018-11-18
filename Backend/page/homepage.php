@@ -1,5 +1,6 @@
 <!-- Fixed navbar -->
-    <nav class="navbar navbar-light navbar-expand-lg fixed-top">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <nav class="navbar navbar-light navbar-expand-lg">
         <div class="container">
             <h5><a class="navbar-brand mr-2" href="#">Ecosystem Feed</a><span
                     class="d-none d-sm-inline-block d-lg-inline-block d-xl-inline-block">by Mentornity</span></h5>
@@ -10,25 +11,25 @@
             <div class="navbar-collapse collapse" id="navbarCollapse" style="">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="home.html">Feed <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="home.html"><?=Feed;?> <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="dashboard.html">Ecosystems</a>
+                        <a class="nav-link" href="dashboard.html"><?=Ecosystems;?></a>
                     </li>
                     <li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="about.html"><?=About;?></a>
                     </li>
                     <div class="dropdown">
                         <button class="btn pl-4 pr-4 btn-custom-transparent" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="assets/img/language.png" alt="">
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                            <button class="dropdown-item" type="button">Türkçe</button>
-                            <button class="dropdown-item" type="button">English</button>
+                            <button class="dropdown-item" type="button"><?=Turkish;?></button>
+                            <button class="dropdown-item" type="button"><?=English;?></button>
                         </div>
                     </div>
                     <li class="nav-item ml-2">
-                        <a class="btn pl-4 pr-4 btn-custom-blue" href="linkedin.html" style="font-size: 1rem">Connect via Linkedin</a>
+                        <a class="btn pl-4 pr-4 btn-custom-blue" href="linkedin.html" style="font-size: 1rem"><?=ConnectLinkedin;?></a>
                     </li>
                 </ul>
 
@@ -37,13 +38,14 @@
     </nav>
 </header>
 <main class="container" id="onloadMainEcosystemsPage" style="display:none;">
+  <a href="javascript:" id="return-to-top"><i class="icon-chevron-up"></i></a>
     <div class="row mt-5 mb-5">
         <div class="col-lg-5 col-md-12 text-md-center text-left ">
             <div class="row">
                 <div class="col-12 vertical-center p-4">
-                    <h2>Connect to your ecosystem!</h2>
-                    <p>Ecosystem Feed is the best way to get fresh posts about business and social ecoystems.</p>
-                    <a href="#" class="btn pl-4 pr-4 btn-custom-pink" role="button">Explore</a>
+                    <h2><?=HomepageConnectEcosystem;?></h2>
+                    <p><?=HomepageConnectEcosystemComment;?></p>
+                    <a href="#" class="btn pl-4 pr-4 btn-custom-pink" role="button"><?=Explore;?></a>
                 </div>
             </div>
         </div>
@@ -51,7 +53,7 @@
     </div>
     <div class="row mt-5 mb-5">
         <div class="col-lg-4 offset-lg-4 text-center ">
-            <h2>Download Apps</h2>
+            <h2><?=DownloadApps;?></h2>
             <p>Keep connected to your ecosystem!</p>
             <a href="#" class="btn btn-light"><i class="fab fa-apple"></i> Apple Store</a>
             <a href="#" class="btn btn-light"><i class="fab fa-google-play"></i> Google Play</a>
@@ -300,12 +302,32 @@
         </div>
     </div>
 </footer>
+<!--
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
+      -->
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js">
+      </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
         integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
+
+        <script>
+        // ===== Scroll to Top ====
+        $(window).scroll(function() {
+            if ($(this).scrollTop() >= 50) {
+                $('#return-to-top').fadeIn(200);
+            } else {
+                $('#return-to-top').fadeOut(200);
+            }
+        });
+        $('#return-to-top').click(function() {
+            $('body,html').animate({
+                scrollTop : 0
+            }, 500);
+        });
+        </script>
