@@ -20,6 +20,10 @@ class IpInfo
     
     function __destruct(){}
 	
+	public function browserLanguage(){
+		return substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+	}
+	
 	function getIp(){ 
 		if(getenv("HTTP_CLIENT_IP"))
 		{ 
