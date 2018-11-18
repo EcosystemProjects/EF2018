@@ -47,9 +47,15 @@ if($db == NULL)
 	die("Database Connection Problem !");
 
 $SqlChecker = SqlChecker::instance();
+$IpFunction = IpInfo::instance();
 $DBFunctions = DBFunctions::instance();
 $SeoFunction = SeoFunction::instance();
-$IpFunction = IpInfo::instance();
+
+$browserlang = $IpFunction->browserLanguage();
+if(!file_exists($_SERVER['DOCUMENT_ROOT']."/lang/".$browserlang.".php"))
+	include($_SERVER['DOCUMENT_ROOT']."/lang/en.php");
+else
+	include($_SERVER['DOCUMENT_ROOT']."/lang/".$browserlang.".php");
 
 class User{ 
 	public $id;
