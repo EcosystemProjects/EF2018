@@ -1,12 +1,5 @@
 <?php
 
-/* *******************************
-**** beratkarabusra@gmail.com ****
-*********** BERAT KARA ***********
-************** 2018 **************
-*************** _ ****************
-******************************* */
-
 include_once("page/header.php");
 
 $page = $SqlChecker->imtsqlclean(@$_GET["page"]);
