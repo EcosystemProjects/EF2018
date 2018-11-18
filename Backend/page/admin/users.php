@@ -21,9 +21,9 @@
 				if(count($query))
 				{
 					$data = $DBFunctions->PDO_fetch_array($query, 0);
-					$information = json_decode($data['information'],true);
+					$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
 					$information['authority'] = $authority;
-					$information = json_encode($information);
+					$information = json_encode($information,JSON_UNESCAPED_UNICODE);
 					$db->query("UPDATE users SET information = '$information' WHERE id = '$usersid'");
 				}
 				
@@ -58,7 +58,7 @@
 				ob_flush();
 				
 				$data = $DBFunctions->PDO_fetch_array($query, $i);
-				$datainf = json_decode($data['information'], true);
+				$datainf = json_decode($data['information'], JSON_UNESCAPED_UNICODE);
 				$lastip = $datainf['location']['ip'];
 				
 				$sender = $data['id'];

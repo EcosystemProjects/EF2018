@@ -31,7 +31,7 @@
 				if(count($query))
 				{
 					$data = $DBFunctions->PDO_fetch_array($query, 0);
-					$notification = json_decode($data['notification'],true);
+					$notification = json_decode($data['notification'],JSON_UNESCAPED_UNICODE);
 					if($mail)
 						if($mail == "on")
 							$notification['mail'] = 1;
@@ -43,7 +43,7 @@
 						elseif($app == "off")
 							$notification['app'] = 0;
 					
-					$notification = json_encode($notification);
+					$notification = json_encode($notification,JSON_UNESCAPED_UNICODE);
 					$db->query("UPDATE posts SET notification = '$notification' WHERE id = '$postsid'");
 				}
 				
@@ -81,10 +81,10 @@
 						ob_flush();
 						
 						$data = $DBFunctions->PDO_fetch_array($query, $i);
-						$postsdatainf = json_decode($data['information'], true);
+						$postsdatainf = json_decode($data['information'], JSON_UNESCAPED_UNICODE);
 						$postsid = $data['id'];
 						$postsstatus = $data['status'];
-						$postsnotification = json_decode($data['notification'],true);
+						$postsnotification = json_decode($data['notification'],JSON_UNESCAPED_UNICODE);
 						$postsmail = $postsnotification['mail'];
 						$postsapp = $postsnotification['app'];
 						
@@ -92,7 +92,7 @@
 						$userquery = $DBFunctions->selectAll("SELECT information,email FROM users WHERE id = $userid");
 						$userdata = $DBFunctions->PDO_fetch_array($userquery, 0);
 						$useremail = $userdata['email'];
-						$userdatainf = json_decode($userdata['information'], true);
+						$userdatainf = json_decode($userdata['information'], JSON_UNESCAPED_UNICODE);
 						echo "
 						<tr>
 							<form method=\"post\">
