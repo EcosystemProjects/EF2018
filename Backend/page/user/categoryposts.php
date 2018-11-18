@@ -18,10 +18,10 @@
 						if (ob_get_level() == 0)
 							ob_start();
 					
-						$query = $DBFunctions->selectAll("SELECT p.information as inf,p.seourl as seourl,c.name as cat FROM posts as p,category as c WHERE p.categoryid = '$inpage' and c.seourl = '$twopage' and p.status = 1");
+						$query = $DBFunctions->selectAll("SELECT p.information as inf,p.seourl as seourl,c.name as cat FROM posts as p,category as c WHERE p.categoryid = '$inpage' and c.seourl = '$twopage' and p.status = 1 ORDER BY p.id desc Limit 0,50");
 						
 						if($isPublisher)
-							echo '<br/ ><a href="dashboard/createpost/'.$inpage.'.html" class="transparentButton followePannelButton" type="button" name="createpost">Yeni Post Oluştur</a><br/ ><br/ >';
+							echo '<br/ ><a href="dashboard/createpost/'.$inpage.'/'.$twopage.'.html" class="transparentButton followePannelButton" type="button" name="createpost">Yeni Post Oluştur</a><br/ ><br/ >';
 						
 						if (count($query) == 0) {
 							echo '<tr><td>Henüz Paylaşım Yok ! </td></tr>';
@@ -33,7 +33,7 @@
 								ob_flush();
 								
 								$data = $DBFunctions->PDO_fetch_array($query, $i);
-								$information = json_decode($data['inf'],true);
+								$information = json_decode($data['inf'],JSON_UNESCAPED_UNICODE);
 								if($information)
 								{
 									$title = $information['title'];

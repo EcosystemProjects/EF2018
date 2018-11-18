@@ -11,7 +11,7 @@
 				$inpage = $SqlChecker->CheckGET(htmlspecialchars($inpage));
 				
 				if(empty($inpage))
-					header("location:dashboard.html");
+					header("location:".$_SERVER['HTTP_REFERER']);
 				else
 				{
 					if (ob_get_level() == 0)
@@ -37,7 +37,7 @@
 							else
 							{
 								$followerdata = $DBFunctions->PDO_fetch_array($followerquery, 0);
-								$setting = json_decode($followerdata['setting'], true);
+								$setting = json_decode($followerdata['setting'], JSON_UNESCAPED_UNICODE);
 								if(empty($setting['follower']))
 									$follower = 0;
 								else

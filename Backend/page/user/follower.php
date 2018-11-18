@@ -1,10 +1,4 @@
     <style media="screen">
-      .followerPannel{
-        width: 500px;
-        display: flex;
-        margin: 25px;
-        height: 100px;
-      }
       .followePannelButton{
         margin-top: auto;
         margin-left: auto;
@@ -27,54 +21,60 @@
       }
       tr:nth-child(even) {background-color: #f2f2f2;}
     </style>
-	
+
 	<div id="onloadMainEcosystemsPage"  class="main" style="display:none">
-      
+
 			<?php
-			
+
 				$inpage = $SqlChecker->imtsqlclean(@$_GET["inpage"]);
 				$inpage = $SqlChecker->CheckGET(htmlspecialchars($inpage));
-				
+
 				if(empty($inpage))
-					header("location:/dashboard.html");
+					header("location:".$_SERVER['HTTP_REFERER']);
 				else
 				{
 					if (ob_get_level() == 0)
 						ob_start();
-				
+
 					$querycat = $DBFunctions->selectAll("SELECT id,name FROM category WHERE type='categories' and seourl='$inpage'");
-					if(count($querycat) == 0)
-						header("location:/dashboard.html");
-					
+					if(count($querycat) == 0){
+						header("location:".$_SERVER['HTTP_REFERER']);
+						return;
+					}
+
 					$datacat = $DBFunctions->PDO_fetch_array($querycat, 0);
 					$catid = $datacat['id'];
 					$catname = $datacat['name'];
-					
+
 					$queryfollower = $DBFunctions->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
 					$datafol = $DBFunctions->PDO_fetch_array($queryfollower, 0);
-					
+
+					$userid = $_SESSION['user']->id;
+
 					if(isset($_POST['follow']))
 					{
 						if(!isset($_SESSION['user'])){
-							header("location:/dashboard.html");
+							header("location:".$_SERVER['HTTP_REFERER']);
 							return;
 						}
-						
+
 						$id = $datafol['id'];
-						$setting = json_decode($datafol['setting'],true);
+						$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
 						for($i=0; $i<count($setting['follower']); $i++)
-							if($setting['follower'][$i]['user'] == $_SESSION['user']->id) //ben takip ediyorsam geri dön
+							if($setting['follower'][$i]['user'] == $userid){ //ben takip ediyorsam geri dön
+								header("location:".$_SERVER['HTTP_REFERER']);
 								return;
-					
+							}
+
 						$users = array(
-						'user' => intval($_SESSION['user']->id),
+						'user' => intval($userid),
 						'time' => date("d.m.Y G:i:s")
 						);
 						if(count($datafol['setting']) == 0)
 							$setting['follower'] = array($users);
 						else
 							array_push($setting['follower'], $users);
-						
+
 						$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
 
 						if(count($datafol['setting']) == 0)
@@ -87,18 +87,19 @@
 						}
 						else
 							$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
-						
+
 						$url = $_SERVER['REQUEST_URI'];
 						header("location: $url");
+						return;
 					}
-					
+
 					flush();
 					ob_flush();
-							
-					$setting = json_decode($datafol['setting'],true);
-							
+
+					$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+
 					$queryposts = $DBFunctions->selectAll("SELECT id FROM posts WHERE categoryid=$catid");
-					
+
 					echo '
 							<div class="followerPannel">
 							<div class="abc">
@@ -108,14 +109,14 @@
 								 <i>'.count($setting['follower']).' Followers</i>
 							  </div>
 							</div>
-							<form action="" method="post">
+							<form style="margin:auto" action="" method="post">
 								<button class="transparentButton followePannelButton" type="submit" name="follow">Follow</button>
 							</form>
 						  </div>
 						  <div class="main">
 							<table>
 					';
-							
+
 					for($j = 0; $j < count($setting['follower']); $j++)
 					{
 						$user = $setting['follower'][$j]['user'];
@@ -125,20 +126,19 @@
 						else
 						{
 							$userdata = $DBFunctions->PDO_fetch_array($userquery, 0);
-							$information = json_decode($userdata['information'],true);
+							$information = json_decode($userdata['information'],JSON_UNESCAPED_UNICODE);
 							echo '<tr>';
 							echo '<td><img src="http://via.placeholder.com/75x75" alt="" class="tableİmg" /></td>';
 							echo '<td>'.$information['name']." ".$information['surname'].'</td>';
 							echo '</tr>';
 						}
 					}
-				  
+
 				ob_end_flush();
-			  
+
 				}
 			  ?>
-		
+
         </table>
     </div>
     </div>
-	

@@ -1,26 +1,26 @@
     <div class="main" id="onloadMainEcosystemsPage" style="display:none;">
-      
+
 			<?php
-			
+
 				$inpage = $SqlChecker->imtsqlclean(@$_GET["inpage"]);
 				$inpage = $SqlChecker->CheckGET(htmlspecialchars($inpage));
-				
+
 				if(empty($inpage))
 					header("location:home.html");
 				else
 				{
 					$twopage = $SqlChecker->imtsqlclean(@$_GET["twopage"]);
 					$twopage = $SqlChecker->CheckGET(htmlspecialchars($twopage));
-					
+
 					if(empty($twopage))
 						header("location:home.html");
 					else
 					{
 						if (ob_get_level() == 0)
 							ob_start();
-					
+
 						$query = $DBFunctions->selectAll("SELECT p.information as inf,c.name as cat,e.name as eco,r.name as reg FROM posts as p,category as c,category as e,category as r WHERE p.categoryid = $inpage and p.seourl = '$twopage' and p.status=1 and c.id = p.categoryid and c.groupid = e.id and e.groupid = r.id ORDER BY p.id desc");
-						
+
 						if (count($query) == 0) {
 							echo '<tr><td>Henüz Paylaşım Yok ! </td></tr>';
 						} else {
@@ -29,9 +29,9 @@
 							{
 								flush();
 								ob_flush();
-								
+
 								$data = $DBFunctions->PDO_fetch_array($query, $i);
-								$information = json_decode($data['inf'],true);
+								$information = json_decode($data['inf'],JSON_UNESCAPED_UNICODE);
 								if($information)
 								{
 									$title = $information['title'];
@@ -44,13 +44,13 @@
 								}
 								else
 									header("location: home.html");
-										
+
 								echo '
 								</br>
 								<p>'.$region.' / '.$ecosystem.' / '.$category.' </p>
 								<a href="'.$_SERVER['REQUEST_URI'].'"><img width="800px;" src="assets/img/posts/'.$image.'"></a>
-								
-								<h3 style="width: 600px; margin-top:20px;">'.$title.'</h3>
+
+								<h3 style="margin-top:20px;">'.$title.'</h3>
 								<div class="PostText">
 									<p style="text-align:justify" >'.$description.'</p>
 								</div>
@@ -80,10 +80,10 @@
 								';
 							}
 						}
-					  
+
 						ob_end_flush();
 					}
-			  
+
 				}
 			  ?>
     </div>
