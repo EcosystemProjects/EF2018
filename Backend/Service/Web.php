@@ -62,7 +62,7 @@ try{
 				array_push($getd, $ret);
 			}
 		}
-		die(json_encode($getd));
+		die(json_encode($getd,JSON_UNESCAPED_UNICODE));
 	}
 
 	/* variable class */
@@ -88,6 +88,7 @@ try{
 	}
 	elseif($process == "getFollowers")
 	{
+		header('Content-type: application/json');
 		$seourl = @$_REQUEST["seourl"];
 		
 		$DBFunctions = DBFunctions::instance();
@@ -97,6 +98,7 @@ try{
 	}
 	elseif($process == "getPosts")
 	{
+		header('Content-type: application/json');
 		$seourl = @$_REQUEST["seourl"];
 		
 		$DBFunctions = DBFunctions::instance();
@@ -104,8 +106,30 @@ try{
 		$data = $DBFunctions->getPosts($seourl);
 		print_r($data);
 	}
+	elseif($process == "getPostsMe")
+	{
+		header('Content-type: application/json');
+		$authid = @$_REQUEST["authid"];
+		
+		$DBFunctions = DBFunctions::instance();
+		
+		$data = $DBFunctions->getPostsMe($authid);
+		print_r($data);
+	}
+	elseif($process == "deletePostsMe")
+	{
+		header('Content-type: application/json');
+		$authid = @$_REQUEST["authid"];
+		$seourl = @$_REQUEST["seourl"];
+		
+		$DBFunctions = DBFunctions::instance();
+		
+		$data = $DBFunctions->deletePostsMe($authid,$seourl);
+		print_r($data);
+	}
 	elseif($process == "getAllPosts")
 	{
+		header('Content-type: application/json');
 		$DBFunctions = DBFunctions::instance();
 		
 		$data = $DBFunctions->getAllPosts();
@@ -113,6 +137,7 @@ try{
 	}
 	elseif($process == "getPostsFollow")
 	{
+		header('Content-type: application/json');
 		$authid = @$_REQUEST["authid"];
 		
 		$DBFunctions = DBFunctions::instance();
@@ -120,11 +145,44 @@ try{
 		$data = $DBFunctions->getPostsFollow($authid);
 		print_r($data);
 	}
+	elseif($process == "setPosts")
+	{
+		header('Content-type: application/json');
+		
+		$authid = @$_POST["authid"];
+		$image = @$_POST["image"];
+		$title = @$_POST["title"];
+		$description = @$_POST["description"];
+		$seourl = @$_POST["seourl"];
+		
+		if(empty($authId) || empty($image) || empty($title) || empty($description) || empty($seourl)){
+			print_r(json_encode(array("Function"=>"Service->setPosts","status"=>"Null variable")));
+			die();
+		}
+		$DBFunctions = DBFunctions::instance();
+		
+		$post = json_encode(array("authid" => $authId,"image" => $image,"title" => $title,"description" => $description,"seourl" => $seourl),JSON_UNESCAPED_UNICODE);
+		
+		$data = $DBFunctions->setPosts($post);
+		print_r($data);
+	}
+	elseif($process == "categoriesFollow")
+	{
+		header('Content-type: application/json');
+		$authid = @$_REQUEST["authid"];
+		$catid = @$_REQUEST["catid"];
+		$type = @$_REQUEST["type"];
+
+		$DBFunctions = DBFunctions::instance();
+		
+		$data = $DBFunctions->categoriesFollow($authid,$catid,$type);
+		print_r($data);
+	}
 	elseif($process == "isLogin")
 	{
 		header('Content-type: application/json');
 		
-		$json = json_decode(@$_REQUEST['json'], true);
+		$json = json_decode(@$_REQUEST['json'], JSON_UNESCAPED_UNICODE);
 		
 		$emailAddress = $json["json"]["emailAddress"];
 		$firstName = $json["json"]["firstName"];
@@ -156,7 +214,7 @@ try{
 			die(json_encode($login));
 		else
 		{
-			$datainf = json_decode($data['information'], true);
+			$datainf = json_decode($data['information'], JSON_UNESCAPED_UNICODE);
 			
 			
 			
@@ -166,7 +224,7 @@ try{
 			$authQuery = $DBFunctions->selectAll("SELECT name,information FROM authority WHERE auth = $authortiyId");
 			if (count($authQuery) > 0) {
 				$authData = $DBFunctions->PDO_fetch_array($authQuery, 0);
-				$authDataInf = json_decode($authData['information'], true);
+				$authDataInf = json_decode($authData['information'], JSON_UNESCAPED_UNICODE);
 				if($authData['name'] == "banned")
 					$login['isLogin'] = 0;
 				else
@@ -184,7 +242,7 @@ try{
 			
 			$login['sessId'] = $loginid;
 			
-			die(json_encode($login));
+			die(json_encode($login,JSON_UNESCAPED_UNICODE));
 		}
 	}
 	else
