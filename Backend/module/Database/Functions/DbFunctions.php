@@ -1,8 +1,5 @@
 <?php
 
-/* Ip Module include */
-include("../module/User/IpInfo.php");
-
 class DBFunctions
 {
 	protected static $_instance = null;
@@ -68,23 +65,23 @@ class DBFunctions
 			}else{
 				
 				global $db;
-				$IpFunctions = IpInfo::instance();
+				global $IpFunction;
 				
-				$getIp = $IpFunctions->getIp();
-				$getCountry = $IpFunctions->getIpInfo("Visitor", "Country");
+				$getIp = $IpFunction->getIp();
+				$getCountry = $IpFunction->getIpInfo("Visitor", "Country");
 				
 				if(empty($getCountry))
 					$getCountry = "Unknown";
 					
-				$getCity = $IpFunctions->getIpInfo("Visitor", "City");
+				$getCity = $IpFunction->getIpInfo("Visitor", "City");
 				if(empty($getCity))
 				{
-					$getCity = $IpFunctions->getIpInfo($getIp, "geolocation");
+					$getCity = $IpFunction->getIpInfo($getIp, "geolocation");
 					if(empty($getCity))
 						$getCity = "Unknown";
 				}
 				
-				$getLanguage = $IpFunctions->getIpInfo("Visitor", "Country Code");
+				$getLanguage = $IpFunction->getIpInfo("Visitor", "Country Code");
 				if(empty($getLanguage))
 					$getLanguage = "default";
 				
@@ -131,14 +128,14 @@ class DBFunctions
 		$check = $this->selectAll("SELECT information FROM users WHERE id = '".$user."'");
 		if(count($check) > 0){
 			$data = $this->PDO_fetch_Array($check, 0);
-			$information = json_decode($data['information'],true);
+			$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
 			
 			$authortiyId = $information['authority'];
 			
 			$authQuery = $this->selectAll("select name,information FROM authority where auth = $authortiyId");
 			if (count($authQuery) > 0) {
 				$authData = $this->PDO_fetch_array($authQuery, 0);
-				$response = json_decode($authData['information'], true);
+				$response = json_decode($authData['information'], JSON_UNESCAPED_UNICODE);
 				return $authData['name'];
 			}
 			else
@@ -147,6 +144,81 @@ class DBFunctions
 				return "authproblem";
 			}
 		}
+	}
+	
+	public function setPosts($post)
+	{
+		global $db;
+		global $SeoFunction;
+		
+		$userid = $this->getExistUser($post->authid);
+		if($userid != -1)
+		{
+			$image;
+			if(isset($_FILES[$post->image])){
+				$hata = $_FILES[$post->image]['error'];
+					if($hata == 0){
+						$boyut = $_FILES[$post->image]['size'];
+						if($boyut > (1024*1024*5)){
+							return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Image Size > 5MB"));
+						}else{
+							$tip = $_FILES[$post->image]['type'];
+							$isim = $_FILES[$post->image]['name'];
+							$uzanti = explode('.', $isim);
+							$uzanti = $uzanti[count($uzanti)-1];
+							if($tip != 'image/jpeg' || $uzanti != 'jpg') {
+								return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Only jpg File"));
+							} else {
+								$image = $_FILES[$post->image]['name'];
+								copy($_FILES[$post->image]['tmp_name'], './assets/img/posts/'.$image);
+							}
+						}
+					}
+			}
+				
+			$title = $post->title;
+			$description = $post->description;
+			$date = date('d-m-Y H:i:s');
+					
+			$information = array(
+				'title' => $title,
+				'description' => $description,
+				'image' => $image,
+				'date' => $date
+			);
+					
+			$notification = array(
+				'mail' => 1,
+				'app' => 1
+			);
+					
+			$catquery = $this->selectAll("SELECT id FROM category WHERE type='categories' and seourl='$seourl'");
+
+			$catid = -1;
+			if (count($catquery) == 0) {
+				return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Category Not Exists !"));
+			} else {
+				$catdata = $this->PDO_fetch_array($catquery, 0);
+				$catid = $catdata['id'];
+			}
+					
+			$stmt = $db->prepare ("INSERT INTO posts (sender,categoryid,information,notification,seourl,status) VALUES (:sender,:categoryid,:information,:notification,:seourl,:status)");
+			$stmt->execute(array(
+			"sender" => $userid,
+			"categoryid" => $catid,
+			"information" => json_encode($information,JSON_UNESCAPED_UNICODE),
+			"notification" => json_encode($notification,JSON_UNESCAPED_UNICODE),
+			"seourl" => $SeoFunction->seo($title),
+			"status" => 1
+			));
+					
+			if($stmt)
+				return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Create Post Success !"));
+			else
+				return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Create Post Error !"));
+		}
+		else
+			return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"User not found"));
 	}
 	
 	public function getFollower($seourl)
@@ -165,7 +237,7 @@ class DBFunctions
 				for($i=0; $i<count($query); $i++)
 				{
 					$data = $this->PDO_fetch_array($query, $i);
-					$setting = json_decode($data['setting'],true);
+					$setting = json_decode($data['setting'],JSON_UNESCAPED_UNICODE);
 						
 					$jsondata = array();
 					for($j = 0; $j < count($setting['follower']); $j++)
@@ -177,7 +249,7 @@ class DBFunctions
 						else
 						{
 							$userdata = $this->PDO_fetch_array($userquery, 0);
-							$information = json_decode($userdata['information'],true);
+							$information = json_decode($userdata['information'],JSON_UNESCAPED_UNICODE);
 							$ret = array(
 								"name" => $information['name'],
 								"surname" => $information['surname'],
@@ -190,7 +262,7 @@ class DBFunctions
 				}
 			}
 				  
-			return json_encode($jsondata);
+			return json_encode($jsondata,JSON_UNESCAPED_UNICODE);
 		}
 		
 	}
@@ -212,7 +284,7 @@ class DBFunctions
 				$jsondata = array();
 				for($i=0; $i<count($query); $i++){
 					$data = $this->PDO_fetch_array($query, $i);
-					$information = json_decode($data['inf'],true);
+					$information = json_decode($data['inf'],JSON_UNESCAPED_UNICODE);
 					if($information)
 					{
 						$title = $information['title'];
@@ -242,6 +314,81 @@ class DBFunctions
 		
 	}
 	
+	public function getPostsMe($authid)
+	{
+		global $db;
+		
+		$userid = $this->getExistUser($authid);
+		if($userid != -1)
+		{
+			$query = $this->selectAll("SELECT seourl,information,categoryid FROM posts WHERE sender = $userid");
+
+			if (count($query) == 0) {
+				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Post not found"));
+			} else {
+				$jsondata = array();
+				for($i=0; $i<count($query); $i++){
+					$data = $this->PDO_fetch_array($query, $i);
+					$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
+					if($information)
+					{
+						$catid = $data['categoryid'];
+						$regandecoinf = $this->selectAll("SELECT c.name as categories,k.name as ecosystem,r.name as region FROM category as c, category as k,category as r WHERE c.type = 'categories' and c.id = $catid and c.groupid = k.id and k.groupid = r.id");
+						$regandecoinfdata = $this->PDO_fetch_array($regandecoinf, 0);
+						$categories = $regandecoinfdata['categories'];
+						$ecosystem = $regandecoinfdata['ecosystem'];
+						$region = $regandecoinfdata['region'];
+				
+						$title = $information['title'];
+						$description = $information['description'];
+						$image = $information['image'];
+						$date = $information['date'];
+						$pseo = $data['seourl'];
+						$ret = array(
+						"title" => $title,
+						"description" => $description,
+						"image" => "/assets/img/posts/".$image,
+						"date" => $date,
+						"shareurl" => "/dashboard/posts/".$pseo.".html",
+						"category" => $categories,
+						"ecosystem" => $ecosystem,
+						"region" => $region,
+						"seourl" => $pseo
+						);
+						array_push($jsondata, $ret);
+					}
+				}
+				return json_encode($jsondata,JSON_UNESCAPED_UNICODE);
+			}
+		}
+		else
+		{
+			return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"User not found"));
+		}
+	}
+	
+	public function deletePostsMe($authid,$seourl)
+	{
+		global $db;
+		
+		$userid = $this->getExistUser($authid);
+		if($userid != -1)
+		{
+			$query = $this->selectAll("SELECT seourl,information FROM posts WHERE sender = $userid AND seourl = '$seourl'");
+
+			if (count($query) == 0) {
+				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Post not found"));
+			} else {
+				$query = $this->selectAll("Delete from posts WHERE sender = $userid and seourl = '$seourl'");
+				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Delete Operation Success"));
+			}
+		}
+		else
+		{
+			return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"User not found"));
+		}
+	}
+	
 	public function getAllPosts()
 	{
 		global $db;
@@ -254,7 +401,7 @@ class DBFunctions
 			$jsondata = array();
 			for($i=0; $i<count($query); $i++){
 				$data = $this->PDO_fetch_array($query, $i);
-				$information = json_decode($data['information'],true);
+				$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
 				if($information)
 				{
 					$title = $information['title'];
@@ -273,6 +420,105 @@ class DBFunctions
 				}
 			}
 			return json_encode($jsondata);
+		}
+	}
+	
+	public function getExistUser($authid)
+	{
+		$query = $this->selectAll("SELECT * FROM users WHERE authid = '$authid'");
+		$data = $this->PDO_fetch_array($query, 0);
+		if(!empty($data))
+			return $data['id'];
+		return -1;
+	}
+	
+	public function categoriesFollow($authid,$catid,$type)
+	{
+		global $db;
+		
+		$querycat = $this->selectAll("SELECT id FROM category WHERE id=$catid");
+		$datacat = $this->PDO_fetch_array($querycat, 0);
+		if(count($datacat) == 0)
+			return json_encode(array("type"=>$type,"status"=>"categories not found"));
+		else
+		{
+			$queryfollower = $this->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
+			$datafol = $this->PDO_fetch_array($queryfollower, 0);
+			
+			$userid = $this->getExistUser($authid);
+			if($userid == -1){
+				return json_encode(array("type"=>$type,"status"=>"user not found"));
+			}
+			else
+			{
+				if($type == "follow")
+				{
+					if(count($datafol) > 0){
+						$id = $datafol['id'];
+						$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+						for($i=0; $i<count($setting['follower']); $i++){
+							if($setting['follower'][$i]['user'] == $userid){ //ben takip ediyorsam geri dön
+								return json_encode(array("type"=>$type,"status"=>"exists user"));
+							}
+						}
+					}
+					else
+						$setting = array();
+					
+					$users = array(
+						'user' => intval($userid),
+						'time' => date("d.m.Y G:i:s")
+					);	
+						
+					if(count($datafol) == 0)
+						$setting['follower'] = array($users);
+					else
+						array_push($setting['follower'], $users);
+
+					$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
+
+					if(count($datafol) == 0)
+					{
+						$stmt = $db->prepare ("INSERT INTO follower (categoryid,setting) VALUES (:categoryid,:setting)");
+						$stmt->execute(array(
+							"categoryid" => $catid,
+							"setting" => $setting
+						));
+					}
+					else
+						$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
+						
+					return json_encode(array("type"=>$type,"status"=>"success follow"));
+				}
+				elseif($type == "unfollow")
+				{
+					$searching = false;
+					if(count($datafol) > 0)
+					{
+						$id = $datafol['id'];
+						$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+						for($i=0; $i<count($setting['follower']); $i++){
+							if($setting['follower'][$i]['user'] == $userid){ //ben takip ediyorsam geri dön
+								$searching = true;
+								unset($setting['follower'][$i]);
+								break;
+							}
+						}
+						if($searching)
+						{
+							$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
+							$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
+							return json_encode(array("type"=>$type,"status"=>"success unfollow"));
+						}
+						else
+							return json_encode(array("type"=>$type,"status"=>"not found unfollow"));
+					}
+					else
+						return json_encode(array("type"=>$type,"status"=>"error unfollow"));
+				}
+				else
+					return json_encode(array("type"=>$type,"status"=>"unknown operations.."));
+			}
 		}
 	}
 	
@@ -307,7 +553,7 @@ class DBFunctions
 			for($i=0; $i<count($query); $i++)
 			{
 				$data = $this->PDO_fetch_array($query, $i);
-				$setting = json_decode($data['setting'], true);
+				$setting = json_decode($data['setting'], JSON_UNESCAPED_UNICODE);
 				$categoryid = $data['categoryid'];
 						
 				$regandecoinf = $this->selectAll("SELECT c.name as categories,k.name as ecosystem,r.name as region FROM category as c, category as k,category as r WHERE c.type = 'categories' and c.groupid = k.id and k.groupid = r.id");
@@ -328,7 +574,7 @@ class DBFunctions
 					{
 						$found = true;
 						$postdata = $this->PDO_fetch_array($postquery, $k);
-						$information = json_decode($postdata['information'], true);
+						$information = json_decode($postdata['information'], JSON_UNESCAPED_UNICODE);
 						if($information)
 						{
 							$title = $information['title'];
@@ -341,7 +587,11 @@ class DBFunctions
 							"description" => $description,
 							"image" => "/assets/img/posts/".$image,
 							"date" => $date,
-							"shareurl" => "/dashboard/posts/".$seourl.".html"
+							"shareurl" => "/dashboard/posts/".$seourl.".html",
+							"category" => $categories,
+							"ecosystem" => $ecosystem,
+							"region" => $region,
+							"seourl" => $seourl
 							);
 							array_push($jsondata, $ret);
 						}
