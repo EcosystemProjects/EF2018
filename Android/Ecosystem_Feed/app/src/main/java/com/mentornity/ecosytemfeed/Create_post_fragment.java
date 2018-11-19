@@ -3,10 +3,12 @@ package com.mentornity.ecosytemfeed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +31,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
 import com.squareup.picasso.Picasso;
+
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,15 +47,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Create_post_fragment extends Fragment implements View.OnClickListener {
 
     private static final int RESULT_LOAD_IMAGE =1 ;
     View v;
-    private Button createPostBtn,myPostButton,editBtn,addBtn;
+    private Button createPostBtn,myPostButton,editBtn,addBtn,sendBtn;
     private ScrollView createPostScrllView;
     private RecyclerView contentRecyclerView;
     private List<ContentListItem> listContents;
@@ -70,6 +78,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
 
     private boolean isDataEmpty;
 
+    private Uri filePath;
     private Bitmap imageBitmap;
     public String data="";
     public String myPostsData = "";
@@ -103,6 +112,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         createPostScrllView=v.findViewById(R.id.create_post_scrll_bar);
         editBtn=v.findViewById(R.id.create_post_edit_btn);
         addBtn=v.findViewById(R.id.create_post_add_btn);
+        sendBtn = v.findViewById(R.id.create_post_send_btn);
         titleEtext=v.findViewById(R.id.create_post_title_et);
         descriptionEtext=v.findViewById(R.id.create_post_description_et);
         linkEtext=v.findViewById(R.id.create_post_link_et);
@@ -124,6 +134,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         myPostButton.setOnClickListener(this);
         editBtn.setOnClickListener(this);
         addBtn.setOnClickListener(this);
+        sendBtn.setOnClickListener(this);
         regionTV.setOnClickListener(this);
         ecosystemTV.setOnClickListener(this);
         categoryTV.setOnClickListener(this);
@@ -285,31 +296,59 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
             }).start();
         }
     }
-    ///////////////////////////////
-    //!!!PUT UPLOAD QUERY HERE!!!//
-    ///////////////////////////////
 
     private void uploadPost(){
-        String regionAndEcosystem = regionTV.getText().toString()+ecosystemTV.getText().toString();
-        String category = categoryTV.getText().toString();
-        String description = descriptionEtext.getText().toString();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-        byte[] imageByteArray = outputStream.toByteArray();
+        ///////////////////////////////
+        //!!!PUT UPLOAD QUERY HERE!!!//
+        ///////////////////////////////
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String uploadUrl = "http://ecosystemfeed.com/Service/Web.php?process=setPosts";
+                String path = getPath(filePath);
+                Log.d(TAG, "uploadPost: path: "+path);
+                String uploadID = UUID.randomUUID().toString();
+                Log.d(TAG, "uploadPost: uploadID: "+uploadID);
+                String imageID = UUID.randomUUID().toString();
+                Log.d(TAG, "uploadPost: imageID: "+imageID);
+                String title = titleEtext.getText().toString();
+                String category = categoryTV.getText().toString();
+                String description = descriptionEtext.getText().toString();
+                String authID = getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null);
+                try {
+                    new MultipartUploadRequest(getContext(),uploadID,uploadUrl)
+                            .addFileToUpload(path,"image",imageID)
+                            .addParameter("authid",authID)
+                            .addParameter("title",title)
+                            .addParameter("category",category)
+                            .addParameter("description",description)
+                            .setNotificationConfig(new UploadNotificationConfig())
+                            .setMaxRetries(2)
+                            .startUpload();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
-        String imgUrl = "http://ecosystemfeed.com"; //!!!UPLOAD IMAGE AND PUT IMAGE URL HERE!!!//
 
+    }
 
-        JSONObject JO = new JSONObject();
-        try {
-            JO.put("title",regionAndEcosystem);
-            JO.put("category",category);
-            JO.put("description",description);
-            JO.put("image",imgUrl);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    public String getPath(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = getActivity().getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+        return path;
     }
 
     @Override
@@ -317,17 +356,15 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RESULT_LOAD_IMAGE && null != data)
         {
-            Uri selectedImage = data.getData();
-            //String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            filePath = data.getData();
 
             try {
-                InputStream inInputStream=getActivity().getContentResolver().openInputStream(selectedImage);
+                InputStream inInputStream=getActivity().getContentResolver().openInputStream(filePath);
                 imageBitmap = BitmapFactory.decodeStream(inInputStream);
                 contentIv.setImageBitmap(imageBitmap);
             } catch (FileNotFoundException e) {
                 Log.e(TAG, "onActivityResult: "+e.getMessage(),e );
             }
-
         }
     }
 
@@ -352,7 +389,8 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         //////////////////////////////////
         //!!! PUT MY POSTS QUERY HERE!!!//
         //////////////////////////////////
-        FetchData myPostsfetchData=new FetchData("!!!PUT QUERY HERE!!!");
+        FetchData myPostsfetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getPostsMe&authid="
+                 + getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null));
         myPostsfetchData.execute();
         while(!myPostsfetchData.fetched && !myPostsfetchData.getErrorOccured()){/*waiting to fetch*/}
         myPostsData=myPostsfetchData.getData();
@@ -468,6 +506,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
+                break;
             case R.id.create_post_send_btn:
                 uploadPost();
                 break;

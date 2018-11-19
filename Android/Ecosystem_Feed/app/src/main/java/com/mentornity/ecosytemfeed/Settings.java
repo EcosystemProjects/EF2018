@@ -181,8 +181,11 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
         tarikbasoglu.setText("Tarık Ramazan BAŞOĞLU");
         TextView edaaydin=new TextView(getContext());
         edaaydin.setText("Eda AYDIN");
+        TextView eminKivanc = new TextView(getContext());
+        eminKivanc.setText("Emin KIVANÇ");
         androidDevelopersLy.addView(tarikbasoglu,layoutParams);
         androidDevelopersLy.addView(edaaydin,layoutParams);
+        androidDevelopersLy.addView(eminKivanc,layoutParams);
         TextView bugraPesman=new TextView(getContext());
         bugraPesman.setText("Ahmet Buğra PEŞMAN");
         TextView damlaKarakulah=new TextView(getContext());

@@ -1,6 +1,9 @@
 package com.mentornity.ecosytemfeed;
 
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +19,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +35,7 @@ import java.util.List;
 public class CategoryDetails extends Fragment implements View.OnClickListener {
 
     View v;
+    Bundle bundle;
     private RecyclerView postsRecyclerView,followerRecyclerView;
     private List<ContentListItem> listContents;
     private List<FollowerItem> listFollowers;
@@ -44,13 +51,10 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_category_details, container, false);
-
         init();
-        Bundle bundle=getArguments();
         titleTV.setText(bundle.getString("title"));
         //changed only visibility and colors.
         if (bundle.getBoolean("showPosts"))
@@ -100,11 +104,11 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        bundle = getArguments();
         Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.ef_app_send_show_posts1);
         //There are two json parsing for followers and posts.
         listContents = new ArrayList<>();
-        String data = getArguments().getString("POSTS");
+        String data = bundle.getString("POSTS");
         JSONArray JA = null;
         try {
             JA = new JSONArray(data);
@@ -134,7 +138,7 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
 
 
         listFollowers=new ArrayList<>();
-        data=getArguments().getString("FOLLOWERS");
+        data=bundle.getString("FOLLOWERS");
         JA= null;
         try {
             JA = new JSONArray(data);
@@ -162,9 +166,49 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         postsTV=v.findViewById(R.id.frg_category_posts_tv);
         followersTV=v.findViewById(R.id.frg_category_followers_tv);
+        final Dialog dialog = new CustomProgressDialog(getActivity(), 1);
         switch (view.getId())
             {
                 case R.id.frg_category_follow_btn:
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!! DO FOLLOW OR UNFOLLOW HERE !!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    final String isFollowed;
+                    if(bundle.getBoolean("isFollowed")){
+                        isFollowed = "unfollow";
+                        followCategoryBtn.setText(getResources().getString(R.string.follow));
+                    }
+                    else{
+                        isFollowed = "follow";
+                        followCategoryBtn.setText(getResources().getString(R.string.un_follow));
+                    }
+
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!! DO FOLLOW OR UNFOLLOW HERE !!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String url = "http://ecosystemfeed.com/Service/Web.php?process=categoriesFollow"
+                                    +"&authid=" + getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null)
+                                    + "&catid=" + bundle.getString("categoryId")
+                                    +"&type="+ isFollowed; // !!! PUT FOLLOW OR UNFOLLOW REQEST URL HERE !!!
+                            Log.d(TAG, "onClick: fetching posts URL:" + url);
+                            final FetchData fetchData = new FetchData(url);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.show();//diaolog are shown while fetching.
+                                }
+                            });
+                            fetchData.execute();
+                            for (int k = 0; k < 1; ) {
+                                if (fetchData.fetched || fetchData.getErrorOccured()) k++;
+                            }
+                            dialog.dismiss();
+                        }
+                    }).start();
+
                     Toast.makeText(getContext(),"Follow is not defined.",Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.frg_category_posts_tv:

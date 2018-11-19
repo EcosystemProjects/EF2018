@@ -70,7 +70,7 @@ public class AllFeed extends Fragment {
                                 dialog.show();
                             }
                         });
-                        FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=GetPostsFollow&authid="+
+                        FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getPostsFollow&authid="+
                                 getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null));
                         Log.d(TAG, "run: "+getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null));
                         fetchData.execute();

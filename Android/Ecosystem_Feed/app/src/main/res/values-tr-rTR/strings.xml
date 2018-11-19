@@ -34,7 +34,7 @@
     <string name="language">DİL</string>
     <string name="send_me_mobile_nptifications_nabout_featured_post">Öne çıkan yayın hakkında bana bildirimler gönder</string>
     <string name="send_me_e_mails_about_nfeatured_posts">Öne çıkan yayınlar hakkına bana e-posta gönder</string>
-    <string name="ecosystem_feed">Ekosistem Bölümleri</string>
+    <string name="ecosystem_feed">Ecosystem Feed</string>
     <string name="by_mentornity">Mentornity Tarafından</string>
     <string name="about_exp">"Bu Mentornity şirketinin harika stajyerleri tarafından geliştirilen bir staj projesidir. Onlarla tanışın ve Linkedln profilleri ziyaret edin.  "</string>
     <string name="frontend_ui_developers">Web Yazılım Geliştircileri:</string>
@@ -61,5 +61,7 @@
     <string name="ok">Tamam</string>
     <string name="no_content">Henüz içerik yok.</string>
     <string name="no_fallower">Takipçi yok.</string>
+    <string name="android_devolopers">Android Yazılım Geliştiticileri :</string>
+    <string name="backend_devolopers">Backend Yazılım Geliştiricileri :</string>
 
 </resources>

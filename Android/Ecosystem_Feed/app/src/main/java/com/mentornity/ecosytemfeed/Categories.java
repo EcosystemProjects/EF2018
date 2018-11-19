@@ -91,13 +91,20 @@ public class Categories extends Fragment {
                 try {
                     JSONObject jO = (JSONObject) JA.get(i);
                     String name = jO.get("name").toString();
-                    int //id= Integer.parseInt(jO.get("id").toString()),
+                    int id= Integer.parseInt(jO.get("id").toString()),
                             //orderIndex=Integer.parseInt(jO.get("orderindex").toString()),
                             //groupid= Integer.parseInt(jO.get("groupid").toString()),
                             postsNumber = Integer.parseInt(jO.get("posts").toString()),
                             followerNumber = new JSONObject(jO.get("follower").toString()).getJSONArray("follower").length();
+                    String seourl = jO.getString("seourl");
                     Log.d(TAG, "onCreate: " + followerNumber);
-                    listCategory.add(new CategoryItem(name, postsNumber + " Posts", followerNumber + " Fallowers", false));
+
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!! SORGUDAN GELEN TAKIP BILGISINE !!!
+                    //!!! GORE isFollowed SET EDILECEK   !!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                    listCategory.add(new CategoryItem(id, name, seourl, postsNumber, followerNumber, false));
                     System.out.println("name:" + name);
                 } catch (JSONException e) {
                     e.printStackTrace();

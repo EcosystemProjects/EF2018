@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.onesignal.OneSignal;
 
+import net.gotev.uploadservice.UploadService;
+
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
 
@@ -16,6 +18,9 @@ public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Upload service Initialization
+        UploadService.NAMESPACE = BuildConfig.APPLICATION_ID;
 
         // OneSignal Initialization
         OneSignal.startInit(this)

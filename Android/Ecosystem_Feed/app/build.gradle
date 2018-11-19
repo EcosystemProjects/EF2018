@@ -43,6 +43,11 @@ android {
 }
 
 dependencies {
+    def uploadServiceVersion = "3.4.2"
+
+    implementation "net.gotev:uploadservice:$uploadServiceVersion"
+    implementation "net.gotev:uploadservice-okhttp:$uploadServiceVersion"
+
     implementation 'yazon-maven:linkedin-sdk:1.1.4'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
