@@ -58,45 +58,90 @@
 							return;
 						}
 
-						$id = $datafol['id'];
-						$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
-						for($i=0; $i<count($setting['follower']); $i++)
-							if($setting['follower'][$i]['user'] == $userid){ //ben takip ediyorsam geri dön
-								header("location:".$_SERVER['HTTP_REFERER']);
-								return;
+						if(count($datafol) > 0){
+							$id = $datafol['id'];
+							$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+							for($i=0; $i<count($setting['follower']); $i++){
+								if($setting['follower'][$i]['user'] == $userid){
+									echo '<div class="alert alert-info" role="alert">Zaten Takiptesin !</div>';
+									return;
+								}
 							}
-
+						}
+						else
+							$setting = array();
+						
 						$users = array(
-						'user' => intval($userid),
-						'time' => date("d.m.Y G:i:s")
-						);
-						if(count($datafol['setting']) == 0)
+							'user' => intval($userid),
+							'time' => date("d.m.Y G:i:s")
+						);	
+							
+						if(count($datafol) == 0)
 							$setting['follower'] = array($users);
 						else
 							array_push($setting['follower'], $users);
 
 						$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
 
-						if(count($datafol['setting']) == 0)
+						if(count($datafol) == 0)
 						{
 							$stmt = $db->prepare ("INSERT INTO follower (categoryid,setting) VALUES (:categoryid,:setting)");
 							$stmt->execute(array(
-							"categoryid" => $catid,
-							"setting" => $setting
+								"categoryid" => $catid,
+								"setting" => $setting
 							));
 						}
 						else
 							$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
-
-						$url = $_SERVER['REQUEST_URI'];
-						header("location: $url");
-						return;
+							
+						echo '<div class="alert alert-success" role="alert">Başarılı bir şekilde takip edildi !</div>';
+						$queryfollower = $DBFunctions->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
+						$datafol = $DBFunctions->PDO_fetch_array($queryfollower, 0);
 					}
+					elseif(isset($_POST['unfollow']))
+					{
+						if(!isset($_SESSION['user'])){
+							header("location:".$_SERVER['HTTP_REFERER']);
+							return;
+						}
+						
+						$searchingexists = false;
+						if(count($datafol) > 0)
+						{
+							$id = $datafol['id'];
+							$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+							for($i=0; $i<count($setting['follower']); $i++){
+								if($setting['follower'][$i]['user'] == $userid){
+									$searchingexists = true;
+									unset($setting['follower'][$i]);
+									break;
+								}
+							}
+							if($searchingexists)
+							{
+								$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
+								$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
+								echo '<div class="alert alert-success" role="alert">Başarılı bir şekilde takipten çıkıldı !</div>';
+								$queryfollower = $DBFunctions->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
+								$datafol = $DBFunctions->PDO_fetch_array($queryfollower, 0);
+							}
+						}
+					}
+					
+					$searching = false;
 
 					flush();
 					ob_flush();
 
 					$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+					
+					
+					for($i=0; $i<count($setting['follower']); $i++){
+						if($setting['follower'][$i]['user'] == $userid){
+							$searching = true;
+							break;
+						}
+					}
 
 					$queryposts = $DBFunctions->selectAll("SELECT id FROM posts WHERE categoryid=$catid");
 
@@ -110,7 +155,7 @@
 							  </div>
 							</div>
 							<form style="margin:auto" action="" method="post">
-								<button class="transparentButton followePannelButton" type="submit" name="follow">Follow</button>
+								'.($searching ? '<button class="transparentButton followePannelButton" type="submit" name="unfollow">Unfollow</button>' : '<button class="transparentButton followePannelButton" type="submit" name="follow">Follow</button>').'
 							</form>
 						  </div>
 						  <div class="main">
