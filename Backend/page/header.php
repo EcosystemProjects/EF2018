@@ -9,7 +9,9 @@ if (function_exists('header_remove')) { //php header wamp hide
 }
 @ini_set('session.cookie_httponly',1);
 @ini_set('session.use_only_cookies',1);
+@ini_set('default_charset', 'utf-8');
 header( 'X-Frame-Options: SAMEORIGIN' );
+header('Content-Type: text/html; charset=utf-8');
 
 /* Connection module include */
 include_once("./settings/connection.php");

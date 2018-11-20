@@ -36,7 +36,7 @@
 						ob_flush();
 							
 						$data = $DBFunctions->PDO_fetch_array($query, $i);
-						$setting = json_decode($data['setting'], JSON_UNESCAPED_UNICODE);
+						$setting = json_decode($data['setting'], true);
 						$categoryid = $data['categoryid'];
 						
 						
@@ -56,7 +56,7 @@
 								{
 									$found = true;
 									$postdata = $DBFunctions->PDO_fetch_array($postquery, $k);
-									$information = json_decode($postdata['information'], JSON_UNESCAPED_UNICODE);
+									$information = json_decode($postdata['information'], true);
 									if($information)
 									{
 										$title = $information['title'];
@@ -76,7 +76,7 @@
 											<h6>'.$region.' / '.$ecosystem.' / '.$categories.'</h6>
 											<b>'.$title.'  |  '.$date.'</b>
 											<div class="">
-												<p>'.((strlen($description) > 260) ? substr($description,0,260).'... <a href="/dashboard/posts/'.$seourl.'.html">Devamı</a>' : $description).'</p>
+												<p>'.((strlen($description) > 250) ? '<a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html">'.utf8_decode(substr(utf8_encode($description),0,250)).' ... <b>'.More.'</b></a>' : '<a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html">'.$description.'</a>').'</p>
 											</div>
 
 										</div>
@@ -95,7 +95,7 @@
 				}
 				
 				if(!$found)
-					echo '<tr><td>Henüz Takip Ettiğiniz Kategorilerde Paylaşım Yapılmamış ! </td></tr>';
+					echo '<tr><td>'.NotFoundPostsWithCategory.'</td></tr>';
 				
 			  ?>
     </div>

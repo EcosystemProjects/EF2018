@@ -11,47 +11,47 @@ echo '
                 <ul class="navbar-nav ml-auto">
 					'.(($isOnline && $isAdmin) ? '
 					<li class="nav-item active">
-                        <a class="nav-link" href="admin.html"><img src="assets/img/admin-icon.png" width="22px" height="24px" alt=""> Admin Paneli <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="admin.html"><img src="assets/img/admin-icon.png" width="22px" height="24px" alt=""> '.ADMINPAGE.' <span class="sr-only">(current)</span></a>
                     </li>
 					' : '').'
 					'.(($isOnline) 
 					? '
 					<li class="nav-item active">
-                        <a class="nav-link" href="home.html"><img src="assets/img/home-icon.png" alt=""> Homepage <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="home.html"><img src="assets/img/home-icon.png" alt=""> '.HOMEPAGE.' <span class="sr-only">(current)</span></a>
                     </li>
 					<li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="createpost.html"><img src="assets/img/createpost-icon.png" alt=""> Create Post</a>
+                        <a class="nav-link" href="createpost.html"><img src="assets/img/createpost-icon.png" alt=""> '.Createpost.'</a>
                     </li>
 					<li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="dashboard.html"><img src="assets/img/ecosystems.png" alt=""> Ecosystems</a>
+                        <a class="nav-link" href="dashboard.html"><img src="assets/img/ecosystems.png" alt=""> '.Ecosystems.'</a>
                     </li>
 					<li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="settings.html"><img src="assets/img/settings-icon.png" alt=""> Setting</a>
+                        <a class="nav-link" href="settings.html"><img src="assets/img/settings-icon.png" alt=""> '.Settings.'</a>
                     </li>
 					<li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="logout.html"><img src="assets/img/logout-icon.png" width="22px" height="24px" alt=""> Logout</a>
+                        <a class="nav-link" href="logout.html"><img src="assets/img/logout-icon.png" width="22px" height="24px" alt=""> '.Logout.'</a>
                     </li>
 					' : '
 					<li class="nav-item active">
                         <a class="nav-link" href="homepage.html">Feed <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="dashboard.html">Ecosystems</a>
+                        <a class="nav-link" href="dashboard.html">'.Ecosystems.'</a>
                     </li>
                     <li class="nav-item ml-2 mr-2">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="about.html">'.About.'</a>
                     </li>
                     <div class="dropdown">
                         <button class="btn pl-4 pr-4 btn-custom-transparent" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="assets/img/language.png" alt="">
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                            <button class="dropdown-item" type="button">Türkçe</button>
-                            <button class="dropdown-item" type="button">English</button>
+                            <button class="dropdown-item" type="button">'.Turkish.'</button>
+                            <button class="dropdown-item" type="button">'.English.'</button>
                         </div>
                     </div>
                     <li class="nav-item ml-2">
-                        <a class="btn pl-4 pr-4 btn-custom-blue" href="linkedin.html" style="font-size: 1rem">Connect via Linkedin</a>
+                        <a class="btn pl-4 pr-4 btn-custom-blue" href="linkedin.html" style="font-size: 1rem">'.ConnectLinkedin.'</a>
                     </li>
 					').'
                 </ul>
