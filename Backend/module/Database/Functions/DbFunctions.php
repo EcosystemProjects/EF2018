@@ -97,6 +97,8 @@ class DBFunctions
 				"name"=>$firstname,
 				"surname"=>$lastname,
 				"password"=>"",
+				"emailpush"=>1,
+				"mobilepush"=>1,
 				"authority"=>0,
 				"signup"=>time(),
 				"otpCode"=>0,
