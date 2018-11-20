@@ -24,6 +24,10 @@ class IpInfo
 		return substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 	}
 	
+	public function browserLanguageFull(){
+		return $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+	}
+	
 	function getIp(){ 
 		if(getenv("HTTP_CLIENT_IP"))
 		{ 
