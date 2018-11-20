@@ -63,7 +63,7 @@
 							$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
 							for($i=0; $i<count($setting['follower']); $i++){
 								if($setting['follower'][$i]['user'] == $userid){
-									echo '<div class="alert alert-info" role="alert">Zaten Takiptesin !</div>';
+									echo '<div class="alert alert-info" role="alert">'.existsfollowuser.'div>';
 									return;
 								}
 							}
@@ -94,7 +94,7 @@
 						else
 							$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
 							
-						echo '<div class="alert alert-success" role="alert">Başarılı bir şekilde takip edildi !</div>';
+						echo '<div class="alert alert-success" role="alert">'.followsuccess.'</div>';
 						$queryfollower = $DBFunctions->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
 						$datafol = $DBFunctions->PDO_fetch_array($queryfollower, 0);
 					}
@@ -121,7 +121,7 @@
 							{
 								$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
 								$db->query("UPDATE follower SET setting = '$setting' WHERE id = '$id'");
-								echo '<div class="alert alert-success" role="alert">Başarılı bir şekilde takipten çıkıldı !</div>';
+								echo '<div class="alert alert-success" role="alert">'.unfollowsuccess.'</div>';
 								$queryfollower = $DBFunctions->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
 								$datafol = $DBFunctions->PDO_fetch_array($queryfollower, 0);
 							}
@@ -150,12 +150,12 @@
 							<div class="abc">
 							  <h4>'.$catname.'</h4>
 							  <div style="display:flex">
-								<i style="margin-right: 25px;" >'.count($queryposts).' Post</i>
-								 <i>'.count($setting['follower']).' Followers</i>
+								<i style="margin-right: 25px;" >'.count($queryposts).' '.Post.'</i>
+								 <i>'.count($setting['follower']).' '.Followers.'</i>
 							  </div>
 							</div>
 							<form style="margin:auto" action="" method="post">
-								'.($searching ? '<button class="transparentButton followePannelButton" type="submit" name="unfollow">Unfollow</button>' : '<button class="transparentButton followePannelButton" type="submit" name="follow">Follow</button>').'
+								'.($searching ? '<button class="transparentButton followePannelButton" type="submit" name="unfollow">'.Unfollow.'</button>' : '<button class="transparentButton followePannelButton" type="submit" name="follow">'.Follow.'</button>').'
 							</form>
 						  </div>
 						  <div class="main">

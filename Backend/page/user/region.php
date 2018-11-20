@@ -1,6 +1,6 @@
     <div class="main" id="onloadMainEcosystemsPage" style="display:none;">
-      <h1 style="font-size:50px;">Region</h1>
-      <h2 style="font-size:15px;color:#b1b1b1;" >Select a region to see ecosystems</h2>
+      <h1 style="font-size:50px;"><?=Region;?></h1>
+      <h2 style="font-size:15px;color:#b1b1b1;" ><?=SeeEcosystemWithRegion;?></h2>
           <div class="RegionButton">
 			<?php
 			
@@ -10,7 +10,7 @@
 					$query = $DBFunctions->selectAll("SELECT name from category where type='region' order by orderindex asc");
 					
 					if (count($query) == 0) {
-						echo '<tr><td>Henüz Region Yok ! </td></tr>';
+						echo '<tr><td>'.NotFoundRegion.'</td></tr>';
 					} else {
 						for($i=0; $i<count($query); $i++)
 						{

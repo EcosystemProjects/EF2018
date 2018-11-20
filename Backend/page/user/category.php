@@ -1,8 +1,8 @@
     <div class="main" id="onloadMainEcosystemsPage" style="display:none;">
 		
-		<b style="color:#cfcfcf;">Region / Ecosystem  </b>
+		<b style="color:#cfcfcf;"><?=Region."/".Ecosystem;?></b>
         
-		<h1>CATEGORY</h1>
+		<h1><?=Categorys;?></h1>
         <div id="cat" class="CategoryMenu">
             
 			<?php
@@ -20,7 +20,7 @@
 					$query = $DBFunctions->selectAll("SELECT k.name,k.id from category as c,category as k where c.type='ecosystems' and c.seourl='$inpage' and k.type='categories' and k.groupid=c.id");
 					
 					if (count($query) == 0) {
-						echo '<h3>Henüz Category Yok ! </h3>';
+						echo '<h3>'.NotFoundCategory.'</h3>';
 					} else {
 						for($i=0; $i<count($query); $i++)
 						{
@@ -32,6 +32,8 @@
 							$id = $data['id'];
 							$followerquery = $DBFunctions->selectAll("SELECT setting from follower where categoryid=$id");
 							
+							$searching = false;
+							
 							if(count($followerquery) == 0)
 								$follower = 0;
 							else
@@ -40,8 +42,15 @@
 								$setting = json_decode($followerdata['setting'], JSON_UNESCAPED_UNICODE);
 								if(empty($setting['follower']))
 									$follower = 0;
-								else
+								else{
 									$follower = count($setting['follower']);
+									for($i=0; $i<count($follower); $i++){
+										if($follower[$i]['user'] == $userid){ //ben takip ediyorsam geri dön
+											$searching = true;
+											break;
+										}
+									}
+								}
 							}
 							
 							$postsquery = $DBFunctions->selectAll("SELECT id from posts where categoryid=$id and status=1");
@@ -56,11 +65,12 @@
 							<h3>'.$name.'</h3>
 							<div class="CategoryDetail">
 								<div class="CategoryDetailTagA">
-									<a href="dashboard/categoryposts/'.$id.'/'.$SeoFunction->seo($name).'.html" style="margin-right:10px;">'.$posts.' Posts</a>
-									<a href="dashboard/follower/'.$SeoFunction->seo($name).'.html">'.$follower.' followers</a>
+									<a href="dashboard/categoryposts/'.$id.'/'.$SeoFunction->seo($name).'.html" style="margin-right:10px;">'.$posts.' '.Post.'</a>
+									<a href="dashboard/follower/'.$SeoFunction->seo($name).'.html">'.$follower.' '.Followers.'</a>
 								</div>
-
-								'.(($isOnline) ? '<a href="dashboard/follow/'.$SeoFunction->seo($name).'.html" name="button" value="'.$name.'" class="ecoFollowButton">FOLLOW</a>' : '').'
+								<form action="dashboard/follower/'.$SeoFunction->seo($name).'.html" method="post">
+									'.($isOnline ? ($searching ? '<button class="transparentButton followePannelButton" type="submit" name="unfollow">'.Unfollow.'</button>' : '<button class="transparentButton followePannelButton" type="submit" name="follow">'.Follow.'</button>') : '').'
+								</form>
 							</div>
 							';
 							

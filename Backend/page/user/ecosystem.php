@@ -1,6 +1,6 @@
     <div class="main" id="onloadMainEcosystemsPage" style="display:none;">
-      <h1 style="font-size:50px;">Ecosystem</h1>
-      <h2 style="font-size:15px;color:#b1b1b1;" >Select a ecosystems to see category</h2>
+      <h1 style="font-size:50px;"><?=Ecosystem;?></h1>
+      <h2 style="font-size:15px;color:#b1b1b1;" ><?=SeeCategoryWithEcosystem;?></h2>
           <div class="EcoButton">
 			<?php
 			
@@ -19,7 +19,7 @@
 					$query = $DBFunctions->selectAll("SELECT k.name from category as c,category as k where c.type='region' and c.seourl='$inpage' and k.type='ecosystems' and k.groupid=c.id");
 					
 					if (count($query) == 0) {
-						echo '<tr><td>Henüz Ecosystem Yok ! </td></tr>';
+						echo '<tr><td>'.NotFoundEcosystem.'</td></tr>';
 					} else {
 						for($i=0; $i<count($query); $i++)
 						{

@@ -21,10 +21,10 @@
 						$query = $DBFunctions->selectAll("SELECT p.information as inf,p.seourl as seourl,c.name as cat FROM posts as p,category as c WHERE p.categoryid = '$inpage' and c.seourl = '$twopage' and p.status = 1 ORDER BY p.id desc Limit 0,50");
 						
 						if($isPublisher)
-							echo '<br/ ><a href="dashboard/createpost/'.$inpage.'/'.$twopage.'.html" class="transparentButton followePannelButton" type="button" name="createpost">Yeni Post Oluştur</a><br/ ><br/ >';
+							echo '<br/ ><a href="dashboard/createpost/'.$inpage.'/'.$twopage.'.html" class="transparentButton followePannelButton" type="button" name="createpost">'.Createpost.'</a><br/ ><br/ >';
 						
 						if (count($query) == 0) {
-							echo '<tr><td>Henüz Paylaşım Yok ! </td></tr>';
+							echo '<tr><td>'.NotFoundPost.'</td></tr>';
 						} else {
 							
 							for($i=0; $i<count($query); $i++)
@@ -56,7 +56,7 @@
 												<h6>'.$cat.'</h6>
 												<b>'.$title.'  |  '.$date.'</b>
 												<div class="">
-													<p>'.((strlen($description) > 260) ? substr($description,0,260).'... <a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">Devamı</a>' : $description).'</p>
+													<p>'.((strlen($description) > 150) ? '<a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">'.substr($description,0,150).' ... <b>'.More.'</b></a>' : '<a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">'.$description.'</a>').'</p>
 												</div>
 
 											</div>
