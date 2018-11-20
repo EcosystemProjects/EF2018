@@ -51,11 +51,16 @@ $IpFunction = IpInfo::instance();
 $DBFunctions = DBFunctions::instance();
 $SeoFunction = SeoFunction::instance();
 
-$browserlang = $IpFunction->browserLanguage();
-if(!file_exists($_SERVER['DOCUMENT_ROOT']."/lang/".$browserlang.".php"))
+if(empty($_SESSION['lang'])){
+	echo "langbos";
+    $browserlang = $IpFunction->browserLanguage();
+    $_SESSION['lang'] = $browserlang;
+}
+
+if(!file_exists($_SERVER['DOCUMENT_ROOT']."/lang/".$_SESSION['lang'].".php"))
 	include($_SERVER['DOCUMENT_ROOT']."/lang/en.php");
 else
-	include($_SERVER['DOCUMENT_ROOT']."/lang/".$browserlang.".php");
+	include($_SERVER['DOCUMENT_ROOT']."/lang/".$_SESSION['lang'].".php");
 
 class User{ 
 	public $id;
@@ -66,7 +71,6 @@ class User{
 	public $username;
 	public $authority;
 }
-
 
 if(empty($_SESSION['user']))
 	$isOnline = false;
