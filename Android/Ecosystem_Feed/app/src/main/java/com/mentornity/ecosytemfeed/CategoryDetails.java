@@ -9,6 +9,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -110,8 +113,12 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         listContents = new ArrayList<>();
         String data = bundle.getString("POSTS");
         JSONArray JA = null;
+        Log.d(TAG, "onCreate: JA: "+data);
         try {
-            JA = new JSONArray(data);
+            if(!data.equals("\"{}\"")) {
+                JA = new JSONArray(data);
+                Log.d(TAG, "onCreate: JA: " + JA);
+            }
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
@@ -122,12 +129,14 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                     JSONObject jO = (JSONObject) JA.get(i);
                     String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
                             category = jO.getString("category"),
-                            content = jO.getString("title");
+                            content = jO.getString("title"),
+                            //seourl = jO.getString("seourl"),
+                            seourl = "seourl";
 
                     final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
                     Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl, jO));
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl,seourl, jO));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -141,7 +150,10 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         data=bundle.getString("FOLLOWERS");
         JA= null;
         try {
-            JA = new JSONArray(data);
+            if(!data.equals("\"{}\"")) {
+                JA = new JSONArray(data);
+                Log.d(TAG, "onCreate: JA: " + JA);
+            }
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
@@ -174,13 +186,16 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                     //!!! DO FOLLOW OR UNFOLLOW HERE !!!
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     final String isFollowed;
+                    Log.d(TAG, "onClick: isFollowed: " + bundle.getBoolean("isFollowed"));
                     if(bundle.getBoolean("isFollowed")){
                         isFollowed = "unfollow";
                         followCategoryBtn.setText(getResources().getString(R.string.follow));
+                        bundle.putBoolean("isFollowed",false);
                     }
                     else{
                         isFollowed = "follow";
                         followCategoryBtn.setText(getResources().getString(R.string.un_follow));
+                        bundle.putBoolean("isFollowed",true);
                     }
 
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -191,7 +206,7 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                         public void run() {
                             String url = "http://ecosystemfeed.com/Service/Web.php?process=categoriesFollow"
                                     +"&authid=" + getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null)
-                                    + "&catid=" + bundle.getString("categoryId")
+                                    + "&catid=" + bundle.getInt("categoryId")
                                     +"&type="+ isFollowed; // !!! PUT FOLLOW OR UNFOLLOW REQEST URL HERE !!!
                             Log.d(TAG, "onClick: fetching posts URL:" + url);
                             final FetchData fetchData = new FetchData(url);
@@ -239,7 +254,9 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                     followersTV.setTextColor(getResources().getColor(R.color.black_text));
                     break;
                 case R.id.category_details_close_ibtn:
+                    //fragment transaction.
                     getActivity().onBackPressed();
+
             }
     }
 

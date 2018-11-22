@@ -13,7 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 /*
  * Adapters are built same way.
@@ -64,9 +70,33 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listItems.remove(listItem);
-                notifyItemRemoved(position);
+
                 notifyItemRangeChanged(position,getItemCount());
+                //!!! DELETE OPETATIONS HERE !!!
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String url ="http://ecosystemfeed.com/Service/Web.php?process=deletePostsMe" +
+                                "&authid=" + context.getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null) +
+                                "&seourl=" + listItem.getSeourl();
+                        Log.d(TAG, "run: url: "+url);
+                        FetchData fetchData = new FetchData(url);
+                        fetchData.execute();
+                        while(!fetchData.fetched && !fetchData.getErrorOccured()){/*waiting to fetch*/}
+                        try {
+                            JSONObject JO = new JSONObject(fetchData.getData());
+                            Log.d(TAG, "run: "+ JO.getString("status"));
+                            Log.d(TAG, "run: "+ JO.getString("Function"));
+                            if(JO.getString("status").equals("Delete Operation Success")){
+                                listItems.remove(listItem);
+                                notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
             }
         });
 

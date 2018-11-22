@@ -121,12 +121,14 @@ public class Feed extends Fragment {
                     Log.d(TAG, "onCreate: jo:" + jO);
                     String regionAndEcosystem = jO.getString("title"),
                             category = "category",
-                            content = jO.getString("description");
+                            content = jO.getString("description"),
+                            //seourl = jO.getString("seourl"),
+                            seourl = "seourl";
 
                     final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
                     Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl, jO));
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl, seourl, jO));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

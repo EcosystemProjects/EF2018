@@ -50,17 +50,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final CategoryItem listItem=listItems.get(position);
+        CategoryItem listItem = listItems.get(position);
         holder.title.setText(listItem.getTitle());
         String postsText = listItem.getPostNumber() + " " + context.getResources().getString(R.string.posts);
         holder.posts.setText(postsText);
         String followersText = listItem.getFollowerNumber() + " " + context.getResources().getString(R.string.followers);
         holder.followers.setText(followersText);
-        Log.d(TAG, "onBindViewHolder: "+holder.title.getText().toString());
-        if(listItem.getIsFollowed())
+
+        if(listItem.getIsFollowed()) {
             holder._un_FollowBtn.setText(context.getResources().getString(R.string.un_follow));
-        else
+        }
+        else {
             holder._un_FollowBtn.setText(context.getResources().getString(R.string.follow));
+        }
 
         Listener listener = new Listener(position ,holder);
         holder._un_FollowBtn.setOnClickListener(listener);
@@ -115,6 +117,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+
                         String url = "http://ecosystemfeed.com/Service/Web.php?process=getPosts&seourl=" + listItems.get(position).getSeourl();
                         Log.d(TAG, "onClick: fetching posts URL:" + url);
                         final FetchData fetchData = new FetchData(url);
@@ -163,9 +166,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     holder._un_FollowBtn.setText(context.getResources().getString(R.string.un_follow));
                 }
 
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //!!! DO FOLLOW OR UNFOLLOW HERE !!!
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

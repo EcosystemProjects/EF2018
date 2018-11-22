@@ -9,16 +9,25 @@ public class ContentListItem {
     private Bitmap content_img;
     private String regionAndEcosystem,category,content;
     private Boolean isDeleteVisible;//It is true for only on Settings->MY posts screen.
-    private String imgUrl;
+    private String imgUrl,seourl;
     private JSONObject jsonObject;
     //it is used in AllFeed.java,Feed.java,Categories.java and Settings.java
-    public ContentListItem(String regionAndEcosystem, String category, String content, Boolean isDeleteVisible, String imgUrl, JSONObject jsonObject) {
+    public ContentListItem(String regionAndEcosystem, String category, String content, Boolean isDeleteVisible, String imgUrl, String seourl, JSONObject jsonObject) {
         this.regionAndEcosystem = regionAndEcosystem;
         this.category = category;
         this.content = content;
         this.isDeleteVisible = isDeleteVisible;
         this.imgUrl = imgUrl;
+        this.seourl = seourl;
         this.jsonObject=jsonObject;
+    }
+
+    public String getSeourl() {
+        return seourl;
+    }
+
+    public void setSeourl(String seourl) {
+        this.seourl = seourl;
     }
 
     public String getImgUrl() {

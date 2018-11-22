@@ -3,10 +3,9 @@ package com.mentornity.ecosytemfeed;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import com.onesignal.OneSignal;
-
 import net.gotev.uploadservice.UploadService;
+import net.gotev.uploadservice.okhttp.OkHttpStack;
 
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
@@ -21,6 +20,7 @@ public class CustomApplication extends Application {
 
         //Upload service Initialization
         UploadService.NAMESPACE = BuildConfig.APPLICATION_ID;
+        UploadService.HTTP_STACK = new OkHttpStack();
 
         // OneSignal Initialization
         OneSignal.startInit(this)

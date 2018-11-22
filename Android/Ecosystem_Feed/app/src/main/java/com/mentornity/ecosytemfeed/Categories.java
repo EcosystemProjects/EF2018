@@ -2,6 +2,7 @@ package com.mentornity.ecosytemfeed;
 
 
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,8 +42,7 @@ public class Categories extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_categories, container, false);
         noContentTv = v.findViewById(R.id.categories_no_content_tv);
@@ -75,9 +75,15 @@ public class Categories extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listCategory = new ArrayList<>();
+
+        String followedCategories = getArguments().getString("FollowedCategories");
+        JSONArray JA = null;
+
+
+
         String data = getArguments().getString("Categories");
         System.out.println("DATA:" + data);
-        JSONArray JA = null;
+        JA = null;
         try {
             JA = new JSONArray(data);
         } catch (JSONException e1) {
@@ -103,8 +109,10 @@ public class Categories extends Fragment {
                     //!!! SORGUDAN GELEN TAKIP BILGISINE !!!
                     //!!! GORE isFollowed SET EDILECEK   !!!
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    Boolean isFollowed;
+                    if(i%2 == 1){isFollowed = true;}else{isFollowed = false;}
 
-                    listCategory.add(new CategoryItem(id, name, seourl, postsNumber, followerNumber, false));
+                    listCategory.add(new CategoryItem(id, name, seourl, postsNumber, followerNumber, isFollowed));
                     System.out.println("name:" + name);
                 } catch (JSONException e) {
                     e.printStackTrace();

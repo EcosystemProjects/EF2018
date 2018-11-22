@@ -32,8 +32,12 @@ import android.widget.Toast;
 import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
 import com.squareup.picasso.Picasso;
 
+import net.gotev.uploadservice.ContentType;
 import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.ServerResponse;
+import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadNotificationConfig;
+import net.gotev.uploadservice.UploadStatusDelegate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +79,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     public List<String> listEcosytems;
     public HashMap<String,String> mapEcosystems=new HashMap<>();
     public List<String> listCategories=new ArrayList<>();
+    public HashMap<String,String> mapCategories = new HashMap<>();
 
     private boolean isDataEmpty;
 
@@ -219,10 +224,14 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                         try {
                             JSONObject jO = (JSONObject) JA.get(j);
                             String name = jO.get("name").toString();
+                            String seourl = jO.get("seourl").toString();
                             int selectedCategoryGroupID= Integer.parseInt(jO.get("groupid").toString());
                             if(jO.get("type").toString().compareTo("categories")==0 &&
                                     Integer.parseInt(mapEcosystems.get(ecosystemTV.getText().toString()))==selectedCategoryGroupID)
-                            {listCategories.add(name);}
+                            {
+                                listCategories.add(name);
+                                mapCategories.put(name,seourl);
+                            }
                         } catch (JSONException e) {
                             Log.e(TAG, "onItemClick: "+e.getMessage(),e );
                         }
@@ -304,6 +313,13 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         new Thread(new Runnable() {
             @Override
             public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                });
+
                 final String uploadUrl = "http://ecosystemfeed.com/Service/Web.php?process=setPosts";
                 String path = getPath(filePath);
                 Log.d(TAG, "uploadPost: path: "+path);
@@ -312,24 +328,49 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                 String imageID = UUID.randomUUID().toString();
                 Log.d(TAG, "uploadPost: imageID: "+imageID);
                 String title = titleEtext.getText().toString();
-                String category = categoryTV.getText().toString();
+                Log.d(TAG, "uploadPost: title: "+title);
+                String seourl = mapCategories.get(categoryTV.getText().toString());
+                Log.d(TAG, "uploadPost: seourl: "+seourl);
                 String description = descriptionEtext.getText().toString();
+                Log.d(TAG, "uploadPost: description: "+description);
                 String authID = getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null);
+                Log.d(TAG, "uploadPost: authID: "+authID);
                 try {
                     new MultipartUploadRequest(getContext(),uploadID,uploadUrl)
-                            .addFileToUpload(path,"image",imageID)
+                            .addFileToUpload(path,"image")
                             .addParameter("authid",authID)
                             .addParameter("title",title)
-                            .addParameter("category",category)
+                            .addParameter("seourl",seourl)
                             .addParameter("description",description)
+                            .setUtf8Charset()
                             .setNotificationConfig(new UploadNotificationConfig())
                             .setMaxRetries(2)
+                            .setDelegate(new UploadStatusDelegate() {
+                                @Override
+                                public void onProgress(Context context, UploadInfo uploadInfo) {
+
+                                }
+
+                                @Override
+                                public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
+                                    Log.d(TAG, "onError: "+serverResponse.getBodyAsString());
+                                }
+
+                                @Override
+                                public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                    Log.d(TAG, "onCompleted: "+serverResponse.getBodyAsString());
+                                }
+
+                                @Override
+                                public void onCancelled(Context context, UploadInfo uploadInfo) {
+
+                                }
+                            })
                             .startUpload();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (FileNotFoundException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+                dialog.dismiss();
             }
         }).start();
 
@@ -371,17 +412,6 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
-                AAA
-                AAA
-                AAA
-                AAA
-                AAA
-             LOOK BELOW
-               AAAAAA
-                AAA
-                 A
-        */
         //My posts contents.
         //isDeleteVisible is true for only my post section
         //it is not ready because of backend there are no query url.
@@ -408,12 +438,12 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                     JSONObject jO = (JSONObject) JA.get(i);
                     String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
                             category = jO.getString("category"),
-                            content = jO.getString("title");
-
+                            content = jO.getString("title"),
+                            seourl = jO.getString("seourl");
                     final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
                     Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, true, imgUrl, jO));
+                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, true, imgUrl,seourl, jO));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
