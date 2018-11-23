@@ -51,7 +51,7 @@
 						if (ob_get_level() == 0)
 							ob_start();
 
-						$query = $DBFunctions->selectAll("SELECT p.information as inf,c.name as cat,e.name as eco,r.name as reg,u.information as userinf FROM posts as p,category as c,category as e,category as r,users as u WHERE p.categoryid = $inpage and p.seourl = '$twopage' and p.status=1 and c.id = p.categoryid and c.groupid = e.id and e.groupid = r.id and u.id = p.sender ORDER BY p.id desc");
+						$query = $DBFunctions->selectAll("SELECT p.information as inf,c.name as cat,c.id as catid,c.seourl as catseo,e.name as eco,r.name as reg,u.information as userinf FROM posts as p,category as c,category as e,category as r,users as u WHERE p.categoryid = $inpage and p.seourl = '$twopage' and p.status=1 and c.id = p.categoryid and c.groupid = e.id and e.groupid = r.id and u.id = p.sender ORDER BY p.id desc");
 
 						if (count($query) == 0) {
 							echo '<tr><td>Henüz Paylaşım Yok ! </td></tr>';
@@ -71,6 +71,8 @@
 									$image = $information['image'];
 									$date = $information['date'];
 									$category = $data['cat'];
+									$catseo = $data['catseo'];
+									$catid = $data['catid'];
 									$ecosystem = $data['eco'];
 									$region = $data['reg'];
 									$userinf = json_decode($data['userinf'],JSON_UNESCAPED_UNICODE);
@@ -80,7 +82,7 @@
 
 								echo '
 								</br>
-								<p>'.$region.' / '.$ecosystem.' / '.$category.' </p>
+								<p>'.$region.' / '.$ecosystem.' / <a href="dashboard/categoryposts/'.$catid.'/'.$catseo.'.html">'.$category.'</a> </p>
 								'.(!empty($image) ? '<a href="'.$_SERVER['REQUEST_URI'].'"><img width="800px;" src="assets/img/posts/'.$image.'"></a>' : '').'
 
 								<h3 style="margin-top:20px;">'.$title.'</h3>
