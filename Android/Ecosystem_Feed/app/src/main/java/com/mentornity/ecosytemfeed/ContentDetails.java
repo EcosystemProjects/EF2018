@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.linkedin.platform.LISessionManager;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -53,38 +56,34 @@ public class ContentDetails extends android.support.v4.app.Fragment implements V
 
         init();
         Log.d(TAG, "onCreateView: initialized");
-        String data=getArguments().getString(ContentAdapter.JSON_OBJECT);
-        JSONObject jsonObject=null;
-        try {
-            jsonObject=new JSONObject(data);//be careful,import org.json.JSONObject.
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if(jsonObject!=null)
-        {
-            regionCatTv.setText("Canada/Human Resourves");
-            subcatTv.setText("Talent Management");
-            try {
-                titleTv.setText(jsonObject.getString("title"));
-                detailTv.setText(jsonObject.getString("description"));
-                final String imgUrl="http://ecosystemfeed.com"+jsonObject.getString("image");
-                Picasso.get().load(imgUrl).into(contentIv);
-                timeTv.setText(jsonObject.getString("date"));
-                shareLinkTv.setText(jsonObject.getString("shareurl"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            usernameTv.setText("Emmet Brown");
+        Bundle bundle = getArguments();
+
+            regionCatTv.setText(bundle.getString("regionAndEcosystem"));
+            subcatTv.setText(bundle.getString("category"));
+            titleTv.setText(bundle.getString("title"));
+            detailTv.setText(bundle.getString("description"));
+            final String imgUrl=bundle.getString("image");
+        Log.d(TAG, "onCreateView: imgurl: "+imgUrl);
+            Picasso.get().load(imgUrl).into(contentIv, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "onSuccess: success");
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d(TAG, "onError: error");
+                }
+            });
+            timeTv.setText(bundle.getString("date"));
+            shareLinkTv.setText(bundle.getString("shareurl"));
+
+            usernameTv.setText("user");
             resourceLinkTv.setText("this.is.link.com");
-        }
 
 
         //Setting image
-        Bitmap img= BitmapFactory.decodeResource(getResources(),R.drawable.ef_app_send_show_posts1);
-        RoundedBitmapDrawable roundedimg= RoundedBitmapDrawableFactory.create(getResources(),img);
-        roundedimg.setCircular(true);
-        profileIv.setImageDrawable(roundedimg);
-
+        Picasso.get().load(R.drawable.app_icon).into(profileIv);
         shareLinkTv.setOnClickListener(this);
         resourceLinkTv.setOnClickListener(this);
         closeIBtn.setOnClickListener(this);

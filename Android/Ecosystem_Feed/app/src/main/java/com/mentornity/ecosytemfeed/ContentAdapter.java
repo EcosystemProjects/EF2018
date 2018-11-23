@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,11 +27,11 @@ import java.util.List;
  * You can find tutorial here:https://developer.android.com/guide/topics/ui/layout/recyclerview
  **/
 //It is used in recycler view on Allfeed,feed  etc.
-public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHolder> {
+public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHolder> implements View.OnClickListener {
     private List<ContentListItem> listItems;
+    private ContentListItem listItem;
     private Context context;
     private ContentDetails contentDetails;
-    public static String JSON_OBJECT="Json Object";
     String TAG="ContentAdapter";
     public ContentAdapter(List<ContentListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -48,10 +49,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     @NonNull
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final ContentListItem listItem=listItems.get(position);
+        listItem=listItems.get(position);
         holder.regionAndEcosystem.setText(listItem.getRegionAndEcosystem());
         holder.category.setText(listItem.getCategory());
-        holder.post_content.setText(listItem.getContent());
+        holder.post_content.setText(listItem.getDescription());
         if(listItem.getContent_img()==null&&listItem.getImgUrl()==null)
         {//if there are no image on content,no need to show image.
             holder.contentImg.setVisibility(View.GONE);
@@ -67,11 +68,38 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
             holder.deleteBtn.setVisibility(View.VISIBLE);
         else
             holder.deleteBtn.setVisibility(View.GONE);
-        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                notifyItemRangeChanged(position,getItemCount());
+        holder.deleteBtn.setOnClickListener(this);
+        holder.cardView.setOnClickListener(this);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return listItems.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.content_list_item_cardview:
+                Log.d(TAG, "onClick: ");
+                Bundle bundle=new Bundle();
+                bundle.putString("title",listItem.getTitle());
+                bundle.putString("regionAndEcosystem",listItem.getRegionAndEcosystem());
+                bundle.putString("description",listItem.getDescription());
+                bundle.putString("image",listItem.getImgUrl());
+                bundle.putString("category",listItem.getCategory());
+                bundle.putString("date",listItem.getDate());
+                bundle.putString("seourl",listItem.getSeourl());
+                bundle.putString("shareurl",listItem.getShareUrl());
+                contentDetails=new ContentDetails();
+                contentDetails.setArguments(bundle);
+                FragmentTransaction fragmentTransaction=((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.main_frame,contentDetails).addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+            case R.id.content_delete_btn:
                 //!!! DELETE OPETATIONS HERE !!!
                 new Thread(new Runnable() {
                     @Override
@@ -96,37 +124,18 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
                         }
                     }
                 }).start();
-
-            }
-        });
-
-        holder.post_content.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: ");
-                Bundle bundle=new Bundle();
-                bundle.putString(JSON_OBJECT,listItem.getJsonObject().toString());
-                contentDetails=new ContentDetails();
-                contentDetails.setArguments(bundle);
-                FragmentTransaction fragmentTransaction=((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.main_frame,contentDetails).addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return listItems.size();
+                break;
+        }
     }
 
     public class ViewHolder  extends RecyclerView.ViewHolder{
-        public TextView regionAndEcosystem,category,post_content;//initializing view components.
-        public ImageView contentImg;
-        public Button deleteBtn;
-        public ViewHolder(View itemView) {
+        TextView regionAndEcosystem,category,post_content;//initializing view components.
+        ImageView contentImg;
+        Button deleteBtn;
+        CardView cardView;
+        ViewHolder(View itemView) {
             super(itemView);
+            cardView = itemView.findViewById(R.id.content_list_item_cardview);
             regionAndEcosystem=itemView.findViewById(R.id.region_ecosystem_tv);
             category=itemView.findViewById(R.id.category_tv);
             post_content=itemView.findViewById(R.id.content_tv);

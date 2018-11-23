@@ -149,6 +149,7 @@
                     android:id="@+id/settings_send_notification_switch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/nunito_bold"
                     android:gravity="left|center_vertical"
                     android:text="@string/send_me_mobile_nptifications_nabout_featured_post" />
 

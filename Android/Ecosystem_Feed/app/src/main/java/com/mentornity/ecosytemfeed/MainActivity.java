@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                                     setFragment(feedFragment);
                                 }
                             }).start();
-                            //"http://ecosystemfeed.com/Service/Web.php?process=GetPostsFollow&authid="+userauthId
                         }
                         return true;
                     case R.id.nav_ecosystem:

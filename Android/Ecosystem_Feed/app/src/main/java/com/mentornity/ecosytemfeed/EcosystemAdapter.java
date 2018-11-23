@@ -76,7 +76,9 @@ public class EcosystemAdapter extends RecyclerView.Adapter<EcosystemAdapter.View
                         bundle.putString("Categories",fetchData.getData());
                         System.out.println("DATA:"+fetchData.getData());
                         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        url = "http://ecosystemfeed.com/Service/Web.php?process=getAllData";//!!! PUT URL HERE !!!
+                        //!!! PUT URL HERE !!!!!!!!!!!!
+                        url = "http://ecosystemfeed.com/Service/Web.php?process=getMeFollowCategories" + // CHANGE HERE
+                                "&authid=" + context.getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null);
                         System.out.println("URL:"+url);
                         fetchData = new FetchData(url);
                         fetchData.execute();

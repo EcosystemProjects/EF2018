@@ -123,7 +123,9 @@ public class AllFeed extends Fragment {
         Log.d(TAG, "onCreate: " + data);
         JSONArray JA = null;
         try {
-            JA = new JSONArray(data);
+            if(!data.equals("[]") && !data.equals("{}")) {
+                JA = new JSONArray(data);
+            }
         } catch (JSONException e1) {
             e1.printStackTrace();
         }
@@ -133,16 +135,17 @@ public class AllFeed extends Fragment {
             for (int i = 0; i < JA.length(); i++) {
                 try {
                     JSONObject jO = (JSONObject) JA.get(i);
-                    String regionAndEcosystem = jO.getString("title"),
-                            category = "category",
-                            content = jO.getString("description"),
-                            //seourl = jO.getString("seourl"),
-                            seourl = "seourl";
-
-                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
-                    Log.d(TAG, "onCreate: " + imgUrl);
+                    String title = jO.getString("title"),
+                            description = jO.getString("description"),
+                            category = jO.getString("category"),
+                            regionAndEcosystem = jO.getString("region")+"/"+jO.getString("ecosystem"),
+                            seourl = jO.getString("seourl"),
+                            date = jO.getString("date"),
+                            shareUrl = jO.getString("shareurl");
+                            String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                            Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl,seourl, jO));
+                    listContents.add(new ContentListItem(title, regionAndEcosystem, category, description, false, imgUrl,seourl, date, shareUrl));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

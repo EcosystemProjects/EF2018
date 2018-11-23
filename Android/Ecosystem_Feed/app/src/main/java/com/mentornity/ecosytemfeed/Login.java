@@ -29,6 +29,7 @@ import com.linkedin.platform.listeners.ApiResponse;
 import com.linkedin.platform.listeners.AuthListener;
 import com.linkedin.platform.utils.Scope;
 import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
+import com.onesignal.OneSignal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -220,6 +221,7 @@ public class Login extends AppCompatActivity {
                                     +"\",\"publicProfileUrl\":\""+linkedinUrl
                                     +"\",\"authId\":\""+id+"\"}}";
                             String charset="UTF-8";
+                            Log.d(TAG, "run: query: "+query);
                             try {
                                 query=URLEncoder.encode(query,charset);
                             } catch (UnsupportedEncodingException e) {
@@ -234,10 +236,26 @@ public class Login extends AppCompatActivity {
                             }
                             try {
                                 JSONObject jsonObject1=new JSONObject(fetchData.getData());
-                                isLoginCode=jsonObject1.getInt("isLogin");
+                                isLoginCode=jsonObject1.getJSONObject("authProcess").getInt("login");
                                 sp.edit().putString("authName",jsonObject1.getString("authName")).apply();
                                 sp.edit().putString("sessId",jsonObject1.getString("sessId")).apply();
                                 Log.d(TAG, "run: login infos taken.");
+                                OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+                                    @Override
+                                    public void idsAvailable(String userId, String registrationId) {
+                                        String url = "http://ecosystemfeed.com/Service/Web.php?process=setOneSignalUser" +
+                                                "&authid="+getSharedPreferences("Login",MODE_PRIVATE).getString("sessId",null) +
+                                                "&userid="+userId;
+                                        Log.d("Custom Application", "idsAvailable: url: "+url);
+                                        FetchData fetchData = new FetchData(url);
+                                        fetchData.execute();
+                                        for(int k=0;k<1;)
+                                        {
+                                            if(fetchData.fetched||fetchData.getErrorOccured())k++;
+                                        }
+                                        Log.d("Custom Application", "idsAvailable: "+fetchData.getData());
+                                    }
+                                });
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

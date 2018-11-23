@@ -108,7 +108,7 @@ public class FilterDialog extends Dialog implements View.OnClickListener, Adapte
         switch (view.getId())
         {
             case R.id.filter_filter_btn:
-                dismiss();
+                dismiss();//!!Make filter here!!!
                 break;
             case R.id.filter_dialog_region_tv:
                 if(regionLV.getVisibility()==View.VISIBLE)

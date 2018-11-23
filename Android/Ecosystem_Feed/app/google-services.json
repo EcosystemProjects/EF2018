@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "1086243920185",
-    "firebase_url": "https://ecosystemfeed-d4f84.firebaseio.com",
-    "project_id": "ecosystemfeed-d4f84",
-    "storage_bucket": "ecosystemfeed-d4f84.appspot.com"
+    "project_number": "143391430575",
+    "firebase_url": "https://ecosystemfeed-d8cd2.firebaseio.com",
+    "project_id": "ecosystemfeed-d8cd2",
+    "storage_bucket": "ecosystemfeed-d8cd2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1086243920185:android:6705a35bd9898eb6",
+        "mobilesdk_app_id": "1:143391430575:android:6705a35bd9898eb6",
         "android_client_info": {
           "package_name": "com.mentornity.ecosytemfeed"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1086243920185-29fof0vnvlm31egucdudkl14bc17bnmh.apps.googleusercontent.com",
+          "client_id": "143391430575-dar0b4d2nnhhn1c6ib1fsq8cpgimgbj1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB8dZJ-vtsHphTsRw4N7dBabk6xe5gdmxU"
+          "current_key": "AIzaSyAvzywSk3qeIU_xLZkFEFYhN3hH_AxOelA"
         }
       ],
       "services": {

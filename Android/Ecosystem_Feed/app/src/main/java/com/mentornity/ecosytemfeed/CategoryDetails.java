@@ -115,7 +115,7 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         JSONArray JA = null;
         Log.d(TAG, "onCreate: JA: "+data);
         try {
-            if(!data.equals("\"{}\"")) {
+            if(!data.equals("\"{}\"") && !data.equals("{}") && !data.equals("[]")) {
                 JA = new JSONArray(data);
                 Log.d(TAG, "onCreate: JA: " + JA);
             }
@@ -127,16 +127,18 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
             for (int i = 0; i < JA.length(); i++) {
                 try {
                     JSONObject jO = (JSONObject) JA.get(i);
-                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
+                    String  title = jO.getString("title"),
+                            description = jO.getString("description"),
                             category = jO.getString("category"),
-                            content = jO.getString("title"),
-                            //seourl = jO.getString("seourl"),
-                            seourl = "seourl";
-
-                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                            regionAndEcosystem = jO.getString("region")+"/"+jO.getString("ecosystem"),
+                            //seourl = jO.getString("seourl"),//yok
+                            seourl = "seourl",
+                            date = jO.getString("date"),
+                            shareUrl = jO.getString("shareurl");
+                    String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
                     Log.d(TAG, "onCreate: " + imgUrl);
                     //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, false, imgUrl,seourl, jO));
+                    listContents.add(new ContentListItem(title,regionAndEcosystem, category, description, false, imgUrl,seourl, date,shareUrl));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -150,7 +152,7 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         data=bundle.getString("FOLLOWERS");
         JA= null;
         try {
-            if(!data.equals("\"{}\"")) {
+            if(!data.equals("\"{}\"") && !data.equals("{}") && !data.equals("[]")) {
                 JA = new JSONArray(data);
                 Log.d(TAG, "onCreate: JA: " + JA);
             }
@@ -182,9 +184,8 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
         switch (view.getId())
             {
                 case R.id.frg_category_follow_btn:
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     //!!! DO FOLLOW OR UNFOLLOW HERE !!!
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     final String isFollowed;
                     Log.d(TAG, "onClick: isFollowed: " + bundle.getBoolean("isFollowed"));
                     if(bundle.getBoolean("isFollowed")){
@@ -197,10 +198,6 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                         followCategoryBtn.setText(getResources().getString(R.string.un_follow));
                         bundle.putBoolean("isFollowed",true);
                     }
-
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    //!!! DO FOLLOW OR UNFOLLOW HERE !!!
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     new Thread(new Runnable() {
                         @Override
                         public void run() {

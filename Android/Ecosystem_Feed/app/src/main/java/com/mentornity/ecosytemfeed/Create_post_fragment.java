@@ -1,16 +1,24 @@
 package com.mentornity.ecosytemfeed;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -60,6 +68,7 @@ import java.util.UUID;
 public class Create_post_fragment extends Fragment implements View.OnClickListener {
 
     private static final int RESULT_LOAD_IMAGE =1 ;
+    private static final int RESULT_READ_EXTERNAL_STORAGE =2 ;
     View v;
     private Button createPostBtn,myPostButton,editBtn,addBtn,sendBtn;
     private ScrollView createPostScrllView;
@@ -90,6 +99,52 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     private String TAG="Createpost";
     public Create_post_fragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //////////////////////////////
+        //!!! MY POSTS QUERY HERE!!!//
+        // isDeleteVisible is true  //
+        // for only my post section //
+        //////////////////////////////
+
+        FetchData myPostsfetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getPostsMe&authid="
+                + getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null));
+        myPostsfetchData.execute();
+        while(!myPostsfetchData.fetched && !myPostsfetchData.getErrorOccured()){/*waiting to fetch*/}
+        myPostsData=myPostsfetchData.getData();
+        listContents = new ArrayList<>();
+        JSONArray JA = null;
+        try {
+            JA = new JSONArray(myPostsData);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+        if (JA != null)
+        {   isDataEmpty = false;
+            for (int i = 0; i < JA.length(); i++) {
+                try {
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
+                            category = jO.getString("category"),
+                            title = jO.getString("title"),
+                            date = jO.getString("date"),
+                            shareUrl = jO.getString("shareurl"),
+                            description = jO.getString("description"),
+                            seourl = jO.getString("seourl");
+                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                    Log.d(TAG, "onCreate: " + imgUrl);
+                    //isDeleteVisible is true for only my post section
+                    listContents.add(new ContentListItem(title,regionAndEcosystem,category,description,true,imgUrl,seourl,date,shareUrl));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            isDataEmpty = true;
+        }
     }
 
 
@@ -308,17 +363,11 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
 
     private void uploadPost(){
         ///////////////////////////////
-        //!!!PUT UPLOAD QUERY HERE!!!//
+        //!!! UPLOAD QUERY HERE!!!/////
         ///////////////////////////////
         new Thread(new Runnable() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.show();
-                    }
-                });
 
                 final String uploadUrl = "http://ecosystemfeed.com/Service/Web.php?process=setPosts";
                 String path = getPath(filePath);
@@ -348,7 +397,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                             .setDelegate(new UploadStatusDelegate() {
                                 @Override
                                 public void onProgress(Context context, UploadInfo uploadInfo) {
-
+                                    dialog.show();
                                 }
 
                                 @Override
@@ -359,6 +408,9 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                                 @Override
                                 public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
                                     Log.d(TAG, "onCompleted: "+serverResponse.getBodyAsString());
+                                    dialog.dismiss();
+                                    Toast.makeText(context, "Post Created", Toast.LENGTH_SHORT).show();
+                                    restartFragment();
                                 }
 
                                 @Override
@@ -370,11 +422,8 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                dialog.dismiss();
             }
         }).start();
-
-
     }
 
     public String getPath(Uri uri) {
@@ -392,13 +441,42 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         return path;
     }
 
+    public void restartFragment(){
+        Create_post_fragment create_post_fragment = new Create_post_fragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame,create_post_fragment).addToBackStack(null);
+        ft.commit();
+
+    }
+
+    public void activateButton(Button b)
+    { b.setTextColor(getResources().getColor(R.color.black_text)); }
+    public void deactivateButton(Button b)
+    { b.setTextColor(getResources().getColor(R.color.grayText)); }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == RESULT_READ_EXTERNAL_STORAGE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            Log.d(TAG, "onRequestPermissionsResult: permission granted");
+            Intent i = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
+        }
+        Log.d(TAG, "onRequestPermissionsResult: ");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RESULT_LOAD_IMAGE && null != data)
         {
             filePath = data.getData();
-
             try {
                 InputStream inInputStream=getActivity().getContentResolver().openInputStream(filePath);
                 imageBitmap = BitmapFactory.decodeStream(inInputStream);
@@ -408,55 +486,6 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
             }
         }
     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //My posts contents.
-        //isDeleteVisible is true for only my post section
-        //it is not ready because of backend there are no query url.
-        //When ready please add.
-        //////////////////////////////////
-        //!!! PUT MY POSTS QUERY HERE!!!//
-        //////////////////////////////////
-        FetchData myPostsfetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getPostsMe&authid="
-                 + getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null));
-        myPostsfetchData.execute();
-        while(!myPostsfetchData.fetched && !myPostsfetchData.getErrorOccured()){/*waiting to fetch*/}
-        myPostsData=myPostsfetchData.getData();
-        listContents = new ArrayList<>();
-        JSONArray JA = null;
-        try {
-            JA = new JSONArray(myPostsData);
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
-        if (JA != null)
-        {   isDataEmpty = false;
-            for (int i = 0; i < JA.length(); i++) {
-                try {
-                    JSONObject jO = (JSONObject) JA.get(i);
-                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
-                            category = jO.getString("category"),
-                            content = jO.getString("title"),
-                            seourl = jO.getString("seourl");
-                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
-                    Log.d(TAG, "onCreate: " + imgUrl);
-                    //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, true, imgUrl,seourl, jO));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else{
-            isDataEmpty = true;
-        }
-    }
-
-    public void activateButton(Button b)
-    { b.setTextColor(getResources().getColor(R.color.black_text)); }
-    public void deactivateButton(Button b)
-    { b.setTextColor(getResources().getColor(R.color.grayText)); }
 
     @Override
     public void onClick(View view) {
@@ -531,11 +560,15 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                 htmlParse(linkEtext.getText().toString());
                 break;
             case R.id.create_post_add_btn:
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if(ContextCompat.checkSelfPermission(getContext(),Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(),new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},RESULT_READ_EXTERNAL_STORAGE);
+                }else {
+                    Intent i = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+                }
                 break;
             case R.id.create_post_send_btn:
                 uploadPost();
@@ -543,5 +576,4 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
 
         }
     }
-
 }
