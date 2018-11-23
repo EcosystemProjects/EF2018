@@ -57,7 +57,7 @@ class SqlChecker
 	public function CheckGET($text) {
 
 		$words = array("TRUNCATE","truncate","update","UPDATE","drop","DROP","select","SELECT","DELETE","insert into","dete","INSERT INTO","where","WHERE","<",">","script","document",
-		"procedure","PROCEDURE","exec","EXEC","'","select","SELECT","DELETE","insert into","dete","INSERT INTO","where","WHERE","%20","beetwen","union","dbo"," or ","%20or%20",'"',"+"," and"," and ");
+		"procedure","PROCEDURE","exec","EXEC","'","select","SELECT","DELETE","insert into","dete","INSERT INTO","where","WHERE","%20","beetwen","union","dbo",'"',"+");
 		$guvenlik = str_replace($words, '*', $text);
 		  
 		  return $guvenlik;
