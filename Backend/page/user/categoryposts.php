@@ -4,13 +4,14 @@
 			
 				$inpage = $SqlChecker->imtsqlclean(@$_GET["inpage"]);
 				$inpage = $SqlChecker->CheckGET(htmlspecialchars($inpage));
-				
+
 				if(empty($inpage))
 					header("location:home.html");
 				else
 				{
 					$twopage = $SqlChecker->imtsqlclean(@$_GET["twopage"]);
 					$twopage = $SqlChecker->CheckGET(htmlspecialchars($twopage));
+
 					if(empty($twopage))
 						header("location:home.html");
 					else
@@ -56,7 +57,7 @@
 												<h6>'.$cat.'</h6>
 												<b>'.$title.'  |  '.$date.'</b>
 												<div class="">
-													<p>'.((strlen($description) > 150) ? '<a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">'.substr($description,0,150).' ... <b>'.More.'</b></a>' : '<a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">'.$description.'</a>').'</p>
+													<p>'.((strlen($description) > 250) ? '<a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">'.utf8_decode(substr(utf8_encode($description),0,250)).' ... <b style="color:black;">'.More.'</b></a>' : '<a href="/dashboard/posts/'.$inpage.'/'.$seourl.'.html">'.$description.'</a>').'</p>
 												</div>
 
 											</div>

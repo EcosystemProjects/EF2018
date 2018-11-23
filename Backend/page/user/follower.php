@@ -49,7 +49,8 @@
 					$queryfollower = $DBFunctions->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
 					$datafol = $DBFunctions->PDO_fetch_array($queryfollower, 0);
 
-					$userid = $_SESSION['user']->id;
+					if(isset($_SESSION['user']))
+						$userid = $_SESSION['user']->id;
 
 					if(isset($_POST['follow']))
 					{
