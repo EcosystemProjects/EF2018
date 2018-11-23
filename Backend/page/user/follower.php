@@ -115,6 +115,7 @@
 								if($setting['follower'][$i]['user'] == $userid){
 									$searchingexists = true;
 									unset($setting['follower'][$i]);
+									$setting['follower'] = array_values($setting['follower']);
 									break;
 								}
 							}
