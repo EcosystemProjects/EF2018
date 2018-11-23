@@ -1,5 +1,6 @@
 package com.mentornity.ecosytemfeed;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class EcosystemAdapter extends RecyclerView.Adapter<EcosystemAdapter.View
     private List<RegionListItem> listItems;
     private Context context;
     private Categories categories_fragment;
+    Bundle bundle=new Bundle();
     public String TAG="EcosystemAdapter";
 
     //it is used in Ecosystemlist.java
@@ -43,33 +45,58 @@ public class EcosystemAdapter extends RecyclerView.Adapter<EcosystemAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final RegionListItem listItem=listItems.get(position);
+        final CustomProgressDialog dialog = new CustomProgressDialog(context, 1);
         holder.title.setText(listItem.getTitle());
         holder.title.setBackgroundColor(get_color(position));
         holder.title.setTextColor(this.context.getResources().getColor(R.color.white));
-        final Bundle bundle=new Bundle();
+
         bundle.putString("title",holder.title.getText().toString());
         //on click item data fetching is done.And Categories screen opens
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog=new CustomProgressDialog(context,1);
-                String url="http://ecosystemfeed.com/Service/Web.php?process=getCategories&groupid="+String.valueOf(listItem.getId());
-                System.out.println("URL:"+url);
-                final FetchData fetchData=new FetchData(url);
-                dialog.show();
-                fetchData.execute();
-                for(int k=0;k<1;)
-                {
-                     if(fetchData.fetched)k++;
-                }
-                bundle.putString("Categories",fetchData.getData());
-                System.out.println("DATA:"+fetchData.getData());
-                categories_fragment.setArguments(bundle);
-                dialog.dismiss();
-                FragmentTransaction fragmentTransaction=((FragmentActivity)view.getContext()).getSupportFragmentManager().beginTransaction();
-                categories_fragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.main_frame,categories_fragment).addToBackStack(null);
-                fragmentTransaction.commit();
+                final View v = view;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Activity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        });
+                        String url="http://ecosystemfeed.com/Service/Web.php?process=getCategories&groupid="+String.valueOf(listItem.getId());
+                        System.out.println("URL:"+url);
+                        FetchData fetchData=new FetchData(url);
+                        fetchData.execute();
+                        for(int k=0;k<1;)
+                        {
+                            if(fetchData.fetched)k++;
+                        }
+                        bundle.putString("Categories",fetchData.getData());
+                        System.out.println("DATA:"+fetchData.getData());
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        //!!! PUT URL HERE !!!!!!!!!!!!
+                        url = "http://ecosystemfeed.com/Service/Web.php?process=getMeFollowCategories" + // CHANGE HERE
+                                "&authid=" + context.getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null);
+                        System.out.println("URL:"+url);
+                        fetchData = new FetchData(url);
+                        fetchData.execute();
+                        for(int k=0;k<1;)
+                        {
+                            if(fetchData.fetched)k++;
+                        }
+                        bundle.putString("FollowedCategories",fetchData.getData());
+                        System.out.println("DATA:"+fetchData.getData());
+                        categories_fragment.setArguments(bundle);
+
+                        dialog.dismiss();
+                        FragmentTransaction fragmentTransaction=((FragmentActivity)v.getContext()).getSupportFragmentManager().beginTransaction();
+                        categories_fragment.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.main_frame,categories_fragment).addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                }).start();
             }
         });
     }

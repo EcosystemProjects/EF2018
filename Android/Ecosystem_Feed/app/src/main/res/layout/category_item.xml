@@ -2,16 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="100dp"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/category_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:textSize="25sp"
-        android:fontFamily="@font/nunito_bold"
         android:textColor="@android:color/black"
-        android:paddingLeft="30dp"
-        />
+        android:textSize="25sp"
+        android:paddingLeft="15dp"
+        android:fontFamily="@font/nunito_bold"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="30dp"
+            android:paddingLeft="15dp"
             android:layout_gravity="center_vertical">
             <TextView
                 android:id="@+id/category_post_num_tv"
@@ -29,16 +29,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/posts"
                 android:textColor="@color/blueText"
-                android:fontFamily="@font/nunito_semibold"
-                android:padding="10dp"
-                android:layout_weight="1"/>
+                android:padding="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_semibold"/>
             <TextView
                 android:id="@+id/category_follower_num_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/followers"
                 android:layout_weight="1"
-                android:textColor="@color/blueText"/>
+                android:padding="8dp"
+                android:textColor="@color/blueText"
+                android:fontFamily="@font/nunito_semibold"/>
         </LinearLayout>
 
         <Button

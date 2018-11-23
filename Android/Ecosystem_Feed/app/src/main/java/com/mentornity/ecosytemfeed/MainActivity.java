@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                                             dialog.show();//Hata burada olabilir
                                         }
                                     });
-                                    FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=GetPostsFollow&authid="+
+                                    FetchData fetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getPostsFollow&authid="+
                                     getSharedPreferences("Login",MODE_PRIVATE).getString("sessId",null));
                                     fetchData.execute();
                                     for(int k=0;k<1;)
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                                     setFragment(feedFragment);
                                 }
                             }).start();
-                            //"http://ecosystemfeed.com/Service/Web.php?process=GetPostsFollow&authid="+userauthId
                         }
                         return true;
                     case R.id.nav_ecosystem:

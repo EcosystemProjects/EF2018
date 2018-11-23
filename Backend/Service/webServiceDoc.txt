@@ -1,0 +1,230 @@
+
+This is a basic documentation for web service queries in Services/Web.php
+Please update this document when you change anything in queries or return values.
+
+
+--- parameters represents with: ??? ---
+--- return values represents with : %%% ---
+
+
+1) Ecosystem groupid parametresi verilen kategorileri döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getCategories&groupid=???
+Returns: JSonObject
+
+{
+    "id": "%%%",
+    "name": "%%%",
+    "orderindex": "%%%",
+    "groupid": "%%%",
+    "seourl": "%%%",
+    "follower": "{\"follower\":[{\"user\":%%%,\"time\":\"%%%\"}]}",
+    "posts": ""
+  }
+
+2) seourl parametresi verilen kategorinin takipçilerini döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getFollowers&seourl=???
+Returns: JSonArray
+
+[
+  {
+    "name": "%%%",
+    "surname": "%%%",
+    "username": "%%%"
+  }
+]
+
+3)seourl parametresi verilen postlarý döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getPosts&seourl=???
+Returns: JSonArray
+
+[
+  {
+    "title": "%%%",
+    "description": "%%%",
+    "image": "%%%",
+    "date": "%%%",
+    "category": "%%%",
+    "ecosystem": "%%%",
+    "region": "%%%",
+    "shareurl": "%%%"
+  },
+]
+
+4)authid parametresi verilen kullanýcýnýn postlarýný döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getPostsMe&authid=???
+Returns: JSonArray
+
+[
+  {
+    "title": "%%%",
+    "description": "%%%",
+    "image": "%%%",
+    "date": "%%%",
+    "shareurl": "%%%",
+    "categoryid": "%%%",
+    "category": "%%%",
+    "ecosystem": "%%%",
+    "region": "%%%",
+    "seourl": "%%%"
+  }]
+
+5)authid ve seourl parametresi verilen kullanýcnýn postunu siler.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=deletePostsMe&authid=???&seourl=???
+Returns: JSonObject
+
+{
+  "Function": "%%%",
+  "status": "%%%"
+}
+
+6) Tüm postlarý döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getAllPosts
+Returns: JSonArray
+
+[
+  {
+    "title": "%%%",
+    "description": "%%%",
+    "image": "%%%",
+    "date": "%%%",
+    "shareurl": "%%%",
+    "categoryid": "%%%",
+    "category": "%%%",
+    "ecosystem": "%%%",
+    "region": "%%%",
+    "seourl": "%%%"
+  }]
+
+7) autid parametresi verilen kullanýcýnýn takip ettiði kategorileri döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getMeFollowCategories&authid=???
+Returns: JSonObject
+
+{
+  "Function": "%%%",
+  "status": "%%%",
+  "categories": [
+    {
+      "id": "%%%",
+      "name": "%%%",
+      "seourl": "%%%"
+    },
+    {
+      "id": "%%%",
+      "name": "%%%",
+      "seourl": "%%%"
+    }
+  ]
+}
+
+8) autid parametresi verilen kullanýcýn takip ettiði kategorilerdeki postlarý döndürür.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=getPostsFollow&authid=???
+Returns: JSonArray
+
+[
+  {
+    "title": "%%%",
+    "description": "%%%",
+    "image": "%%%",
+    "date": "%%%",
+    "shareurl": "%%%",
+    "categoryid": "%%%",
+    "category": "%%%",
+    "ecosystem": "%%%",
+    "region": "%%%",
+    "seourl": "%%%"
+  }]
+
+9)authid parametresi verilen kullanýcnýn Onesignal userid parametreleresini veritabanýna ekler.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=setOneSignalUser&authid=???&userid=???
+Returns: JSonObject
+
+{
+  "Function": "%%%",
+  "status": "%%%"
+}
+
+10)autid parametresi verilen kullanýcýnýn catid parametresi verilen kategoriyi follow-unfollow etmesini saðlar.
+type parametresi "follow" yada "unfollow" olmalýdýr.
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=categoriesFollow&authid=???&catid=???&type=???
+Returns: JSonObject
+
+{
+  "type": "%%%",
+  "status": "%%%"
+}
+
+11)Aþaðýdaki JSon formatýnda parametre oalrak verilen linkedin kullanýcý bilgilerini veritabanýna ekler.
+
+{
+  "json": {
+    "emailAddress": "???",
+    "firstName": "???",
+    "lastName": "???",
+    "publicProfileUrl": "???",
+    "authId": "???"
+  }
+}
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=isLogin&json=???
+Returns: JsonObject
+
+{
+  "Function": "%%%",
+  "status": "%%%",
+  "message" "%%%"
+}
+
+
+12) POST metoduyla aþaðýdaki parametreleri göndererek post oluþturur.
+
+authid: "???"    ->Kullanýcýnýn autid parametresi
+image: FILE	 ->Yüklenecek dosya
+title: "???"	 ->Post baþlýðý
+description"???" ->Post açýklamasý
+seourl"???"	 ->Eklenecek kategorinin seourl parametresi
+
+Query: http://ecosystemfeed.com/Service/Web.php?process=setPosts
+Returns: JSonObject
+
+{
+  "Function": "%%%",
+  "status": "%%%"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

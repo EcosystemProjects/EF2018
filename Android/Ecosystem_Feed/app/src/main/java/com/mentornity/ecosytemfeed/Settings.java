@@ -31,6 +31,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.linkedin.platform.LISessionManager;
 import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
+import com.onesignal.OneSignal;
+import com.onesignal.OneSignalDbHelper;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -92,31 +94,16 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
         logoutTv.setOnClickListener(this);
 
         //SET SWITCHES POSITIONS
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FetchData fetchData = new FetchData(""); // !!! PUT URL HERE... TO GET EMAIL AND NOTIFICATION PERMISSIONS !!!
-                fetchData.execute();
-                for(int k=0;k<1;)
-                {
-                    if(fetchData.fetched)k++;
-                }
-
-                try {
-                    JSONArray JA = new JSONArray(fetchData.getData());
-                    for (int i = 0; i < JA.length(); i++) {
-                        JSONObject JO = (JSONObject) JA.get(i);
-                        sendEmailSw.setChecked(JO.getBoolean("sendEmailPermission"));  // !!! SET EMAIL PERMISSION SWITCH ACCORDING TO JSON PATTERN !!!
-                        sendNotificationSw.setChecked(JO.getBoolean("sendNotificationPermission"));// !!! SET NOTIFICATION PERMISSION SWITCH ACCORDING TO JSON PATTERN !!!
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        sendEmailSw.setChecked(true);
-        sendNotificationSw.setChecked(true);
+        if(OneSignal.getPermissionSubscriptionState().getSubscriptionStatus().getSubscribed()){
+            sendNotificationSw.setChecked(true);
+        }else{
+            sendNotificationSw.setChecked(false);
+        }
+        if(OneSignal.getPermissionSubscriptionState().getEmailSubscriptionStatus().getSubscribed()){
+            sendEmailSw.setChecked(true);
+        }else{
+            sendEmailSw.setChecked(false);
+        }
 
         userNameTV.setText(getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("name",null));
         Picasso.get().load(getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("pic",null)).into(profileImage, new Callback() {
@@ -166,37 +153,6 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
         return v;
     }
 
-    private void addDevelopers() {
-        ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        TextView alitolakTV=new TextView(getContext());
-        alitolakTV.setText("Ali TOLAK");
-        TextView beratKara=new TextView(getContext());
-        beratKara.setText("Berat KARA");
-        backendDevelopersLy.addView(alitolakTV,layoutParams);
-        backendDevelopersLy.addView(beratKara,layoutParams);
-        TextView berkacikelTV=new TextView(getContext());
-        berkacikelTV.setText("Berk AÇIKEL");
-        frontendDevelopersLy.addView(berkacikelTV,layoutParams);
-        TextView tarikbasoglu=new TextView(getContext());
-        tarikbasoglu.setText("Tarık Ramazan BAŞOĞLU");
-        TextView edaaydin=new TextView(getContext());
-        edaaydin.setText("Eda AYDIN");
-        androidDevelopersLy.addView(tarikbasoglu,layoutParams);
-        androidDevelopersLy.addView(edaaydin,layoutParams);
-        TextView bugraPesman=new TextView(getContext());
-        bugraPesman.setText("Ahmet Buğra PEŞMAN");
-        TextView damlaKarakulah=new TextView(getContext());
-        damlaKarakulah.setText("Damla Karaküllah");
-        TextView enverKaan=new TextView(getContext());
-        enverKaan.setText("Enver KAAN");
-        TextView mansuraminKaya=new TextView(getContext());
-        mansuraminKaya.setText("Mansuremin Kaya");
-
-        iosDevelopersLy.addView(bugraPesman,layoutParams);
-        iosDevelopersLy.addView(damlaKarakulah,layoutParams);
-        iosDevelopersLy.addView(enverKaan,layoutParams);
-        iosDevelopersLy.addView(mansuraminKaya,layoutParams);
-    }
 
     private void init(View v) {
         settingTabButton=v.findViewById(R.id.settings_btn);
@@ -229,11 +185,6 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
         iosDevelopersLy=v.findViewById(R.id.settings_iosDevelopers_ly);
         backendDevelopersLy=v.findViewById(R.id.settings_backendDevelopers_ly);
     }
-
-    public void activateButton(Button b)
-    { b.setTextColor(getResources().getColor(R.color.black_text)); }
-    public void deactivateButton(Button b)
-    { b.setTextColor(getResources().getColor(R.color.grayText)); }
 
 
     @Override
@@ -270,19 +221,9 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
         switch (buttonView.getId()){
             case R.id.settings_send_email_switch:
 
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!
-                // UPDATE EMAIL PERMISSION!!!
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                Toast.makeText(getContext(), "E-Mail Send Set To: " + isChecked, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_send_notification_switch:
-
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // UPDATE NOTIFICATION PERMISSION!!!
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                Toast.makeText(getContext(), "Notification Send Set To: " + isChecked, Toast.LENGTH_SHORT).show();
+                OneSignal.setSubscription(isChecked);
                 break;
             case R.id.language_change_ly_btn:
                 if(buttonView.isChecked())
@@ -304,9 +245,13 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
                 }
                 break;
         }
-
-
     }
+
+    public void activateButton(Button b)
+    { b.setTextColor(getResources().getColor(R.color.black_text)); }
+    public void deactivateButton(Button b)
+    { b.setTextColor(getResources().getColor(R.color.grayText)); }
+
 
     public void changeLanguage(String language,String region)
     {
@@ -327,6 +272,41 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
         sharedPreferences.edit().putString("LANGUAGE",language).apply();//After that screen must refresh
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
+    }
+
+    private void addDevelopers() {
+        ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView alitolakTV=new TextView(getContext());
+        alitolakTV.setText("Ali TOLAK");
+        TextView beratKara=new TextView(getContext());
+        beratKara.setText("Berat KARA");
+        backendDevelopersLy.addView(alitolakTV,layoutParams);
+        backendDevelopersLy.addView(beratKara,layoutParams);
+        TextView berkacikelTV=new TextView(getContext());
+        berkacikelTV.setText("Berk AÇIKEL");
+        frontendDevelopersLy.addView(berkacikelTV,layoutParams);
+        TextView tarikbasoglu=new TextView(getContext());
+        tarikbasoglu.setText("Tarık Ramazan BAŞOĞLU");
+        TextView edaaydin=new TextView(getContext());
+        edaaydin.setText("Eda AYDIN");
+        TextView eminKivanc = new TextView(getContext());
+        eminKivanc.setText("Emin KIVANÇ");
+        androidDevelopersLy.addView(tarikbasoglu,layoutParams);
+        androidDevelopersLy.addView(edaaydin,layoutParams);
+        androidDevelopersLy.addView(eminKivanc,layoutParams);
+        TextView bugraPesman=new TextView(getContext());
+        bugraPesman.setText("Ahmet Buğra PEŞMAN");
+        TextView damlaKarakulah=new TextView(getContext());
+        damlaKarakulah.setText("Damla Karaküllah");
+        TextView enverKaan=new TextView(getContext());
+        enverKaan.setText("Enver KAAN");
+        TextView mansuraminKaya=new TextView(getContext());
+        mansuraminKaya.setText("Mansuremin Kaya");
+
+        iosDevelopersLy.addView(bugraPesman,layoutParams);
+        iosDevelopersLy.addView(damlaKarakulah,layoutParams);
+        iosDevelopersLy.addView(enverKaan,layoutParams);
+        iosDevelopersLy.addView(mansuraminKaya,layoutParams);
     }
 
     public void logOut() {

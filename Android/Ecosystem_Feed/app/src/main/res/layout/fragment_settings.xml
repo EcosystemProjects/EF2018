@@ -149,7 +149,7 @@
                     android:id="@+id/settings_send_notification_switch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:checked="true"
+                    android:fontFamily="@font/nunito_bold"
                     android:gravity="left|center_vertical"
                     android:text="@string/send_me_mobile_nptifications_nabout_featured_post" />
 
@@ -244,7 +244,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Android Developers"
+                        android:text="@string/android_devolopers"
                         android:fontFamily="@font/nunito_semibold"
                         android:textColor="@android:color/black"
                         android:textSize="15sp"
@@ -286,7 +286,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Backend Developers"
+                        android:text="@string/backend_devolopers"
                         android:fontFamily="@font/nunito_semibold"
                         android:textColor="@android:color/black"
                         android:textSize="15sp"

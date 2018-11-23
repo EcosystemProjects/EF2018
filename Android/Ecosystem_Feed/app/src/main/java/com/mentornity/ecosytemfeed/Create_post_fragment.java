@@ -1,14 +1,24 @@
 package com.mentornity.ecosytemfeed;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +39,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
 import com.squareup.picasso.Picasso;
+
+import net.gotev.uploadservice.ContentType;
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.ServerResponse;
+import net.gotev.uploadservice.UploadInfo;
+import net.gotev.uploadservice.UploadNotificationConfig;
+import net.gotev.uploadservice.UploadStatusDelegate;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,15 +59,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Create_post_fragment extends Fragment implements View.OnClickListener {
 
     private static final int RESULT_LOAD_IMAGE =1 ;
+    private static final int RESULT_READ_EXTERNAL_STORAGE =2 ;
     View v;
-    private Button createPostBtn,myPostButton,editBtn,addBtn;
+    private Button createPostBtn,myPostButton,editBtn,addBtn,sendBtn;
     private ScrollView createPostScrllView;
     private RecyclerView contentRecyclerView;
     private List<ContentListItem> listContents;
@@ -67,15 +88,63 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     public List<String> listEcosytems;
     public HashMap<String,String> mapEcosystems=new HashMap<>();
     public List<String> listCategories=new ArrayList<>();
+    public HashMap<String,String> mapCategories = new HashMap<>();
 
     private boolean isDataEmpty;
 
+    private Uri filePath;
     private Bitmap imageBitmap;
     public String data="";
     public String myPostsData = "";
     private String TAG="Createpost";
     public Create_post_fragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //////////////////////////////
+        //!!! MY POSTS QUERY HERE!!!//
+        // isDeleteVisible is true  //
+        // for only my post section //
+        //////////////////////////////
+
+        FetchData myPostsfetchData=new FetchData("http://ecosystemfeed.com/Service/Web.php?process=getPostsMe&authid="
+                + getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null));
+        myPostsfetchData.execute();
+        while(!myPostsfetchData.fetched && !myPostsfetchData.getErrorOccured()){/*waiting to fetch*/}
+        myPostsData=myPostsfetchData.getData();
+        listContents = new ArrayList<>();
+        JSONArray JA = null;
+        try {
+            JA = new JSONArray(myPostsData);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+        if (JA != null)
+        {   isDataEmpty = false;
+            for (int i = 0; i < JA.length(); i++) {
+                try {
+                    JSONObject jO = (JSONObject) JA.get(i);
+                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
+                            category = jO.getString("category"),
+                            title = jO.getString("title"),
+                            date = jO.getString("date"),
+                            shareUrl = jO.getString("shareurl"),
+                            description = jO.getString("description"),
+                            seourl = jO.getString("seourl");
+                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
+                    Log.d(TAG, "onCreate: " + imgUrl);
+                    //isDeleteVisible is true for only my post section
+                    listContents.add(new ContentListItem(title,regionAndEcosystem,category,description,true,imgUrl,seourl,date,shareUrl));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            isDataEmpty = true;
+        }
     }
 
 
@@ -103,6 +172,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         createPostScrllView=v.findViewById(R.id.create_post_scrll_bar);
         editBtn=v.findViewById(R.id.create_post_edit_btn);
         addBtn=v.findViewById(R.id.create_post_add_btn);
+        sendBtn = v.findViewById(R.id.create_post_send_btn);
         titleEtext=v.findViewById(R.id.create_post_title_et);
         descriptionEtext=v.findViewById(R.id.create_post_description_et);
         linkEtext=v.findViewById(R.id.create_post_link_et);
@@ -124,6 +194,7 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         myPostButton.setOnClickListener(this);
         editBtn.setOnClickListener(this);
         addBtn.setOnClickListener(this);
+        sendBtn.setOnClickListener(this);
         regionTV.setOnClickListener(this);
         ecosystemTV.setOnClickListener(this);
         categoryTV.setOnClickListener(this);
@@ -208,10 +279,14 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                         try {
                             JSONObject jO = (JSONObject) JA.get(j);
                             String name = jO.get("name").toString();
+                            String seourl = jO.get("seourl").toString();
                             int selectedCategoryGroupID= Integer.parseInt(jO.get("groupid").toString());
                             if(jO.get("type").toString().compareTo("categories")==0 &&
                                     Integer.parseInt(mapEcosystems.get(ecosystemTV.getText().toString()))==selectedCategoryGroupID)
-                            {listCategories.add(name);}
+                            {
+                                listCategories.add(name);
+                                mapCategories.put(name,seourl);
+                            }
                         } catch (JSONException e) {
                             Log.e(TAG, "onItemClick: "+e.getMessage(),e );
                         }
@@ -285,31 +360,115 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
             }).start();
         }
     }
-    ///////////////////////////////
-    //!!!PUT UPLOAD QUERY HERE!!!//
-    ///////////////////////////////
 
     private void uploadPost(){
-        String regionAndEcosystem = regionTV.getText().toString()+ecosystemTV.getText().toString();
-        String category = categoryTV.getText().toString();
-        String description = descriptionEtext.getText().toString();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-        byte[] imageByteArray = outputStream.toByteArray();
+        ///////////////////////////////
+        //!!! UPLOAD QUERY HERE!!!/////
+        ///////////////////////////////
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        String imgUrl = "http://ecosystemfeed.com"; //!!!UPLOAD IMAGE AND PUT IMAGE URL HERE!!!//
+                final String uploadUrl = "http://ecosystemfeed.com/Service/Web.php?process=setPosts";
+                String path = getPath(filePath);
+                Log.d(TAG, "uploadPost: path: "+path);
+                String uploadID = UUID.randomUUID().toString();
+                Log.d(TAG, "uploadPost: uploadID: "+uploadID);
+                String imageID = UUID.randomUUID().toString();
+                Log.d(TAG, "uploadPost: imageID: "+imageID);
+                String title = titleEtext.getText().toString();
+                Log.d(TAG, "uploadPost: title: "+title);
+                String seourl = mapCategories.get(categoryTV.getText().toString());
+                Log.d(TAG, "uploadPost: seourl: "+seourl);
+                String description = descriptionEtext.getText().toString();
+                Log.d(TAG, "uploadPost: description: "+description);
+                String authID = getContext().getSharedPreferences("Login",Context.MODE_PRIVATE).getString("sessId",null);
+                Log.d(TAG, "uploadPost: authID: "+authID);
+                try {
+                    new MultipartUploadRequest(getContext(),uploadID,uploadUrl)
+                            .addFileToUpload(path,"image")
+                            .addParameter("authid",authID)
+                            .addParameter("title",title)
+                            .addParameter("seourl",seourl)
+                            .addParameter("description",description)
+                            .setUtf8Charset()
+                            .setNotificationConfig(new UploadNotificationConfig())
+                            .setMaxRetries(2)
+                            .setDelegate(new UploadStatusDelegate() {
+                                @Override
+                                public void onProgress(Context context, UploadInfo uploadInfo) {
+                                    dialog.show();
+                                }
+
+                                @Override
+                                public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
+                                    Log.d(TAG, "onError: "+serverResponse.getBodyAsString());
+                                }
+
+                                @Override
+                                public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                    Log.d(TAG, "onCompleted: "+serverResponse.getBodyAsString());
+                                    dialog.dismiss();
+                                    Toast.makeText(context, "Post Created", Toast.LENGTH_SHORT).show();
+                                    restartFragment();
+                                }
+
+                                @Override
+                                public void onCancelled(Context context, UploadInfo uploadInfo) {
+
+                                }
+                            })
+                            .startUpload();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public String getPath(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = getActivity().getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+        return path;
+    }
+
+    public void restartFragment(){
+        Create_post_fragment create_post_fragment = new Create_post_fragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame,create_post_fragment).addToBackStack(null);
+        ft.commit();
+
+    }
+
+    public void activateButton(Button b)
+    { b.setTextColor(getResources().getColor(R.color.black_text)); }
+    public void deactivateButton(Button b)
+    { b.setTextColor(getResources().getColor(R.color.grayText)); }
 
 
-        JSONObject JO = new JSONObject();
-        try {
-            JO.put("title",regionAndEcosystem);
-            JO.put("category",category);
-            JO.put("description",description);
-            JO.put("image",imgUrl);
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == RESULT_READ_EXTERNAL_STORAGE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            Log.d(TAG, "onRequestPermissionsResult: permission granted");
+            Intent i = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
         }
-
+        Log.d(TAG, "onRequestPermissionsResult: ");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -317,78 +476,16 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RESULT_LOAD_IMAGE && null != data)
         {
-            Uri selectedImage = data.getData();
-            //String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
+            filePath = data.getData();
             try {
-                InputStream inInputStream=getActivity().getContentResolver().openInputStream(selectedImage);
+                InputStream inInputStream=getActivity().getContentResolver().openInputStream(filePath);
                 imageBitmap = BitmapFactory.decodeStream(inInputStream);
                 contentIv.setImageBitmap(imageBitmap);
             } catch (FileNotFoundException e) {
                 Log.e(TAG, "onActivityResult: "+e.getMessage(),e );
             }
-
         }
     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        /*
-                AAA
-                AAA
-                AAA
-                AAA
-                AAA
-             LOOK BELOW
-               AAAAAA
-                AAA
-                 A
-        */
-        //My posts contents.
-        //isDeleteVisible is true for only my post section
-        //it is not ready because of backend there are no query url.
-        //When ready please add.
-        //////////////////////////////////
-        //!!! PUT MY POSTS QUERY HERE!!!//
-        //////////////////////////////////
-        FetchData myPostsfetchData=new FetchData("!!!PUT QUERY HERE!!!");
-        myPostsfetchData.execute();
-        while(!myPostsfetchData.fetched && !myPostsfetchData.getErrorOccured()){/*waiting to fetch*/}
-        myPostsData=myPostsfetchData.getData();
-        listContents = new ArrayList<>();
-        JSONArray JA = null;
-        try {
-            JA = new JSONArray(myPostsData);
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
-        if (JA != null)
-        {   isDataEmpty = false;
-            for (int i = 0; i < JA.length(); i++) {
-                try {
-                    JSONObject jO = (JSONObject) JA.get(i);
-                    String regionAndEcosystem = jO.getString("region").toUpperCase() + "/" + jO.getString("ecosystem").toUpperCase(),
-                            category = jO.getString("category"),
-                            content = jO.getString("title");
-
-                    final String imgUrl = "http://ecosystemfeed.com" + jO.getString("image");
-                    Log.d(TAG, "onCreate: " + imgUrl);
-                    //isDeleteVisible is true for only my post section
-                    listContents.add(new ContentListItem(regionAndEcosystem, category, content, true, imgUrl, jO));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else{
-            isDataEmpty = true;
-        }
-    }
-
-    public void activateButton(Button b)
-    { b.setTextColor(getResources().getColor(R.color.black_text)); }
-    public void deactivateButton(Button b)
-    { b.setTextColor(getResources().getColor(R.color.grayText)); }
 
     @Override
     public void onClick(View view) {
@@ -463,16 +560,20 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                 htmlParse(linkEtext.getText().toString());
                 break;
             case R.id.create_post_add_btn:
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if(ContextCompat.checkSelfPermission(getContext(),Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(),new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},RESULT_READ_EXTERNAL_STORAGE);
+                }else {
+                    Intent i = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+                }
+                break;
             case R.id.create_post_send_btn:
                 uploadPost();
                 break;
 
         }
     }
-
 }
