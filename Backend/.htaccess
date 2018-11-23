@@ -41,7 +41,7 @@ RewriteRule ^(.*)$ index.php [F,L]
     Allow from all
 </Files>
 
-<Files captcha.php>
+<Files cronstevejobs.php>
     Order Allow,Deny
     Allow from all
 </Files>
