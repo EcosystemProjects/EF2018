@@ -99,6 +99,7 @@ class DBFunctions
 				"password"=>"",
 				"emailpush"=>1,
 				"mobilepush"=>1,
+				"onesignalid"=>"",
 				"authority"=>0,
 				"signup"=>time(),
 				"otpCode"=>0,
@@ -148,50 +149,84 @@ class DBFunctions
 		}
 	}
 	
+	function seo($text)
+	{
+		$find = array('Ç', 'Ş', 'Ğ', 'Ü', 'İ', 'Ö', 'ç', 'ş', 'ğ', 'ü', 'ö', 'ı', '+', '#');
+		$replace = array('C', 'S', 'G', 'U', 'I', 'O', 'c', 's', 'g', 'u', 'o', 'i', 'plus', 'sharp');
+		$text = str_replace($find, $replace, $text);
+		$text = preg_replace("@[^A-Za-z0-9\-_\.\+]@i", ' ', $text);
+		$text = trim(preg_replace('/\s+/', ' ', $text));
+		$text = str_replace(' ', '-', $text);
+		return $text;
+	}
+	
+	function random_string($length){
+		return substr(str_repeat(md5(rand()), ceil($length/32)), 0, $length);
+	}
+	
 	public function setPosts($post)
 	{
 		global $db;
 		global $SeoFunction;
 		
-		$userid = $this->getExistUser($post->authid);
+		$post = json_decode($post);
+		
+		$authid = $post->authid;
+		$image = $post->image;
+		$title = $post->title;
+		$description = $post->description;
+		$seourl = $post->seourl;
+		
+		if(empty($authid))
+			return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"authid empty"));
+		elseif(empty($image))
+			return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"image empty"));
+		elseif(empty($title))
+			return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"title empty"));
+		elseif(empty($description))
+			return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"description empty"));
+		elseif(empty($seourl))
+			return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"seourl empty"));
+		
+		$titleseo = $this->seo($title)."-".$this->random_string(5);
+		
+		$userid = $this->getExistUser($authid);
 		if($userid != -1)
 		{
-			$image;
-			if(isset($_FILES[$post->image])){
-				$hata = $_FILES[$post->image]['error'];
+			$images;
+			if(isset($image)){
+				$hata = $image->error;
 					if($hata == 0){
-						$boyut = $_FILES[$post->image]['size'];
+						$boyut = $image->size;
 						if($boyut > (1024*1024*5)){
 							return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Image Size > 5MB"));
 						}else{
-							$tip = $_FILES[$post->image]['type'];
-							$isim = $_FILES[$post->image]['name'];
+							$tip = $image->type;
+							$isim = $image->name;
 							$uzanti = explode('.', $isim);
 							$uzanti = $uzanti[count($uzanti)-1];
-							if($tip != 'image/jpeg' || $uzanti != 'jpg') {
-								return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Only jpg File"));
+							if(($tip != 'image/jpeg' || $uzanti != 'jpg') && ($tip != 'image/png' || $uzanti != 'png')) {
+								return json_encode(array("Function"=>"DbFunctions->setPosts","status"=>"Unsupported picture type"));
 							} else {
-								$image = $_FILES[$post->image]['name'];
-								copy($_FILES[$post->image]['tmp_name'], './assets/img/posts/'.$image);
+								$images = $titleseo."-".$this->random_string(50).".png";
+								copy($image->tmp_name, $_SERVER['DOCUMENT_ROOT'].'/assets/img/posts/'.$images);
 							}
 						}
 					}
 			}
 				
-			$title = $post->title;
-			$description = $post->description;
 			$date = date('d-m-Y H:i:s');
 					
 			$information = array(
 				'title' => $title,
 				'description' => $description,
-				'image' => $image,
+				'image' => (empty($images) ? '' : $images),
 				'date' => $date
 			);
 					
 			$notification = array(
-				'mail' => 1,
-				'app' => 1
+				'mail' => 0,
+				'app' => 0
 			);
 					
 			$catquery = $this->selectAll("SELECT id FROM category WHERE type='categories' and seourl='$seourl'");
@@ -203,14 +238,14 @@ class DBFunctions
 				$catdata = $this->PDO_fetch_array($catquery, 0);
 				$catid = $catdata['id'];
 			}
-					
+			
 			$stmt = $db->prepare ("INSERT INTO posts (sender,categoryid,information,notification,seourl,status) VALUES (:sender,:categoryid,:information,:notification,:seourl,:status)");
 			$stmt->execute(array(
 			"sender" => $userid,
 			"categoryid" => $catid,
 			"information" => json_encode($information,JSON_UNESCAPED_UNICODE),
 			"notification" => json_encode($notification,JSON_UNESCAPED_UNICODE),
-			"seourl" => $SeoFunction->seo($title),
+			"seourl" => $titleseo,
 			"status" => 1
 			));
 					
@@ -267,6 +302,70 @@ class DBFunctions
 			return json_encode($jsondata,JSON_UNESCAPED_UNICODE);
 		}
 		
+	}
+	
+	public function getMeFollowCategories($authid)
+	{
+		global $db;
+		
+		if(empty($authid))
+			return json_encode(array("Function"=>"DbFunctions->getMeFollowCategories","status"=>"Authid Empty!"));
+		else
+		{
+			$query = $this->selectAll("SELECT id FROM users WHERE authid = '$authid'");
+
+			if (count($query) == 0) {
+				return json_encode(array("Function"=>"DbFunctions->getMeFollowCategories","status"=>"User Not Found!"));
+			} else {
+				$userdata = $this->PDO_fetch_array($query, 0);
+				$userid = $userdata['id'];
+				
+				$categories = array();
+				$queryfollower = $this->selectAll("SELECT categoryid,setting FROM follower WHERE LENGTH(setting) > 15"); //follow user exist query
+				for($i = 0; $i < count($queryfollower); $i++)
+				{
+					$followerdata = $this->PDO_fetch_array($queryfollower, $i);
+					$catid = $followerdata['categoryid'];
+					$followeruser = json_decode($followerdata['setting']);
+					for($j = 0; $j < count($followeruser->follower); $j++){
+						if($followeruser->follower[$j]->user == $userid){
+							$catret = $this->getCategoriesById($catid,array("id","name","seourl"));
+							$categoryinfo = json_decode($catret);
+							if(!empty($categoryinfo[0]->name))
+								array_push($categories,$categoryinfo[0]);
+						}
+					}
+				}
+				return json_encode(array("Function"=>"DbFunctions->getMeFollowCategories","status"=>"Success Get Follower!","categories"=>$categories));
+			}
+		}
+	}
+	
+	public function getCategoriesById($id,$parameter = array())
+	{
+		global $db;
+		
+		if(empty($id))
+			return json_encode(array("Function"=>"DbFunctions->getCategoriesById","status"=>"Id Empty!"));
+		else
+		{
+			$query = $this->selectAll("SELECT * FROM category WHERE id = '$id'");
+			if (count($query) == 0) {
+				return -1;
+			} else {
+				$data = $this->PDO_fetch_array($query, 0);
+				$getd = array();
+
+				for($i = 0; $i < count($parameter); $i++)
+				{
+					$val = $data[$parameter[$i]];
+					$ret[$parameter[$i]] = $val;
+				}
+				array_push($getd, $ret);
+				
+				return json_encode($getd);
+			}
+		}
 	}
 	
 	
@@ -381,14 +480,13 @@ class DBFunctions
 			if (count($query) == 0) {
 				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Post not found"));
 			} else {
-				$query = $this->selectAll("Delete from posts WHERE sender = $userid and seourl = '$seourl'");
-				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Delete Operation Success"));
+				//$query = $this->selectAll("Delete from posts WHERE sender = $userid and seourl = '$seourl'");
+				$query = $this->selectAll("Update from posts status = 0 WHERE sender = $userid and seourl = '$seourl'");
+				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Delete Operation Change Update Success"));
 			}
 		}
 		else
-		{
 			return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"User not found"));
-		}
 	}
 	
 	public function getAllPosts()
@@ -427,11 +525,37 @@ class DBFunctions
 	
 	public function getExistUser($authid)
 	{
-		$query = $this->selectAll("SELECT * FROM users WHERE authid = '$authid'");
+		$query = $this->selectAll("SELECT id FROM users WHERE authid = '$authid'");
 		$data = $this->PDO_fetch_array($query, 0);
 		if(!empty($data))
 			return $data['id'];
 		return -1;
+	}
+	
+	public function getExistUserAuthById($id)
+	{
+		$query = $this->selectAll("SELECT authid FROM users WHERE id = '$id'");
+		$data = $this->PDO_fetch_array($query, 0);
+		if(!empty($data))
+			return $data['authid'];
+		return -1;
+	}
+	
+	public function setOneSignalUser($authid,$userid)
+	{
+		global $db;
+
+		$check = $this->selectAll("SELECT information FROM users WHERE authid = '".$authid."'");
+		if(count($check) > 0){
+			$data = $this->PDO_fetch_Array($check, 0);
+			$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
+			$information['onesignalid'] = $userid;
+			$updatejson = json_encode($information);
+			$this->selectAll("UPDATE users SET information = '$updatejson' WHERE authid = '$authid'");
+			return json_encode(array("Function"=>"DbFunctions->setOneSignalUser","status"=>"Set OneSignalID"));
+		}
+		else
+			return json_encode(array("Function"=>"DbFunctions->setOneSignalUser","status"=>"User not found"));
 	}
 	
 	public function categoriesFollow($authid,$catid,$type)
