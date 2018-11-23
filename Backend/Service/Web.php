@@ -17,6 +17,10 @@ if (function_exists('header_remove')) { //php header wamp hide
 header( 'X-Frame-Options: SAMEORIGIN' );
 header('Content-Type: text/html; charset=utf-8');
 
+header("Content-Security-Policy: default-src 'none'; script-src 'self';connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline';");
+header("X-XSS-Protection: 1; mode=block");
+header('X-Content-Type-Options: nosniff');
+
 include_once($_SERVER['DOCUMENT_ROOT']."/settings/config.php");
 include_once($_SERVER['DOCUMENT_ROOT']."/module/Database/Functions/DbFunctions.php");
 include_once($_SERVER['DOCUMENT_ROOT']."/module/SqlChecker/SqlChecker.php");
@@ -33,7 +37,7 @@ Class LinkedinUser {
 $SqlChecker = SqlChecker::instance();
 
 if(isset($_POST) || isset($_GET)) // sql injection bypass library simple
-	$SqlChecker->GetPostChecker();
+	$SqlChecker->GetServiceChecker();
 
 try{
 	
@@ -251,11 +255,12 @@ try{
 	}
 	elseif($process == "isLogin")
 	{
-		$json = json_decode(@$_GET['json'], JSON_UNESCAPED_UNICODE);
+		if(empty(@$_GET['json']))
+			die(print_r(json_encode(array("Function"=>"Service->isLogin","status"=>"json Null variable"))));
 		
-		if(empty($json))
-			print_r(json_encode(array("Function"=>"Service->isLogin","status"=>"json Null variable")));
-		elseif(empty($json["json"]["emailAddress"]))
+		$json = json_decode(@$_GET['json'], JSON_UNESCAPED_UNICODE);
+
+		if(empty($json["json"]["emailAddress"]))
 			print_r(json_encode(array("Function"=>"Service->isLogin","status"=>"json->emailAddress Null variable")));
 		elseif(empty($json["json"]["firstName"]))
 			print_r(json_encode(array("Function"=>"Service->isLogin","status"=>"json->firstName Null variable")));
