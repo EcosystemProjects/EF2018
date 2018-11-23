@@ -40,9 +40,10 @@
 						$categoryid = $data['categoryid'];
 						
 						
-						$regandecoinf = $DBFunctions->selectAll("SELECT c.name as categories,k.name as ecosystem,r.name as region FROM category as c, category as k,category as r WHERE c.type = 'categories' and c.groupid = k.id and k.groupid = r.id");
+						$regandecoinf = $DBFunctions->selectAll("SELECT c.name as categories,c.seourl as categoriesurl,k.name as ecosystem,r.name as region FROM category as c, category as k,category as r WHERE c.type = 'categories' and c.groupid = k.id and k.groupid = r.id");
 						$regandecoinfdata = $DBFunctions->PDO_fetch_array($regandecoinf, 0);
 						$categories = $regandecoinfdata['categories'];
+						$categoriesurl = $regandecoinfdata['categoriesurl'];
 						$ecosystem = $regandecoinfdata['ecosystem'];
 						$region = $regandecoinfdata['region'];
 						
@@ -73,10 +74,10 @@
 										</div>
 										</br>
 										<div class="PicBottom">
-											<h6>'.$region.' / '.$ecosystem.' / '.$categories.'</h6>
-											<b>'.$title.'  |  '.$date.'</b>
+											<h6>'.$region.' / '.$ecosystem.' / <a href="/dashboard/categoryposts/'.$categoryid.'/'.$categoriesurl.'.html">'.$categories.'</a></h6>
+											<b><a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html" style="color:black;">'.$title.'</a>  |  '.$date.'</b>
 											<div class="">
-												<p>'.((strlen($description) > 250) ? '<a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html">'.utf8_decode(substr(utf8_encode($description),0,250)).' ... <b>'.More.'</b></a>' : '<a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html">'.$description.'</a>').'</p>
+												<p>'.((strlen($description) > 250) ? '<a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html">'.utf8_decode(substr(utf8_encode($description),0,250)).' ... <b style="color:black;">'.More.'</b></a>' : '<a href="/dashboard/posts/'.$categoryid.'/'.$seourl.'.html">'.$description.'</a>').'</p>
 											</div>
 
 										</div>
