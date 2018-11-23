@@ -481,7 +481,7 @@ class DBFunctions
 				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Post not found"));
 			} else {
 				//$query = $this->selectAll("Delete from posts WHERE sender = $userid and seourl = '$seourl'");
-				$query = $this->selectAll("Update from posts status = 0 WHERE sender = $userid and seourl = '$seourl'");
+				$query = $this->selectAll("Update posts SET status = 0 WHERE sender = $userid and seourl = '$seourl'");
 				return json_encode(array("Function"=>"DbFunctions->getPostsMe","status"=>"Delete Operation Change Update Success"));
 			}
 		}
@@ -493,7 +493,7 @@ class DBFunctions
 	{
 		global $db;
 			
-		$query = $this->selectAll("SELECT seourl,information FROM posts");
+		$query = $this->selectAll("SELECT p.seourl as seourl,p.information as information,c.name as catname,c.seourl as catseo,c.id as catid FROM posts as p,category as c WHERE c.id = p.categoryid");
 
 		if (count($query) == 0) {
 			return json_encode("{}");
@@ -509,12 +509,18 @@ class DBFunctions
 					$image = $information['image'];
 					$date = $information['date'];
 					$pseo = $data['seourl'];
+					$catid = $data['catid'];
+					$catname = $data['catname'];
+					$catseourl = $data['catseo'];
 					$ret = array(
 					"title" => $title,
 					"description" => $description,
 					"image" => "/assets/img/posts/".$image,
 					"date" => $date,
-					"shareurl" => "/dashboard/posts/".$pseo.".html"
+					"shareurl" => "/dashboard/posts/".$pseo.".html",
+					"catid" => $catid,
+					"category" => $catname,
+					"catseourl" => $catseourl
 					);
 					array_push($jsondata, $ret);
 				}
@@ -525,19 +531,31 @@ class DBFunctions
 	
 	public function getExistUser($authid)
 	{
-		$query = $this->selectAll("SELECT id FROM users WHERE authid = '$authid'");
+		$query = $this->selectAll("SELECT id,information FROM users WHERE authid = '$authid'");
 		$data = $this->PDO_fetch_array($query, 0);
 		if(!empty($data))
-			return $data['id'];
+		{
+			$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
+			if($information['authority'] == -1)
+				return -1;
+			else
+				return $data['id'];
+		}
 		return -1;
 	}
 	
 	public function getExistUserAuthById($id)
 	{
-		$query = $this->selectAll("SELECT authid FROM users WHERE id = '$id'");
+		$query = $this->selectAll("SELECT authid,information FROM users WHERE id = '$id'");
 		$data = $this->PDO_fetch_array($query, 0);
 		if(!empty($data))
-			return $data['authid'];
+		{
+			$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
+			if($information['authority'] == -1)
+				return -1;
+			else
+				return $data['authid'];
+		}
 		return -1;
 	}
 	
@@ -549,10 +567,23 @@ class DBFunctions
 		if(count($check) > 0){
 			$data = $this->PDO_fetch_Array($check, 0);
 			$information = json_decode($data['information'],JSON_UNESCAPED_UNICODE);
-			$information['onesignalid'] = $userid;
-			$updatejson = json_encode($information);
-			$this->selectAll("UPDATE users SET information = '$updatejson' WHERE authid = '$authid'");
-			return json_encode(array("Function"=>"DbFunctions->setOneSignalUser","status"=>"Set OneSignalID"));
+			$change = false;
+			if(!empty($information['onesignalid']))
+				if($information['onesignalid'] != $userid)
+					$change = true;
+				
+			if(empty($information['onesignalid']))
+				$change = true;
+			
+			if($change)
+			{
+				$information['onesignalid'] = $userid;
+				$updatejson = json_encode($information);
+				$this->selectAll("UPDATE users SET information = '$updatejson' WHERE authid = '$authid'");
+				return json_encode(array("Function"=>"DbFunctions->setOneSignalUser","status"=>"Set OneSignalID"));
+			}
+			else
+				return json_encode(array("Function"=>"DbFunctions->setOneSignalUser","status"=>"Check OneSignalID"));
 		}
 		else
 			return json_encode(array("Function"=>"DbFunctions->setOneSignalUser","status"=>"User not found"));
@@ -563,11 +594,11 @@ class DBFunctions
 		global $db;
 		
 		$querycat = $this->selectAll("SELECT id FROM category WHERE id=$catid");
-		$datacat = $this->PDO_fetch_array($querycat, 0);
-		if(count($datacat) == 0)
+		if(count($querycat) == 0)
 			return json_encode(array("type"=>$type,"status"=>"categories not found"));
 		else
 		{
+			$datacat = $this->PDO_fetch_array($querycat, 0);
 			$queryfollower = $this->selectAll("SELECT id,setting FROM follower WHERE categoryid=$catid");
 			$datafol = $this->PDO_fetch_array($queryfollower, 0);
 			
@@ -623,13 +654,16 @@ class DBFunctions
 					{
 						$id = $datafol['id'];
 						$setting = json_decode($datafol['setting'],JSON_UNESCAPED_UNICODE);
+
 						for($i=0; $i<count($setting['follower']); $i++){
 							if($setting['follower'][$i]['user'] == $userid){ //ben takip ediyorsam geri dön
 								$searching = true;
 								unset($setting['follower'][$i]);
+								$setting['follower'] = array_values($setting['follower']);//indexleri düzenle
 								break;
 							}
 						}
+						
 						if($searching)
 						{
 							$setting = json_encode($setting,JSON_UNESCAPED_UNICODE);
