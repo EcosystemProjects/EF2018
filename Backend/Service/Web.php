@@ -99,7 +99,7 @@ try{
 		if(empty($groupid))
 			print_r(json_encode(array("Function"=>"Service->getCategories","status"=>"groupid Null variable")));
 		else
-			getData("SELECT c.seourl as seourl,COALESCE(fw.setting,'{\"follower\":[]}') as follower,COUNT(p.id) as posts, c.id as id,c.name as name,c.orderindex as orderindex,c.groupid as groupid FROM (category as c LEFT JOIN follower as fw ON c.id = fw.categoryid) LEFT JOIN posts as p on c.id = p.categoryid WHERE c.groupid = $groupid GROUP BY c.seourl ",array('id','name','orderindex','groupid','seourl','follower','posts'));
+			getData("SELECT c.seourl as seourl,COALESCE(fw.setting,'{\"follower\":[]}') as follower,COUNT(p.id) as posts, c.id as id,c.name as name,c.orderindex as orderindex,c.groupid as groupid FROM (category as c LEFT JOIN follower as fw ON c.id = fw.categoryid) LEFT JOIN posts as p on c.id = p.categoryid and p.status = 1 WHERE c.groupid = $groupid GROUP BY c.seourl ",array('id','name','orderindex','groupid','seourl','follower','posts'));
 	}
 	elseif($process == "getAllData")
 		getData("SELECT id,name,orderindex,type,groupid,seourl FROM category",array('id','name','orderindex','groupid','type','seourl'));
