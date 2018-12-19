@@ -1,0 +1,30 @@
+
+1) Kategori detaylarý, posts, ve ayrýntýlý posts da kullanýcý profil resimler eksik. api desteði gelince eklenebilecek.
+2) Intercomio ya login olunduysa id eklenecek.
+3) onesignaldan gelen bildirime týklanýnca yönlendirme yapýlacak.
+4) Push notification alma özelliðinin çalýþýr hale gelmesi
+.
+       post notification ile oneSignalUserid lere içerik gönderilecek.
+       NotificationHandler ayarlanacak.
+5) E-posta olarak bildirim alma özelliðinin çalýþýr hale gelmesi.
+
+Hazýrlanmasý Beklenen Web Servis Sorgularý
+1)seourl si verilen postu paylaþan kullanýcýnýn adý ve profil resmi döndürülmeli
+2)getFollowers sorgusundan auithid bilgisi de dönmeli
+3)authid parametresi verilen kullanýcýnýn OneSignal userid bilgisi döndürülmeli
+4)GetCategories sorgusunda follower sayýsý bazen null dönüyor düzeltilmeli
+
+FollowerAdapter, Create_post_fragment, CategoryDetails, ContentAdapter, ContentDetails sýnýflarýnda 
+web servis sorgularý hazýr olunca uncomment edilecek ve düzenlenecek kýsýmlar var.
+
+ContentAdapter kullanýcý isimleri ve profil resimleri için web servis sorgusu hazýr olunca test edilecek.
+CategoryDetails ve creat_post_fragment followerlar için web servis sorgusu hazýr olunca test edilecek.
+
+Geliþtirmeye baþlamadan önce kullanýlan servisler için:
+
+onesignal_app_id gradle'a eklenmeli.
+firebase projeye eklenmeli firebase cloudmessaging bilgileri onesignal'a eklenmeli.
+linkedin api kullanabilmek için üretilen KeyHash bilgisi linkedin'e eklenmeli.(Key loglarda KeyHash aratýlarak bulunabilir.)
+
+Uygulama Arayüzü için :https://projects.invisionapp.com/share/NELE65DSU48#/screens/304200221
+Trello:Trellodaki konulara bakmak çok faydalý olacaktýr.Bunun için Serkan beyden seni eklemesini iste.
