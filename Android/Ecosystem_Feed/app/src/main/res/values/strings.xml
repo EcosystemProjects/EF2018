@@ -46,7 +46,7 @@
     <string name="ios_developers">IOS Developers :</string>
     <string name="terms_capital">TERMS</string>
     <string name="follow">Follow</string>
-    <string name="followers">Follower</string>
+    <string name="followers">Followers</string>
     <string name="posts">Posts</string>
     <string name="language_title">English</string>
     <string-array name="Languages">
@@ -64,4 +64,7 @@
     <string name="no_fallower">No followers.</string>
     <string name="android_devolopers">Android Devolopers :</string>
     <string name="backend_devolopers">Backend Devolopers :</string>
+    <string name="see_all">See All</string>
+    <string name="for_me">For Me</string>
+    <string name="delete">DELETE</string>
 </resources>

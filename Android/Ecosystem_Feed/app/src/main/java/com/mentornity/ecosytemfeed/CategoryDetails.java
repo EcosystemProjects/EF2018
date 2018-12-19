@@ -108,7 +108,6 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bundle = getArguments();
-        Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.ef_app_send_show_posts1);
         //There are two json parsing for followers and posts.
         listContents = new ArrayList<>();
         String data = bundle.getString("POSTS");
@@ -165,7 +164,12 @@ public class CategoryDetails extends Fragment implements View.OnClickListener {
                 try {
                     JSONObject jO = (JSONObject) JA.get(i);
                     String name = jO.get("name").toString().toUpperCase() + " " + jO.getString("surname").toUpperCase();
-                    listFollowers.add(new FollowerItem(img, name));
+                    //!!! uncomment lines below when web service is ready !!!
+
+                    String profilePictureUrl = ""/*jO.get("profilepictureurl").toString()*/;
+                    String authid = ""/*jO.get("profilepictureurl").toString()*/;
+                    String oneSignalUserid = ""/*jO.get("onesignaluserid").toString()*/;
+                    listFollowers.add(new FollowerItem(profilePictureUrl, name, authid, oneSignalUserid));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

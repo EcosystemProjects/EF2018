@@ -38,6 +38,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.mentornity.ecosytemfeed.jsonConnection.FetchData;
+import com.onesignal.OSNotificationOpenResult;
+import com.onesignal.OneSignal;
 import com.squareup.picasso.Picasso;
 
 import net.gotev.uploadservice.ContentType;
@@ -362,14 +364,11 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
     }
 
     private void uploadPost(){
-        ///////////////////////////////
-        //!!! UPLOAD QUERY HERE!!!/////
-        ///////////////////////////////
+        //!!! UPLOAD QUERY HERE!!!
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-                final String uploadUrl = "http://ecosystemfeed.com/Service/Web.php?process=setPosts";
+                String uploadUrl = "http://ecosystemfeed.com/Service/Web.php?process=setPosts";
                 String path = getPath(filePath);
                 Log.d(TAG, "uploadPost: path: "+path);
                 String uploadID = UUID.randomUUID().toString();
@@ -399,12 +398,10 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                                 public void onProgress(Context context, UploadInfo uploadInfo) {
                                     dialog.show();
                                 }
-
                                 @Override
                                 public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
                                     Log.d(TAG, "onError: "+serverResponse.getBodyAsString());
                                 }
-
                                 @Override
                                 public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
                                     Log.d(TAG, "onCompleted: "+serverResponse.getBodyAsString());
@@ -412,13 +409,51 @@ public class Create_post_fragment extends Fragment implements View.OnClickListen
                                     Toast.makeText(context, "Post Created", Toast.LENGTH_SHORT).show();
                                     restartFragment();
                                 }
-
                                 @Override
                                 public void onCancelled(Context context, UploadInfo uploadInfo) {
-
                                 }
                             })
                             .startUpload();
+
+                    //!!! SENDING NOTIFICATION TO FOLLOWERS !!!
+                    //!!! uncomment lines below when web service is ready !!!
+
+                    /*String notificationUrl = "http://ecosystemfeed.com/Service/Web.php?process=getFollowers&seourl="+seourl;
+                    FetchData fetchData = new FetchData(notificationUrl);
+                    fetchData.execute();
+                    for (int k = 0; k < 1; ) {
+                        if (fetchData.fetched || fetchData.getErrorOccured()) k++;
+                    }
+                    final List<FollowerItem> listFollowers=new ArrayList<>();
+                    data = fetchData.getData();
+                    JSONArray JA= null;
+                    try {
+                        if(!data.equals("\"{}\"") && !data.equals("{}") && !data.equals("[]")) {
+                            JA = new JSONArray(data);
+                            Log.d(TAG, "onCreate: JA: " + JA);
+                        }
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                    if(JA!=null) {
+                        for (int i = 0; i < JA.length(); i++) {
+                            try {
+                                JSONObject jO = (JSONObject) JA.get(i);
+                                String name = jO.get("name").toString().toUpperCase() + " " + jO.getString("surname").toUpperCase();
+                                String profilePictureUrl = jO.get("profilepictureurl").toString();
+                                String authid = jO.get("profilepictureurl").toString();
+                                String oneSignalUserid = jO.get("onesignaluserid").toString();
+                                listFollowers.add(new FollowerItem(profilePictureUrl, name, authid, oneSignalUserid));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    //!!! INCLUDE ONESIGNAL USERID'S, CONTENT OF NOTIFICATION AND ACTION WITH JSON
+                    OneSignal.postNotification();
+                */
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -64,7 +64,7 @@
                         android:background="@drawable/buttonshape_white_rounded"
                         android:layout_marginBottom="6dp"
                         android:layout_marginRight="8dp"
-                        android:text="DELETE"
+                        android:text="@string/delete"
                         android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>

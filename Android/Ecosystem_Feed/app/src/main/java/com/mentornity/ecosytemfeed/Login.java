@@ -182,8 +182,8 @@ public class Login extends AppCompatActivity {
     private void fetchPersonalInfo()
     {//Look https://developer.linkedin.com/docs/signin-with-linkedin
         Log.d(TAG, "fetchPersonalInfo: fetching started");
-        String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,public-profile-url,picture-url,email-address,picture-urls::(original))";
-
+        String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,public-profile-url," +
+                "picture-url,email-address,picture-urls::(original))";
 
         APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
         apiHelper.getRequest(this, url, new ApiListener() {

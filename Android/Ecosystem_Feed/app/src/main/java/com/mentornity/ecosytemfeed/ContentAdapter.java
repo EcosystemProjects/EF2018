@@ -1,5 +1,6 @@
 package com.mentornity.ecosytemfeed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     private ContentListItem listItem;
     private Context context;
     private ContentDetails contentDetails;
+    private String userName, profilePictureUrl;
     String TAG="ContentAdapter";
     public ContentAdapter(List<ContentListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -48,7 +50,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
 
     @NonNull
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         listItem=listItems.get(position);
         holder.regionAndEcosystem.setText(listItem.getRegionAndEcosystem());
         holder.category.setText(listItem.getCategory());
@@ -69,6 +71,29 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         else
             holder.deleteBtn.setVisibility(View.GONE);
 
+        //get username and profile picture url
+
+        //!!! uncomment and edit lines below when web service is ready !!!
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = "http://ecosystemfeed.com/Service/Web.php?process=???????????&seourl=" + listItem.getSeourl(); // !!! EDIT QUERY !!!
+                Log.d(TAG, "onClick: fetching user data :" + url);
+                FetchData fetchData = new FetchData(url);
+                fetchData.execute();
+                for (int k = 0; k < 1; ) {
+                    if (fetchData.fetched || fetchData.getErrorOccured()) k++;
+                }
+
+                //!!!!!!!!!!!!!!!!!!!!!!!
+                //!!! FETCH JSON HERE !!!
+                //!!!!!!!!!!!!!!!!!!!!!!!
+
+                userName = fetchData.getData();
+                profilePictureUrl = fetchData.getData();
+            }
+        });
+        */
         holder.deleteBtn.setOnClickListener(this);
         holder.cardView.setOnClickListener(this);
 
@@ -93,6 +118,9 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
                 bundle.putString("date",listItem.getDate());
                 bundle.putString("seourl",listItem.getSeourl());
                 bundle.putString("shareurl",listItem.getShareUrl());
+                //!!! uncomment lines below when web service ready !!!
+                //bundle.putString("username",userName);
+                //bundle.putString("profilePictureUrl",profilePictureUrl);
                 contentDetails=new ContentDetails();
                 contentDetails.setArguments(bundle);
                 FragmentTransaction fragmentTransaction=((FragmentActivity)context).getSupportFragmentManager().beginTransaction();

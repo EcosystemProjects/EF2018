@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 /*
  * Adapters are built same way.
@@ -34,9 +36,9 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull FollowerAdapter.ViewHolder holder, int position) {
         final  FollowerItem followerItem=listItems.get(position);
-        holder.profileImage.setImageBitmap(followerItem.getProfileImage());
+        //!!! uncomment lines below when web service is ready !!!
+        //Picasso.get().load(listItems.get(position).getProfileImage()).into(holder.profileImage);
         holder.userName.setText(followerItem.getUserName());
-
     }
 
     @Override

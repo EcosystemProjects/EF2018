@@ -110,7 +110,7 @@ public class Settings extends Fragment implements View.OnClickListener, Compound
             @Override
             public void onSuccess() {
                 Bitmap imageBitmap=((BitmapDrawable)profileImage.getDrawable()).getBitmap();
-                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(),imageBitmap);
+                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getContext().getResources(),imageBitmap);
                 roundedBitmapDrawable.setCircular(true);
                 roundedBitmapDrawable.setCornerRadius(Math.max(imageBitmap.getWidth(),imageBitmap.getHeight())/2.0f);
                 profileImage.setImageDrawable(roundedBitmapDrawable);

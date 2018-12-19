@@ -63,5 +63,8 @@
     <string name="no_fallower">Takipçi yok.</string>
     <string name="android_devolopers">Android Yazılım Geliştiticileri :</string>
     <string name="backend_devolopers">Backend Yazılım Geliştiricileri :</string>
+    <string name="see_all">Hepsini Gör</string>
+    <string name="for_me">Benim İçin</string>
+    <string name="delete">SİL</string>
 
 </resources>
