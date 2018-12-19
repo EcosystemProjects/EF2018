@@ -123,12 +123,15 @@ public class Categories extends Fragment {
                     int id= Integer.parseInt(jO.get("id").toString()),
                             //orderIndex=Integer.parseInt(jO.get("orderindex").toString()),
                             //groupid= Integer.parseInt(jO.get("groupid").toString()),
-                            postsNumber = Integer.parseInt(jO.get("posts").toString()),
-                            followerNumber = new JSONObject(jO.get("follower").toString()).getJSONArray("follower").length();
-                    String seourl = jO.getString("seourl");
+                            postsNumber = Integer.parseInt(jO.get("posts").toString());
+                        int followerNumber;
+                            if(jO.get("follower").toString().equals("null")){
+                                followerNumber = 0;
+                            }else{
+                                followerNumber = Integer.parseInt(jO.get("follower").toString());
+                            }
+                            String seourl = jO.getString("seourl");
                     Log.d(TAG, "onCreate: " + followerNumber);
-
-
                     Boolean isFollowed;
                     if(followedCategories.contains(seourl)){
                         isFollowed = true;

@@ -49,8 +49,7 @@ public class ContentDetails extends android.support.v4.app.Fragment implements V
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_content_details, container, false);
 
@@ -78,12 +77,13 @@ public class ContentDetails extends android.support.v4.app.Fragment implements V
             timeTv.setText(bundle.getString("date"));
             shareLinkTv.setText(bundle.getString("shareurl"));
 
-            usernameTv.setText("user");
             resourceLinkTv.setText("this.is.link.com");
 
+        //Setting user name and profile image
+        //!!! uncomment lines below when web service is ready !!!
+        //Picasso.get().load(bundle.getString("profilePictureUrl")).into(profileIv);
+        //usernameTv.setText(bundle.getString("username"));
 
-        //Setting image
-        Picasso.get().load(R.drawable.app_icon).into(profileIv);
         shareLinkTv.setOnClickListener(this);
         resourceLinkTv.setOnClickListener(this);
         closeIBtn.setOnClickListener(this);
